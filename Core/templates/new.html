@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-lg-6">
+        <h2>Создание конфигурации</h2>
+        <hr>
+        <form method="POST">{% csrf_token %}
+            <h4>- Название вашей конфигурации:</h4>
+            <div class="input-group">
+                <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
+                <input style="width: 140%" name="name" type="text" class="form-control" placeholder="Пример: Семья"/>
+            </div>
+            <h4>- Введите сумму, которую хотите распределить:</h4>
+            <div class="input-group">
+                <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
+                <input style="width: 140%" name="incom" type="number" class="form-control" placeholder="Пример: 100000"/>
+            </div>
+
+            <h4>- Создание категорий:</h4>
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th>Максимум</th>
+                    <th>% от <span id="amount">450000</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input name="name-cat1" type="text" class="form-control" placeholder="Пример: На еду"/></td>
+                    <td><input name="incom1" type="number" class="form-control" placeholder="Пример: 1000"/></td>
+                    <td style="text-align: center">--</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input name="name-cat2" type="text" class="form-control" placeholder="Пример: На еду"/></td>
+                    <td><input name="incom2" type="number" class="form-control" placeholder="Пример: 1000"/></td>
+                    <td style="text-align: center">--</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input name="name-cat3" type="text" class="form-control" placeholder="Пример: На еду"/></td>
+                    <td><input name="incom3" type="number" class="form-control" placeholder="Пример: 1000"/></td>
+                    <td style="text-align: center">--</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><i class="fa fa-plus-circle" style="color: #5cb85c" aria-hidden="true"></i> Добавить еще одну категорию</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+{% endblock %}

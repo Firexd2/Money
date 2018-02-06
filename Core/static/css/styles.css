@@ -1,0 +1,168 @@
+body {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    background-color: oldlace;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+/* цвет фона и рамки навигационного меню */
+.navbar-default {
+    background-color: #000000;
+    border-color: #000000;
+}
+/* цвет текста, содержащий название сайта или бренда */
+.navbar-default .navbar-brand {
+    color: #ff923a;
+    font-size: 25px;
+}
+/* цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #ffb57c;
+}
+/* Цвет пунктов навигационного меню */
+.navbar-default .navbar-nav > li > a {
+    color: rgba(255, 146, 57, 0.86);
+}
+/* Цвет пункта меню, при поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #ffb57c;
+}
+/* Цвет и фон активного пункта меню, а также поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #ffb57c;
+    background-color: #3d3c41;
+}
+/* Цвет и фон открытого пункта меню, а также поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #ffb57c;
+    background-color: #3d3c41;
+}
+/* Цвет стрелочки (треугольничка) у раскрывающихся пунктов меню */
+.navbar-default .navbar-nav > .dropdown > a .caret {
+    border-top-color: rgba(255, 146, 57, 0.86);
+    border-bottom-color: rgba(255, 146, 57, 0.86);
+}
+/* Цвет стрелочки (треугольничка) при поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #ffb57c;
+    border-bottom-color: #ffb57c;
+}
+/* Цвет стрелочки (треугольничка), открывшегося пункта меню */
+.navbar-default .navbar-nav > .open > a .caret,
+.navbar-default .navbar-nav > .open > a:hover .caret,
+.navbar-default .navbar-nav > .open > a:focus .caret {
+    border-top-color: #ffb57c;
+    border-bottom-color: #ffb57c;
+}
+/* CSS стили для мобильных устройств */
+/* Цвет рамки у кнопки, которая открывает меню */
+.navbar-default .navbar-toggle {
+    border-color: #DDD;
+}
+/* Цвет фона кнопки (которая открывает меню) при поднесении к ней курсора мышки или при нахождении её в фокусе */
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: rgba(255, 146, 57, 0.86);
+}
+/* Цвет полосочек в кнопочке, которая открывает меню */
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: rgba(255, 146, 57, 0.86);
+}
+
+.dropdown-menu {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.dropdown-menu > li > a {
+        color: #ffb57c;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    color: rgba(255, 146, 57, 0.86);
+    text-decoration: none;
+    background-color: #3d3c41;
+}
+
+@media (max-width: 767px) {
+/* Цвет пунктов меню в раскрывающихся списках */
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: rgba(255, 146, 57, 0.86);
+    }
+/* Цвет и фон пункта меню в раскрывающихся списках, при поднесении к нему курсора мышки или при нахождении его в фокусе */
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: rgba(255, 146, 57, 0.86);
+        background-color: transparent;
+    }
+}
+
+.navbar-toggle {
+  border: none;
+  background: transparent !important;
+}
+.navbar-toggle:hover {
+  background: transparent !important;
+}
+.navbar-toggle .icon-bar {
+  width: 22px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.navbar-toggle.collapsed .icon-bar:nth-of-type(1) {
+  transform: translate3d(0,0,0) rotate(0deg);
+  width: 22px;
+}
+.navbar-toggle.collapsed .icon-bar:nth-of-type(2) {
+  transform: translate3d(0,0,0) rotate(0deg);
+}
+.navbar-toggle.collapsed .icon-bar:nth-of-type(3) {
+  transform: translate3d(0,0,0) rotate(0deg);
+  width: 22px;
+}
+.navbar-toggle .icon-bar:nth-of-type(1) {
+  transform: translate3d(1px,0,0) rotate(-45deg);
+  transform-origin: center center;
+  width: 11px;
+}
+.navbar-toggle .icon-bar:nth-of-type(2) {
+  transform: rotate(-90deg);
+  transform-origin: center center;
+}
+.navbar-toggle .icon-bar:nth-of-type(3) {
+  transform: translate3d(0px,-14px,0) rotate(-135deg);
+  transform-origin: right top;
+  width: 11px;
+}
+
+.conf {
+    text-align: center;
+    opacity: 0.5;
+    border: dashed 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.conf:hover {
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
