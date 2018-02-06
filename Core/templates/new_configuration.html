@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-lg-4">
+        <form method="POST">{% csrf_token %}
+            <p>Название</p>
+            <input type="text" name="name">
+            <p>Сколько денег в оборот пустить</p>
+            <input type="text" name="income">
+            <p>Создание категорий</p>
+            <span>
+            <input type="text" name="name-cat1" placeholder="Название">
+                <div>
+                    <input type="number" name="name-cat1" value="0">
+                    <input style="display:inline-block; width: 100px" type="range" min="0" max="0" step="1" value="0">
+                </div>
+            </span>
+
+
+        </form>
+    </div>
+{% endblock %}

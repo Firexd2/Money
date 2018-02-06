@@ -9,6 +9,7 @@ class Cost(models.Model):
     """
     value = models.IntegerField()
     comment = models.CharField('Комментарий траты', max_length=100)
+    datetime = models.DateTimeField('Время и дата', auto_now=True)
 
 
 class CostCategory(models.Model):
@@ -24,13 +25,11 @@ class Configuration(models.Model):
     """
     При создании конфигурации указывается имя конфигурации, создаются категории, создается экземлпяр истории трат,
     объявляется доход за месяц, и запоминается дата.
-
-    При внесении траты обновляются траты в категориях и создается итем экземлпяра истории
     """
     name = models.CharField('Название конфигурации', max_length=100)
     category = models.ManyToManyField(CostCategory, verbose_name='Категории')
-    income = models.IntegerField('Доход за месяц')
-    date = models.DateField('Дата ввода зарплаты', default=datetime.now)
+    income = models.IntegerField('Деньги в обороте')
+    date = models.DateField('Дата ввода', default=datetime.now)
 
 
 class Settings(models.Model):
@@ -39,4 +38,4 @@ class Settings(models.Model):
     Далее есть возможность создать конфигурацию контроля бюджета.
     """
     configurations = models.ManyToManyField(Configuration, verbose_name='Конфигурация')
-    bank = models.IntegerField('Банк')
+    free_money = models.IntegerField('Свободные деньги')
