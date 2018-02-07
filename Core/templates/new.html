@@ -4,54 +4,58 @@
         <h2>Создание конфигурации</h2>
         <hr>
         <form method="POST">{% csrf_token %}
-            <h4>- Название вашей конфигурации:</h4>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашей конфигурации:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="name" type="text" class="form-control" placeholder="Пример: Семья"/>
             </div>
-            <h4>- Введите сумму, которую хотите распределить:</h4>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="incom" type="number" class="form-control" placeholder="Пример: 100000"/>
             </div>
-
-            <h4>- Создание категорий:</h4>
-
-
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
             <table class="table">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Название</th>
-                    <th>Максимум</th>
-                    <th>% от <span id="amount">450000</span></th>
+                    <th width="200">Максимум</th>
+                    <th style="min-width: 100px">% от <span id="amount">--</span></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>1</td>
-                    <td><input name="name-cat1" type="text" class="form-control" placeholder="Пример: На еду"/></td>
-                    <td><input name="incom1" type="number" class="form-control" placeholder="Пример: 1000"/></td>
-                    <td style="text-align: center">--</td>
+                    <td><b>1</b></td>
+                    <td><input disabled name="name-cat1" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                    <td><input disabled name="incom1" type="number" class="form-control cat"/></td>
+                    <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
                 <tr>
-                    <td>2</td>
-                    <td><input name="name-cat2" type="text" class="form-control" placeholder="Пример: На еду"/></td>
-                    <td><input name="incom2" type="number" class="form-control" placeholder="Пример: 1000"/></td>
-                    <td style="text-align: center">--</td>
+                    <td><b>2</b></td>
+                    <td><input disabled name="name-cat2" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                    <td><input disabled name="incom2" type="number" class="form-control cat"/></td>
+                    <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
                 <tr>
-                    <td>3</td>
-                    <td><input name="name-cat3" type="text" class="form-control" placeholder="Пример: На еду"/></td>
-                    <td><input name="incom3" type="number" class="form-control" placeholder="Пример: 1000"/></td>
-                    <td style="text-align: center">--</td>
+                    <td><b>3</b></td>
+                    <td><input disabled name="name-cat3" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                    <td><input disabled name="incom3" type="number" class="form-control cat"/></td>
+                    <td style="text-align: center"><span>-- </span>%</td>
+                </tr>
+                <tr style="font-weight: bold">
+                    <td><i class="fa fa-info-circle" style="color: #261bb8" aria-hidden="true"></i></td>
+                    <td>В сумме:</td>
+                    <td id="n">--</td>
+                    <td style="text-align: center"><span id="p">-- </span>%</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><i class="fa fa-plus-circle" style="color: #5cb85c" aria-hidden="true"></i> Добавить еще одну категорию</td>
+                    <td><i class="fa fa-plus-circle" style="color: #5cb85c" aria-hidden="true"></i></td>
+                    <td colspan="3">Добавить еще одну категорию</td>
                 </tr>
                 </tbody>
             </table>
-
+            <button type="submit" class="btn btn-warning">Готово!</button>
         </form>
     </div>
 {% endblock %}
