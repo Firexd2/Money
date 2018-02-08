@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="col-lg-6">
+    <div style="margin-bottom: 150px" class="col-lg-6">
         <h2>Создание конфигурации</h2>
         <hr>
         <form method="POST">{% csrf_token %}
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашей конфигурации:</h4>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашей конфигурации:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="name" type="text" class="form-control" placeholder="Пример: Семья"/>
+                <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
             </div>
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="incom" type="number" class="form-control" placeholder="Пример: 100000"/>
             </div>
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
             <table class="table">
                 <thead>
                 <tr>
@@ -43,19 +43,23 @@
                     <td><input disabled name="incom3" type="number" class="form-control cat"/></td>
                     <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
-                <tr style="font-weight: bold">
+                <tr style="font-weight: bold" id="total-tr">
                     <td><i class="fa fa-info-circle" style="color: #261bb8" aria-hidden="true"></i></td>
-                    <td>В сумме:</td>
-                    <td id="n">--</td>
-                    <td style="text-align: center"><span id="p">-- </span>%</td>
+                    <td>Остаток:</td>
+                    <td><span id="o">--</span></td>
+                    <td style="text-align: center"><span id="p">-- </span>% </td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-plus-circle" style="color: #5cb85c" aria-hidden="true"></i></td>
-                    <td colspan="3">Добавить еще одну категорию</td>
+                    <td colspan="3"><a style="cursor: pointer;" id="add-category">Добавить еще одну категорию</a></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-minus-circle" style="color: red" aria-hidden="true"></i></td>
+                    <td colspan="3"><a style="cursor: pointer;" id="remove-category">Удалить категорию</a></td>
                 </tr>
                 </tbody>
             </table>
-            <button type="submit" class="btn btn-warning">Готово!</button>
+            <button type="submit" class="btn btn-warning">Готово!</button> <span style="color: red" id="error-form"></span>
         </form>
     </div>
 {% endblock %}
