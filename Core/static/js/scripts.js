@@ -117,7 +117,7 @@ $(document).ready(function() {
             Total()
         });
 
-        $('form').on('submit', function (e) {
+        $('form[name=new]').on('submit', function (e) {
 
             if ($('#o').text() !== '0') {
                 e.preventDefault();
