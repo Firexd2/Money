@@ -2,8 +2,19 @@
 {% load staticfiles %}
 {% block content %}
 
-    <div class="col-lg-4 conf">
-    <p style="padding-top: 10px; font-weight: bold">Добавить новую конфигурацию</p>
-        <img style="width: 100%; margin-top: -35px" src="{% static '/image/add.png' %}" alt="">
+    {% for configuration in user.settings.configurations.all %}
+        <div style="color: {{ configuration.color }}" onclick="location.href='/{{ configuration.name_url }}/'" class="col-lg-4 conf">
+            <div style="border: solid 3px;cursor: pointer; border-radius: 5px; width: 360px; height: 360px; padding: 20px">
+                <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
+                <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div onclick="location.href='/new/'" class="col-lg-4 conf add">
+        <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; width: 360px; height: 360px; padding: 20px">
+            <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
+            <p style="padding-top: 10px; font-size: 19px; font-weight: bold">Добавить новую конфигурацию</p>
+        </div>
     </div>
 {% endblock %}

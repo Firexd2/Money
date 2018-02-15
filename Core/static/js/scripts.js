@@ -22,7 +22,7 @@ $(document).ready(function() {
     onNavbar();
 
     function procent(value) {
-        var amount = parseInt($('input[name=incom]').val());
+        var amount = parseInt($('input[name=income]').val());
         if (amount && value) {
             return Math.round(value / (amount / 100))
         } else {
@@ -37,14 +37,14 @@ $(document).ready(function() {
     function Total() {
         var n = 0;
         var inputs = $('.cat');
-        var amount = parseInt($('input[name=incom]').val());
+        var amount = parseInt($('input[name=income]').val());
         var tr = $('#total-tr');
         for (var i=0; i<inputs.length; i++) {
             if (parseInt(inputs.eq(i).val())) {
                 n += parseInt(inputs.eq(i).val());
             }
         }
-        if ($('input[name=incom]').val()) {
+        if ($('input[name=income]').val()) {
             $('#p').text(100 - Math.ceil(n / (amount / 100)));
             $('#o').text(amount - n);
             if (n === amount) {
@@ -70,7 +70,7 @@ $(document).ready(function() {
     }
 
     function OnOffInputs() {
-        if ($('input[name=incom]').val()) {
+        if ($('input[name=income]').val()) {
             $('.ca').removeAttr("disabled");
             $('.cat').removeAttr("disabled");
         } else {
@@ -80,7 +80,7 @@ $(document).ready(function() {
     }
 
     function New() {
-        $('input[name=incom]').on('input', function () {
+        $('input[name=income]').on('input', function () {
             OnOffInputs();
 
             if ($(this).val()) {
@@ -97,17 +97,17 @@ $(document).ready(function() {
 
         $('#add-category').on('click', function () {
             var tr = $('tr');
-            var incom = $('input[name=incom]').val();
+            var income = $('input[name=income]').val();
             var disabled = '';
             var proc = '0';
-            if (!(incom)) {
+            if (!(income)) {
                 disabled = 'disabled';
                 proc = '-- '
             }
             tr.eq(tr.length-4).after('<tr>\n' +
                 '<td><b>' + (tr.length-3) + '</b></td>\n' +
                 '<td><input ' + disabled +  ' name="name-cat' + (tr.length-3) + '" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>\n' +
-                '<td><input ' + disabled +  ' name="incom' + (tr.length-3) + '" type="number" class="form-control cat"/></td>\n' +
+                '<td><input ' + disabled +  ' name="income' + (tr.length-3) + '" type="number" class="form-control cat"/></td>\n' +
                 '<td style="text-align: center"><span>' + proc + '</span>%</td>\n' +
                 '</tr>');
         });

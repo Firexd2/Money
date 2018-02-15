@@ -1,19 +1,20 @@
 {% extends 'auth_base.html' %}
 {% load widget_tweaks %}
 {% block content %}
-        <h3 style="text-align: center"><i class="fa fa-address-card" aria-hidden="true"></i> <span style="color: #ff923a; font-weight: bold">Вход на <span style="color: black">control-money.ru</span></span></h3>
-        <hr>
-        <form method="POST">{% csrf_token %}
-            <span style="color: red">{{ form.username.errors }}</span>
-            <div style="margin-bottom: 10px; width: 100%" class="input-group">
-                <span style="width: 40px" class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
-                {{ form.username|add_class:'form-control'|attr:'placeholder:Логин' }}
-            </div>
-            <span style="color: red">{{ form.password.errors }}</span>
-            <div style="margin-bottom: 10px; width: 100%" class="input-group">
-                <span style="width: 40px" class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
-                {{ form.password|add_class:'form-control'|attr:'placeholder:Пароль' }}
-            </div>
-            <button style="margin-top: 8px" class="btn btn-warning" type="submit">Войти</button>
-        </form>
+    <h3 style="text-align: center"><i class="fa fa-address-card" aria-hidden="true"></i> <span style="color: #ff923a; font-weight: bold">Вход на <br><span style="color: black">control-money.ru</span></span></h3>
+    <hr>
+    <form method="POST">{% csrf_token %}
+        <span style="color: red">{{ form.username.errors }}</span>
+        <div style="margin-bottom: 10px; width: 100%" class="input-group">
+            <span style="width: 40px" class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+            {{ form.username|add_class:'form-control'|attr:'placeholder:Логин' }}
+        </div>
+        <span style="color: red">{{ form.password.errors }}</span>
+        <div style="margin-bottom: 10px; width: 100%" class="input-group">
+            <span style="width: 40px" class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+            {{ form.password|add_class:'form-control'|attr:'placeholder:Пароль' }}
+        </div>
+        <button style="margin: 8px 15px 0 0" class="btn btn-warning" type="submit">Вход</button>
+        <button onclick="location.href='/auth/register/'" style="margin-top: 8px" class="btn btn-warning" type="button">Регистрация</button>
+    </form>
 {% endblock %}

@@ -9,10 +9,19 @@
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
             </div>
+
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
+            <p style="font-size: 13px; color: grey">На вашем рабочем столе конфигурации будут отображены в виде плиток, на которых будут иконка и название.</p>
+
+            <select name="icon" required class="form-control">
+                <option><i class="icon fa fa-chevron-right" aria-hidden="true"></i></option>
+                <option><i class="icon fa fa-chevron-right" aria-hidden="true"></i></option>
+            </select>
+
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="incom" type="number" class="form-control" placeholder="Пример: 100000"/>
+                <input style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
             </div>
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
             <table class="table table-hover">
@@ -28,19 +37,19 @@
                 <tr>
                     <td><b>1</b></td>
                     <td><input disabled name="name-cat1" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="incom1" type="number" class="form-control cat"/></td>
+                    <td><input disabled name="income1" type="number" class="form-control cat"/></td>
                     <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
                 <tr>
                     <td><b>2</b></td>
                     <td><input disabled name="name-cat2" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="incom2" type="number" class="form-control cat"/></td>
+                    <td><input disabled name="income2" type="number" class="form-control cat"/></td>
                     <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
                 <tr>
                     <td><b>3</b></td>
                     <td><input disabled name="name-cat3" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="incom3" type="number" class="form-control cat"/></td>
+                    <td><input disabled name="income3" type="number" class="form-control cat"/></td>
                     <td style="text-align: center"><span>-- </span>%</td>
                 </tr>
                 <tr style="font-weight: bold" id="total-tr">

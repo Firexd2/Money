@@ -1,5 +1,6 @@
 from django.views.generic.edit import FormView
 from Auth.forms import RegisterForm
+from Core.models import Settings
 
 
 class RegisterFormView(FormView):
@@ -8,5 +9,9 @@ class RegisterFormView(FormView):
     template_name = "register.html"
 
     def form_valid(self, form):
-        form.save()
+        f = form.save(commit=False)
+        settings = Settings()
+        settings.save()
+        f.settings = settings
+        f.save()
         return super(RegisterFormView, self).form_valid(form)
