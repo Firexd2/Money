@@ -3,7 +3,7 @@
 {% block content %}
 
     {% for configuration in user.settings.configurations.all %}
-        <div style="color: {{ configuration.color }}" onclick="location.href='/{{ configuration.name_url }}/'" class="col-lg-4 conf">
+        <div style="color: {{ configuration.color }}" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
             <div style="border: solid 3px;cursor: pointer; border-radius: 5px; width: 360px; height: 360px; padding: 20px">
                 <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
                 <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>

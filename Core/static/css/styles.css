@@ -178,9 +178,16 @@ input::-webkit-inner-spin-button {
     border-radius: 1px;
 }
 
-.test {
-    color: rgba(255, 7, 0, 0.31);
+.lg {
+    display: inline-block;
+    text-align: center;
+    width: 20%
 }
+
+.icons {cursor: pointer}
+.icons:hover {border-bottom: solid 3px #ff923a}
+
+.active-icons {border-bottom: solid 3px #ff923a}
 
 .form-control:focus {
     border-color: #ff923a;

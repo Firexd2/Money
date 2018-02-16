@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="margin-bottom: 150px" class="col-lg-6">
+        <h3>Текущий месяц</h3>
+        <hr>
+        <table id="current-month-table" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Категория</th>
+                <th>Отношения</th>
+                <th>Остаток в р.</th>
+                <th>Остаток в %</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in configuration.category.all %}
+            <tr>
+                <th scope="row">{{ category.name }}</th>
+                <td><span class="cost-table">{% for cost in category.cost.all %}{{ cost.value }} {% endfor %}</span>/{{ category.max }}</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

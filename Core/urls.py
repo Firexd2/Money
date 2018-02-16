@@ -20,7 +20,8 @@ from Core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', views.home, name='home'),
+    path('panel/', views.panel, name='panel'),
+    path('panel/<name_url>/', views.conf, name='conf'),
     path('new/', views.new),
-    path('auth/', include('Auth.urls'))
+    path('auth/', include('Auth.urls')),
 ]

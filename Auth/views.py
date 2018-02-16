@@ -5,7 +5,7 @@ from Core.models import Settings
 
 class RegisterFormView(FormView):
     form_class = RegisterForm
-    success_url = "/"
+    success_url = "/panel/"
     template_name = "register.html"
 
     def form_valid(self, form):

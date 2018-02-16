@@ -131,7 +131,48 @@ $(document).ready(function() {
                     $('#error-form').text(' Вы превысили лимит вашей суммы')
                 }
             }
+        });
+
+        $('.icons').on('click', function () {
+            var Class = $(this).children().attr('class');
+            $('input[name=icon]').val(Class);
+            $('.icons').removeClass('active-icons');
+            $(this).addClass('active-icons');
         })
+
     }
     New();
+
+
+
+//    ДЕТАЛИЗАЦИЯ КОНФИГУРАЦИИ
+
+    function detail_conf() {
+        var item_cost = $('.cost-table');
+        var costs;
+        var amount_cost = 0;
+
+        for (var i=0;i<item_cost.length;i++) {
+            costs = item_cost.eq(i).text().split(' ');
+
+            if (costs.length === 1) {
+                item_cost.eq(i).text(0);
+                continue
+            }
+
+            for (var j=0;j<costs.slice(0,-1).length;j++) {
+
+                amount_cost += parseInt(costs[j])
+            }
+            item_cost.eq(i).text(amount_cost);
+            amount_cost = 0;
+        }
+
+
+
+    }
+
+    detail_conf();
+
+
 });
