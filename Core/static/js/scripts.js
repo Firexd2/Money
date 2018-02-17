@@ -149,14 +149,15 @@ $(document).ready(function() {
 
     function detail_conf() {
         var item_cost = $('.cost-table');
+        var item_hide = $('.hide');
         var costs;
         var amount_cost = 0;
 
         for (var i=0;i<item_cost.length;i++) {
-            costs = item_cost.eq(i).text().split(' ');
+            costs = item_hide.eq(i).text().split(' ');
 
             if (costs.length === 1) {
-                item_cost.eq(i).text(0);
+                item_cost.eq(i).html(0);
                 continue
             }
 
@@ -164,9 +165,46 @@ $(document).ready(function() {
 
                 amount_cost += parseInt(costs[j])
             }
-            item_cost.eq(i).text(amount_cost);
+            item_cost.eq(i).html(amount_cost);
             amount_cost = 0;
         }
+
+        var category_all = $('.category-table');
+        var balance = $('.balance-table');
+        var balance_procent = $('.balance-table-procent');
+        var item;
+        var procent;
+
+        var amount_costs = 0;
+        var amount_max = 0;
+
+        for (var q=0;q<category_all.length;q++) {
+            item = category_all.eq(q).text().split('/');
+            balance.eq(q).html(parseInt(item[1]) - parseInt(item[0]));
+            procent = Math.round(100 - parseInt(item[0]) / parseInt(item[1]) * 100);
+            balance_procent.eq(q).html(procent + '%');
+            amount_costs += parseInt(item[0]);
+            amount_max += parseInt(item[1]);
+
+            if (procent > 30) {
+                balance.eq(q).css({'color': '#00f100'});
+                balance_procent.eq(q).css({'color': '#00f100'});
+                category_all.eq(q).css({'color': '#00f100'});
+            } else if (procent > 5) {
+                balance.eq(q).css({'color': '#ffc211'});
+                balance_procent.eq(q).css({'color': '#ffc211'});
+                category_all.eq(q).css({'color': '#ffc211'});
+            } else {
+                balance.eq(q).css({'color': 'red'});
+                balance_procent.eq(q).css({'color': 'red'});
+                category_all.eq(q).css({'color': 'red'});
+            }
+        }
+
+        $('#amount-table-1').html(amount_costs);
+        $('#amount-table-2').html(amount_max);
+        $('#amount-balance').html(amount_max - amount_costs);
+        $('#amount-balance-procent').html(Math.round(100 - amount_costs / amount_max * 100) + '%')
 
 
 
