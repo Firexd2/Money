@@ -16,7 +16,7 @@ def new(request):
                                       icon=request.POST['icon'], color=request.POST['color'])
         configuration.save()
 
-        c = [item[1] for item in request.POST.items()][3:]
+        c = [item[1] for item in request.POST.items()][5:]
 
         for n, item in enumerate(c):
             if n % 2 == 1 and c[n-1] and c[n]:

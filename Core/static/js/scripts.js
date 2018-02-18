@@ -147,7 +147,7 @@ $(document).ready(function() {
 
 //    ДЕТАЛИЗАЦИЯ КОНФИГУРАЦИИ
 
-    function detail_conf() {
+    function table() {
         var item_cost = $('.cost-table');
         var item_hide = $('.hide');
         var costs;
@@ -205,12 +205,55 @@ $(document).ready(function() {
         $('#amount-table-2').html(amount_max);
         $('#amount-balance').html(amount_max - amount_costs);
         $('#amount-balance-procent').html(Math.round(100 - amount_costs / amount_max * 100) + '%')
-
-
-
     }
 
-    detail_conf();
+    table();
 
+    function input_cost() {
+        $('.btn-cost').on('click', function () {
+            var comment = $(this).siblings('.middle-comment').val();
+            var cost = $(this).siblings('.middle-cost').val();
+            var table = $(this).parent().parent().next().find('.table-cost');
+            var number = table.children().length;
+
+            table.append('<tr>\n' +
+                '             <td>\n' +
+                '                 <textarea name="detail-comment-' + number + '" style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">' + comment + '</textarea>\n' +
+                '             </td>\n' +
+                '             <td>\n' +
+                '                 <input name="value-' + number + '" class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                '             </td>\n' +
+                '             <td style="text-align: center">\n' +
+                '                 <i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
+                '             </td>\n' +
+                '         </tr>')
+        });
+
+
+        $('.caret-hide').on('click', function () {
+            var item = $(this).parent().parent().find('.hide-detail');
+            if (item.is(':hidden')) {
+                item.show()
+            } else {
+                item.hide()
+            }
+        })
+    }
+
+
+
+    input_cost()
 
 });
+
+                                // <tr>
+                                //     <td>
+                                //         <textarea style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">Полотенце Максюшке</textarea>
+                                //     </td>
+                                //     <td>
+                                //         <input class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="3567" type="number">
+                                //     </td>
+                                //     <td style="text-align: center">
+                                //         <i class="fa fa-times" style="color: red" aria-hidden="true"></i>
+                                //     </td>
+                                // </tr>

@@ -14,7 +14,8 @@ class Cost(models.Model):
     Траты
     """
     value = models.IntegerField()
-    comment = models.CharField('Комментарий траты', max_length=100)
+    comment = models.CharField('Общий комментарий траты', max_length=100)
+    detailed_comment = models.CharField('Подробрый комментарий', max_length=100)
     datetime = models.DateTimeField('Время и дата', auto_now=True)
 
 
