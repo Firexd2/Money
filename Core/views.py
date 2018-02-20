@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from Core.models import Configuration, CostCategory
+from Core.models import Configuration, CostCategory, Cost
 
 
 @login_required
@@ -32,4 +32,24 @@ def new(request):
 
 def conf(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
+
+    if request.POST:
+        dict_value_and_comment = dict()
+        for cat in configuration.category.all():
+            value = 'value-' + str(cat.id)
+            detailed_comment = 'detail-comment-' + str(cat.id)
+            n = 0
+            while True:
+                complete_value = value + '-' + str(n)
+                complete_detailed_comment = detailed_comment + '-' + str(n)
+                try:
+                    cost = Cost(value=request.POST[complete_value],
+                                detailed_comment=request.POST[complete_detailed_comment],
+                                comment=request.POST['common-comment'])
+                except KeyError:
+                    break
+                cost.save()
+                cat.cost.add(cost)
+                n += 1
+
     return render(request, 'conf.html', locals())

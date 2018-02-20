@@ -230,11 +230,10 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     height: 28px;
     padding: 2px 6px 2px 6px;
     vertical-align: inherit;
-    color: #ff923a;
 }
 
 .btn-cost:hover {
-    color: #ff6116;;
+    color: #ff6116;
 }
 
 .hide-detail {
@@ -242,11 +241,104 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     position: absolute;
     background: white;
     right: 50px;
-    width: 300px;
     z-index: 1001;
     font-size: 13px;
-    box-shadow: 1px 1px 4px black;
+    box-shadow: 0 0 4px black;
 }
 
+.input-cost {
+    display: none;
+    position: absolute;
+    margin-left: 50px;
+    padding: 10px 10px 10px 10px;
+    background: white;
+    width: 200px;
+    box-shadow: 0 0 4px black;
+}
 
+.input-cost input {
+    width: 100%;
+    margin-bottom: 10px;
+}
 
+.caret-hide:hover {
+    color: #ff6116;
+}
+
+.button-input-cost {
+    background: #ffe2c1;
+}
+
+.td-cost {
+    text-align: center;
+}
+
+.remove-middle-cost {
+    cursor: pointer;
+    text-align: center;
+}
+
+.remove-middle-cost:hover {
+    background: #eaeaea;
+}
+
+#boxTags {
+    font-family: Arial;
+    border: 1px solid #d3d3d3;
+    padding: 10px 10px 0 10px;
+    margin: 0 auto;
+    margin-top: 10px;
+    background: white;
+}
+#ulTags {
+    padding: 0;
+    margin: 0;
+}
+#ulTags .li_tags {
+    border: 1px solid #e3e3e3;
+    background: #e3e3e3;
+    display: inline;
+    float: left;
+    list-style: none;
+    margin: 0 10px 10px 0;
+    padding: 0 3px 4px 5px;
+}
+#ulTags .li_tags:hover {
+    border-color: #0099cc;
+}
+#newTagInput {
+    display: inline;
+    float: left;
+    list-style: none;
+    margin: 0 10px 10px 0;
+    padding: 0 2px 2px 0;
+    width: 23px;
+    background: white;
+}
+.a_tag {
+    color: #000000;
+    text-decoration: none;
+    font-size: 12px;
+}
+.a_tag:hover {
+    color: #000000;
+}
+.del {
+    font-size: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1px 4px 1px 4px;
+    background: #0099cc;
+    color: #ffffff;
+    position: relative;
+}
+.del:hover {
+    background: #ff0000;
+}
+
+.input-tags {
+    width: 23px;
+    border: 1px solid #ffffff;
+    font-size: 12px;
+    outline: none;
+}

@@ -215,18 +215,29 @@ $(document).ready(function() {
             var cost = $(this).siblings('.middle-cost').val();
             var table = $(this).parent().parent().next().find('.table-cost');
             var number = table.children().length;
+            var category_id = $(this).attr('id');
 
-            table.append('<tr>\n' +
-                '             <td>\n' +
-                '                 <textarea name="detail-comment-' + number + '" style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">' + comment + '</textarea>\n' +
-                '             </td>\n' +
-                '             <td>\n' +
-                '                 <input name="value-' + number + '" class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="' + cost + '" type="number">\n' +
-                '             </td>\n' +
-                '             <td style="text-align: center">\n' +
-                '                 <i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
-                '             </td>\n' +
-                '         </tr>')
+            if (!(comment)) {
+                comment = 'Без комментария';
+            }
+            if ((cost) && cost !== '0') {
+                table.append('<tr>\n' +
+                    '             <td>\n' +
+                    '                 <input readonly value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
+                    '             </td>\n' +
+                    '             <td>\n' +
+                    '                 <input readonly name="value-' + category_id + '-' + number + '" class="middle-costs" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                    '             </td>\n' +
+                    '             <td class="remove-middle-cost">\n' +
+                    '                 <i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
+                    '             </td>\n' +
+                    '         </tr>');
+
+                $(this).siblings('.middle-comment').val('');
+                $(this).siblings('.middle-cost').val('');
+                $(this).parent().hide();
+                count_amount();
+            }
         });
 
 
@@ -237,7 +248,157 @@ $(document).ready(function() {
             } else {
                 item.hide()
             }
-        })
+        });
+        
+        function count_amount() {
+            var amounts = $('.cost-amount');
+            var all_amount = $('#cost-amount');
+            var current_amount;
+            var counts;
+            var all_counts = 0;
+
+            for (var i=0; i<amounts.length; i++) {
+                counts = 0;
+                current_amount = amounts.eq(i).parent().next().children().children().find('.middle-costs');
+                for (var j=0;j<current_amount.length;j++) {
+                    if (current_amount.eq(j).val()) {
+                        counts += parseInt(current_amount.eq(j).val());
+                    }
+                }
+                amounts.eq(i).val(counts);
+                all_counts += counts;
+                if (counts) {
+                    amounts.eq(i).next().show()
+                } else {
+                    amounts.eq(i).next().hide()
+                }
+            }
+            all_amount.val(all_counts)
+        }
+
+        $('.button-input-cost').on('click', function () {
+            $('.input-cost').hide();
+            $(this).prev().show()
+        });
+
+        $('.table-cost').on('click', '.remove-middle-cost', function () {
+            $(this).parent().remove();
+            count_amount()
+        });
+
+        $('body').click(function (event) {
+            if ($('.td-cost').has(event.target).length === 0) {
+                $('.input-cost').hide()
+            }
+
+            if ($('.td-amount').has(event.target).length === 0) {
+                $('.hide-detail').hide()
+            }
+
+        });
+
+        function tags() {
+            var arrayTags = [""];	// Массив, который содержит метки
+            var index = 0;
+
+// Удаление элемента из массива
+            function removeByValue(arr, val) {
+                for(var i=0; i<arr.length; i++) {
+                    if(arr[i] === val) {
+                        arr.splice(i, 1);
+                        break;
+                    }
+                }
+                index--;
+            }
+
+// Удаление метки из списка
+            function removeTag(el) {
+                tag = $(el).prev().html();
+                $("#tag-"+tag).remove();
+                removeByValue(arrayTags, tag);
+                $("#inputTag").focus();
+            }
+
+                var inputWidth = 16;
+
+                // Вставка метки в список
+                function insertTag(tag) {
+                    var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
+                        '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
+                        '<a href="" onclick="removeTag(this); return false;"'+
+                        ' class="del" id="del_'+tag+'">&times;</strong></a>'+
+                        '</li>';
+                    return liEl;
+                }
+
+                $("#inputTag").focus().val("");
+                $("#hiddenTags").val("");
+
+                // Проверяем нажатие клавиши
+                $("#inputTag").keydown(function(event) {
+                    var textVal = jQuery.trim($(this).val()).toLowerCase();
+                    var keyCode = event.which;
+
+                    // Перемещаемся влево (нажата клавиша влево)
+                    if (keyCode == 37 && textVal == '') {
+                        $("#newTagInput").insertBefore($("#newTagInput").prev());
+                        $("#inputTag").focus();
+                    }
+
+                    // Перемещаемся вправо (нажата клавиша вправо)
+                    if (keyCode == 39 && textVal == '') {
+                        $("#newTagInput").insertAfter($("#newTagInput").next());
+                        $("#inputTag").focus();
+                    }
+
+                    // Удаляем предыдущую метку (нажата клавиша backspace)
+                    if (keyCode == 8 && textVal == '') {
+                        deletedTag = $("#newTagInput").prev().find(".a_tag").html();
+                        removeByValue(arrayTags, deletedTag);
+                        $("#newTagInput").prev().remove();
+                        $("#inputTag").focus();
+                    }
+
+                    // Удаляем следующую метку (нажата клавиша delete)
+                    if (keyCode == 46 && textVal == '') {
+                        deletedTag = $("#newTagInput").next().find(".a_tag").html();
+                        removeByValue(arrayTags, deletedTag);
+                        $("#newTagInput").next().remove();
+                        $("#inputTag").focus();
+                    }
+
+                    if ((47 < keyCode && keyCode < 106) || (keyCode == 32)) {
+
+                        if (keyCode != 32) {
+                            // Пользователь все еще вводит метку
+                            inputWidth = inputWidth + 7;
+                            $(this).attr("style", "width:"+inputWidth+"px");
+                            $("#newTagInput").attr("style", "width:"+inputWidth+"px");
+                        } else if (keyCode == 32 && (textVal != '')) {
+                            // Пользователь создает новую метку
+                            var isExist = jQuery.inArray(textVal, arrayTags);
+
+                            if (isExist == -1) {
+                                // Вставляем новую метку (видимый элемент)
+                                $(insertTag(textVal)).insertBefore("#newTagInput");
+
+                                // Вставляем новую метку в массив JavaScript
+                                arrayTags[index] = textVal;
+                                index++;
+                            }
+                            inputWidth = 16;
+                            $(this).attr("style", "width:"+inputWidth+"px"); // Ширина элемента будет соответствовать длине ввода
+                            $("#newTagInput").attr("style", "width:23px");
+                            $(this).val("");
+                        } else {
+                            $(this).val("");
+                        }
+                    }
+                });
+        }
+        tags()
+
     }
 
 

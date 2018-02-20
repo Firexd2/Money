@@ -9,12 +9,18 @@ DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye
                 '"': '_', '(': '_', ')': '_', '№': '_'}
 
 
+class Tags(models.Model):
+
+    name = models.CharField('Название метки', max_length=100)
+    user = models.CharField('Пользователь', max_length=100)
+
+
 class Cost(models.Model):
     """
     Траты
     """
     value = models.IntegerField()
-    comment = models.CharField('Общий комментарий траты', max_length=100)
+    tags = models.ManyToManyField(Tags, verbose_name='Метки')
     detailed_comment = models.CharField('Подробрый комментарий', max_length=100)
     datetime = models.DateTimeField('Время и дата', auto_now=True)
 
