@@ -289,22 +289,26 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     margin: 0 auto;
     margin-top: 10px;
     background: white;
+    cursor: text;
 }
-#ulTags {
+.ulTags {
     padding: 0;
     margin: 0;
 }
-#ulTags .li_tags {
+.ulTags .li_tags {
     border: 1px solid #e3e3e3;
     background: #e3e3e3;
-    display: inline;
+    display: inline-block;
     float: left;
+    cursor: pointer;
     list-style: none;
     margin: 0 10px 10px 0;
     padding: 0 3px 4px 5px;
+    transition: 0.3s;
 }
-#ulTags .li_tags:hover {
-    border-color: #0099cc;
+.ulTags .li_tags:hover {
+    border-color: #ff923a;
+    transition: 0.3s;
 }
 #newTagInput {
     display: inline;
@@ -328,12 +332,12 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     text-decoration: none;
     font-weight: bold;
     padding: 1px 4px 1px 4px;
-    background: #0099cc;
+    background: #ff923a;
     color: #ffffff;
     position: relative;
 }
 .del:hover {
-    background: #ff0000;
+    background: #ff7221;
 }
 
 .input-tags {

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from Core.models import Configuration, CostCategory, Cost
+from Core.models import Configuration, CostCategory, Cost, Tags
 
 
 @login_required
@@ -32,9 +32,12 @@ def new(request):
 
 def conf(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
+    tags = Tags.objects.filter(user=str(request.user)).order_by('-datetime')[:10]
 
     if request.POST:
+        print(request.POST)
         dict_value_and_comment = dict()
+
         for cat in configuration.category.all():
             value = 'value-' + str(cat.id)
             detailed_comment = 'detail-comment-' + str(cat.id)
@@ -44,11 +47,15 @@ def conf(request, name_url):
                 complete_detailed_comment = detailed_comment + '-' + str(n)
                 try:
                     cost = Cost(value=request.POST[complete_value],
-                                detailed_comment=request.POST[complete_detailed_comment],
-                                comment=request.POST['common-comment'])
+                                detailed_comment=request.POST[complete_detailed_comment])
                 except KeyError:
                     break
                 cost.save()
+
+                for tag in request.POST.getlist('tags'):
+                    print(tag)
+                    tag_obj, b = Tags.objects.update_or_create(user=str(request.user), name=tag)
+                    cost.tags.add(tag_obj)
                 cat.cost.add(cost)
                 n += 1
 

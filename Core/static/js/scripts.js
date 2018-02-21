@@ -1,3 +1,23 @@
+var arrayTags = [""];	// Массив, который содержит метки
+var index = 0;
+
+function removeByValue(arr, val) {
+    for(var i=0; i<arr.length; i++) {
+        if(arr[i] === val) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+    index--;
+}
+
+function removeTag(el) {
+    tag = $(el).prev().html();
+    $(el).parent().remove();
+    removeByValue(arrayTags, tag);
+    $("#inputTag").focus();
+}
+
 $(document).ready(function() {
 
     function onNavbar() {
@@ -249,7 +269,7 @@ $(document).ready(function() {
                 item.hide()
             }
         });
-        
+
         function count_amount() {
             var amounts = $('.cost-amount');
             var all_amount = $('#cost-amount');
@@ -298,123 +318,120 @@ $(document).ready(function() {
         });
 
         function tags() {
-            var arrayTags = [""];	// Массив, который содержит метки
-            var index = 0;
 
-// Удаление элемента из массива
-            function removeByValue(arr, val) {
-                for(var i=0; i<arr.length; i++) {
-                    if(arr[i] === val) {
-                        arr.splice(i, 1);
-                        break;
-                    }
+            var inputWidth = 16;
+
+            $('.last_tag').on('click', function () {
+
+                var text = $(this).children().text();
+                var isExist = jQuery.inArray(text, arrayTags);
+
+                if (isExist === -1) {
+                    // Вставляем новую метку (видимый элемент)
+                    $(insertTag(text)).insertBefore("#newTagInput");
+
+                    // Вставляем новую метку в массив JavaScript
+                    arrayTags[index] = text;
+                    index++;
                 }
-                index--;
+            });
+
+            // Вставка метки в список
+            function insertTag(tag) {
+                var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
+                    '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
+                    '<a href="" onclick="removeTag(this); return false;"'+
+                    ' class="del" id="del_'+tag+'">&times;</strong></a>' +
+                    '<input hidden name="tags" value="'+tag+'" type="text">'+
+                    '</li>';
+                return liEl;
             }
 
-// Удаление метки из списка
-            function removeTag(el) {
-                tag = $(el).prev().html();
-                $("#tag-"+tag).remove();
-                removeByValue(arrayTags, tag);
-                $("#inputTag").focus();
-            }
+            $("#inputTag").focus().val("");
+            $("#hiddenTags").val("");
 
-                var inputWidth = 16;
+            // Проверяем нажатие клавиши
+            $("#inputTag").keydown(function(event) {
+                var textVal = jQuery.trim($(this).val()).toLowerCase();
+                var keyCode = event.which;
 
-                // Вставка метки в список
-                function insertTag(tag) {
-                    var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
-                        '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
-                        '<a href="" onclick="removeTag(this); return false;"'+
-                        ' class="del" id="del_'+tag+'">&times;</strong></a>'+
-                        '</li>';
-                    return liEl;
+                // Перемещаемся влево (нажата клавиша влево)
+                if (keyCode === 37 && textVal === '') {
+                    $("#newTagInput").insertBefore($("#newTagInput").prev());
+                    $("#inputTag").focus();
                 }
 
-                $("#inputTag").focus().val("");
-                $("#hiddenTags").val("");
+                // Перемещаемся вправо (нажата клавиша вправо)
+                if (keyCode === 39 && textVal === '') {
+                    $("#newTagInput").insertAfter($("#newTagInput").next());
+                    $("#inputTag").focus();
+                }
 
-                // Проверяем нажатие клавиши
-                $("#inputTag").keydown(function(event) {
-                    var textVal = jQuery.trim($(this).val()).toLowerCase();
-                    var keyCode = event.which;
+                // Удаляем предыдущую метку (нажата клавиша backspace)
+                if (keyCode === 8 && textVal === '') {
+                    deletedTag = $("#newTagInput").prev().find(".a_tag").html();
+                    removeByValue(arrayTags, deletedTag);
+                    $("#newTagInput").prev().remove();
+                    $("#inputTag").focus();
+                }
 
-                    // Перемещаемся влево (нажата клавиша влево)
-                    if (keyCode == 37 && textVal == '') {
-                        $("#newTagInput").insertBefore($("#newTagInput").prev());
-                        $("#inputTag").focus();
-                    }
+                // Удаляем следующую метку (нажата клавиша delete)
+                if (keyCode === 46 && textVal === '') {
+                    deletedTag = $("#newTagInput").next().find(".a_tag").html();
+                    removeByValue(arrayTags, deletedTag);
+                    $("#newTagInput").next().remove();
+                    $("#inputTag").focus();
+                }
 
-                    // Перемещаемся вправо (нажата клавиша вправо)
-                    if (keyCode == 39 && textVal == '') {
-                        $("#newTagInput").insertAfter($("#newTagInput").next());
-                        $("#inputTag").focus();
-                    }
+                if ((47 < keyCode && keyCode < 106) || (keyCode === 32)) {
 
-                    // Удаляем предыдущую метку (нажата клавиша backspace)
-                    if (keyCode == 8 && textVal == '') {
-                        deletedTag = $("#newTagInput").prev().find(".a_tag").html();
-                        removeByValue(arrayTags, deletedTag);
-                        $("#newTagInput").prev().remove();
-                        $("#inputTag").focus();
-                    }
+                    if (keyCode !== 32) {
+                        // Пользователь все еще вводит метку
+                        inputWidth = inputWidth + 7;
+                        $(this).attr("style", "width:"+inputWidth+"px");
+                        $("#newTagInput").attr("style", "width:"+inputWidth+"px");
+                    } else if (keyCode === 32 && (textVal !== '')) {
+                        // Пользователь создает новую метку
+                        var isExist = jQuery.inArray(textVal, arrayTags);
 
-                    // Удаляем следующую метку (нажата клавиша delete)
-                    if (keyCode == 46 && textVal == '') {
-                        deletedTag = $("#newTagInput").next().find(".a_tag").html();
-                        removeByValue(arrayTags, deletedTag);
-                        $("#newTagInput").next().remove();
-                        $("#inputTag").focus();
-                    }
+                        if (isExist === -1) {
+                            // Вставляем новую метку (видимый элемент)
+                            $(insertTag(textVal)).insertBefore("#newTagInput");
 
-                    if ((47 < keyCode && keyCode < 106) || (keyCode == 32)) {
-
-                        if (keyCode != 32) {
-                            // Пользователь все еще вводит метку
-                            inputWidth = inputWidth + 7;
-                            $(this).attr("style", "width:"+inputWidth+"px");
-                            $("#newTagInput").attr("style", "width:"+inputWidth+"px");
-                        } else if (keyCode == 32 && (textVal != '')) {
-                            // Пользователь создает новую метку
-                            var isExist = jQuery.inArray(textVal, arrayTags);
-
-                            if (isExist == -1) {
-                                // Вставляем новую метку (видимый элемент)
-                                $(insertTag(textVal)).insertBefore("#newTagInput");
-
-                                // Вставляем новую метку в массив JavaScript
-                                arrayTags[index] = textVal;
-                                index++;
-                            }
-                            inputWidth = 16;
-                            $(this).attr("style", "width:"+inputWidth+"px"); // Ширина элемента будет соответствовать длине ввода
-                            $("#newTagInput").attr("style", "width:23px");
-                            $(this).val("");
-                        } else {
-                            $(this).val("");
+                            // Вставляем новую метку в массив JavaScript
+                            arrayTags[index] = textVal;
+                            index++;
                         }
+                        inputWidth = 16;
+                        $(this).attr("style", "width:"+inputWidth+"px"); // Ширина элемента будет соответствовать длине ввода
+                        $("#newTagInput").attr("style", "width:23px");
+                        $(this).val("");
+                    } else {
+                        $(this).val("");
                     }
-                });
+                }
+            });
+
+            $('#boxTags').on('click', function () {
+                $('.input-tags').focus()
+            })
         }
         tags()
 
     }
 
-
-
     input_cost()
 
 });
 
-                                // <tr>
-                                //     <td>
-                                //         <textarea style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">Полотенце Максюшке</textarea>
-                                //     </td>
-                                //     <td>
-                                //         <input class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="3567" type="number">
-                                //     </td>
-                                //     <td style="text-align: center">
-                                //         <i class="fa fa-times" style="color: red" aria-hidden="true"></i>
-                                //     </td>
-                                // </tr>
+// <tr>
+//     <td>
+//         <textarea style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">Полотенце Максюшке</textarea>
+//     </td>
+//     <td>
+//         <input class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="3567" type="number">
+//     </td>
+//     <td style="text-align: center">
+//         <i class="fa fa-times" style="color: red" aria-hidden="true"></i>
+//     </td>
+// </tr>

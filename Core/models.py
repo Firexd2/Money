@@ -13,6 +13,7 @@ class Tags(models.Model):
 
     name = models.CharField('Название метки', max_length=100)
     user = models.CharField('Пользователь', max_length=100)
+    datetime = models.DateTimeField('Время и дата', auto_now=True)
 
 
 class Cost(models.Model):
