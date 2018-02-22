@@ -191,7 +191,6 @@ $(document).ready(function() {
 
         var category_all = $('.category-table');
         var balance = $('.balance-table');
-        var balance_procent = $('.balance-table-procent');
         var item;
         var procent;
 
@@ -202,21 +201,17 @@ $(document).ready(function() {
             item = category_all.eq(q).text().split('/');
             balance.eq(q).html(parseInt(item[1]) - parseInt(item[0]));
             procent = Math.round(100 - parseInt(item[0]) / parseInt(item[1]) * 100);
-            balance_procent.eq(q).html(procent + '%');
             amount_costs += parseInt(item[0]);
             amount_max += parseInt(item[1]);
 
             if (procent > 30) {
                 balance.eq(q).css({'color': '#00f100'});
-                balance_procent.eq(q).css({'color': '#00f100'});
                 category_all.eq(q).css({'color': '#00f100'});
             } else if (procent > 5) {
                 balance.eq(q).css({'color': '#ffc211'});
-                balance_procent.eq(q).css({'color': '#ffc211'});
                 category_all.eq(q).css({'color': '#ffc211'});
             } else {
                 balance.eq(q).css({'color': 'red'});
-                balance_procent.eq(q).css({'color': 'red'});
                 category_all.eq(q).css({'color': 'red'});
             }
         }
@@ -285,7 +280,7 @@ $(document).ready(function() {
                         counts += parseInt(current_amount.eq(j).val());
                     }
                 }
-                amounts.eq(i).val(counts);
+                amounts.eq(i).text(counts);
                 all_counts += counts;
                 if (counts) {
                     amounts.eq(i).next().show()
@@ -293,7 +288,7 @@ $(document).ready(function() {
                     amounts.eq(i).next().hide()
                 }
             }
-            all_amount.val(all_counts)
+            all_amount.text(all_counts)
         }
 
         $('.button-input-cost').on('click', function () {
@@ -323,7 +318,7 @@ $(document).ready(function() {
 
             $('.last_tag').on('click', function () {
 
-                var text = $(this).children().text();
+                var text = $(this).text();
                 var isExist = jQuery.inArray(text, arrayTags);
 
                 if (isExist === -1) {
