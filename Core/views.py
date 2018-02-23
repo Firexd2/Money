@@ -32,10 +32,20 @@ def new(request):
 
 def conf(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
+    return render(request, 'conf.html', locals())
+
+def stat(request, name_url):
+
+    configuration = request.user.settings.configurations.all().get(name_url=name_url)
+
+    return render(request, 'stat.html', locals())
+
+
+def cost(request, name_url):
+    configuration = request.user.settings.configurations.all().get(name_url=name_url)
     tags = Tags.objects.filter(user=str(request.user)).order_by('-datetime')[:10]
 
     if request.POST:
-        print(request.POST)
         dict_value_and_comment = dict()
 
         for cat in configuration.category.all():
@@ -53,10 +63,9 @@ def conf(request, name_url):
                 cost.save()
 
                 for tag in request.POST.getlist('tags'):
-                    print(tag)
                     tag_obj, b = Tags.objects.update_or_create(user=str(request.user), name=tag)
                     cost.tags.add(tag_obj)
                 cat.cost.add(cost)
                 n += 1
 
-    return render(request, 'conf.html', locals())
+    return render(request, 'cost.html', locals())

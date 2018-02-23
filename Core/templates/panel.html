@@ -1,18 +1,47 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block menu %}
+    <nav style="border-radius: 0; border: none" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-money.ru</b></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'panel' %}">Панель</a></li>
+                    <li>
+                        <a href="{% url 'new' %}">Новая конфигурация</a>
+                    </li>
+                    <li><a href="/">Настройки аккаунта</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Конфигурации <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for configuration in user.settings.configurations.all %}
+                                <li><a href="{{ configuration.get_absolute_url }}">{{ configuration.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
 {% block content %}
-
     {% for configuration in user.settings.configurations.all %}
         <div style="color: {{ configuration.color }}" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
-            <div style="border: solid 3px;cursor: pointer; border-radius: 5px; width: 360px; height: 360px; padding: 20px">
+            <div style="border: solid 3px;cursor: pointer; border-radius: 5px; padding: 20px">
                 <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
                 <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>
             </div>
         </div>
     {% endfor %}
-
-    <div onclick="location.href='/new/'" class="col-lg-4 conf add">
-        <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; width: 360px; height: 360px; padding: 20px">
+    <div onclick="location.href='{% url 'new' %}'" class="col-lg-4 conf add">
+        <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; padding: 20px">
             <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
             <p style="padding-top: 10px; font-size: 19px; font-weight: bold">Добавить новую конфигурацию</p>
         </div>

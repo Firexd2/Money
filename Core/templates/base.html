@@ -15,43 +15,37 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <header>
-    <!-- Классы navbar и navbar-default (базовые классы меню) -->
-    <nav style="border-radius: 0;box-shadow: 0 2px 5px rgba(0,0,0,0.65);" class="navbar navbar-default">
-        <!-- Контейнер (определяет ширину Navbar) -->
+    {% block menu %}
+    <nav style="border-radius: 0; border: none" class="navbar navbar-default">
         <div class="container">
-            <!-- Заголовок -->
             <div class="navbar-header">
-                <!-- Кнопка «Гамбургер» отображается только в мобильном виде (предназначена для открытия основного содержимого Navbar) -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!-- Бренд или название сайта (отображается в левой части меню) -->
-                <a class="navbar-brand" href="#"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-money.ru</b></a>
+                <a class="navbar-brand" href="#"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
             </div>
-            <!-- Основная часть меню (может содержать ссылки, формы и другие элементы) -->
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Ссылка 1</a></li>
-                    <li><a href="#">Ссылка 2</a></li>
-                    <li><a href="#">Ссылка 3</a></li>
-                    <li><a href="#">Ссылка 4</a></li>
-                    <li><a href="#">Ссылка 5</a></li>
-                    <!-- Выпадающий список -->
+                    <li><a href="{% url 'cost' name_url=configuration.name_url %}">Ввод расходов</a></li>
+                    <li>
+                        <a href="{% url 'stat' name_url=configuration.name_url %}">Статистика</a>
+                    </li>
+                    <li><a href="/">Настройки аккаунта</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Раздел <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Конфигурации <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Ссылка</a></li>
-                            <li><a href="#">Ссылка</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Ссылка</a></li>
+                            {% for configuration in user.settings.configurations.all %}
+                                <li><a href="{{ configuration.get_absolute_url }}">{{ configuration.name }}</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    {% endblock %}
 </header>
 <body>
 <div class="container">
