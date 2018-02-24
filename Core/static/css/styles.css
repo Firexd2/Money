@@ -3,11 +3,29 @@ body {
     font-size: 16px;
 }
 
+h3 {
+    padding-left: 15px
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+#nprogress .bar {
+    background: #ff923a;
+    height: 2px;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #ff923a;
+  border-left-color: #ff923a;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #29d, 0 0 5px #ff923a;
 }
 
 .auth-logo {
@@ -30,8 +48,10 @@ input::-webkit-inner-spin-button {
 
 /* цвет фона и рамки навигационного меню */
 .navbar-default {
-    background-color: #000000;
-    border-color: #000000;
+    background-color: #24292e;
+    border-radius: 0;
+    border: none;
+
 }
 /* цвет текста, содержащий название сайта или бренда */
 .navbar-default .navbar-brand {
@@ -102,6 +122,7 @@ input::-webkit-inner-spin-button {
 .dropdown-menu {
     background-color: #707070;
     border-color: #707070;
+    border-radius: 0;
 }
 
 .dropdown-menu > li > a {
@@ -162,19 +183,12 @@ input::-webkit-inner-spin-button {
 .navbar-toggle .icon-bar:nth-of-type(3) {
   transform: translate3d(0px,-14px,0) rotate(-135deg);
   transform-origin: right top;
-  width: 11px;
+    width: 11px;
 }
 
-.arrow-up {
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #fffaf8;
-    position: absolute;
-    bottom: 0;
-    right: 43%;
-    z-index: 3;
+.active {
+    border-left: 2px solid #ff923a;
+    border-right: 2px solid #ff923a;
 }
 
 .conf {

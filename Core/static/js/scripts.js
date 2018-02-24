@@ -41,7 +41,6 @@ $(document).ready(function() {
         for (var i=0;i<li.length;i++) {
 
             if (li.eq(i).children('a').attr('href') === path) {
-                li.eq(i).append('<span class="arrow-up"></span>');
                 li.eq(i).addClass('active');
                 break
             }
@@ -61,7 +60,7 @@ $(document).ready(function() {
             if (amount) {
                 return 0
             } else {
-                return '-- '
+                return '-- ';
             }
         }
     }
@@ -154,7 +153,7 @@ $(document).ready(function() {
             if ($('#o').text() !== '0') {
                 e.preventDefault();
                 if (!($('#name-input').val())) {
-                    $('#error-form').text(' Вы не ввели название конфигурации')
+                    $('#error-form').text(' Вы не ввели название плана')
                 } else if ($('#o').text() === '--') {
                     $('#error-form').text(' Вы не ввели и не распределили сумму')
                 } else if (parseInt($('#o').text()) > 0) {
@@ -177,9 +176,9 @@ $(document).ready(function() {
 
 
 
-//    ДЕТАЛИЗАЦИЯ КОНФИГУРАЦИИ
+//    СТАТИСТИКА КОНФИГУРАЦИИ
 
-    function table() {
+    function stat() {
         var item_cost = $('.cost-table');
         var item_hide = $('.hide');
         var costs;
@@ -231,10 +230,83 @@ $(document).ready(function() {
         $('#amount-table-1').html(amount_costs);
         $('#amount-table-2').html(amount_max);
         $('#amount-balance').html(amount_max - amount_costs);
-        $('#amount-balance-procent').html(Math.round(100 - amount_costs / amount_max * 100) + '%')
+        $('#amount-balance-procent').html(Math.round(100 - amount_costs / amount_max * 100) + '%');
+
+
+        function week_table() {
+            function count_table() {
+                var data = $('.category-table');
+                var week = parseInt($('#week').val());
+                var balance = $('.balance-week');
+                var proc = $('.proc-week');
+                var amount_balance = 0;
+                var for_proc_cost = 0;
+                var for_proc_limit = 0;
+                var current;
+                var cost;
+                var limit;
+
+                for (var i=0;i<data.length;i++) {
+                    current = data.eq(i).text().split('/');
+                    cost = parseInt(current[0]);
+                    limit = parseInt(current[1]);
+
+                    var result = count_for_week_table(week, cost, limit);
+                    if (!(balance.eq(i).parent().is(':hidden'))) {
+                        amount_balance += result[0];
+                        for_proc_cost += cost;
+                        for_proc_limit += limit;
+                    }
+                    balance.eq(i).html(result[0]);
+                    proc.eq(i).html(parseInt(result[1]) + ' %');
+
+                    if (result[1] > 30) {
+                        balance.eq(i).css({'color': '#00f100'});
+                    } else if (result[1] > 5) {
+                        balance.eq(i).css({'color': '#ffc211'});
+                    } else {
+                        balance.eq(i).css({'color': 'red'});
+                    }
+                }
+
+                $('#amount-table-week-1').html(amount_balance);
+                $('#amount-balance-week').html(parseInt(100 - ((for_proc_cost - (for_proc_limit / 4) * week) / (for_proc_limit / 4) * 100)));
+            }
+            count_table();
+
+            $('.check-cat').on('change', function () {
+                checked_week_cat($(this).next().text());
+                count_table()
+            });
+
+            function checked_week_cat(name) {
+                var names = $('.name-cat');
+                for (var i=0;i<names.length;i++) {
+                    if (name === names.eq(i).text()) {
+                        if (names.eq(i).parent().is(':hidden')) {
+                            names.eq(i).parent().show();
+                        } else {
+                            names.eq(i).parent().hide();
+                        }
+                        break
+                    }
+                }
+                $.post('', {category: name})
+            }
+        }
+
+        week_table();
+
+        function count_for_week_table(week, cost, limit) {
+
+            var limit_for_week = limit / 4;
+            var diff = limit_for_week - (cost - limit_for_week * week);
+            var proc = 100 - ((cost - limit_for_week * week) / limit_for_week * 100);
+            return [diff, proc]
+        }
     }
 
-    table();
+    stat();
 
     function input_cost() {
         $('.btn-cost').on('click', function () {

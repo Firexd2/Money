@@ -1,10 +1,10 @@
 {% extends 'panel.html' %}
 {% block content %}
-    <div style="margin-bottom: 150px" class="col-lg-6">
-        <h2>Создание конфигурации</h2>
-        <hr>
-        <form name="new" method="POST">{% csrf_token %}
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашей конфигурации:</h4>
+    <h2>Создание нового плана распределения бюджета</h2>
+    <hr>
+    <form name="new" method="POST">{% csrf_token %}
+        <div class="col-lg-6">
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
@@ -50,7 +50,7 @@
                     <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
                 </div>
             </div>
-            <p style="font-size: 13px; color: grey">Выбери цвет иконки:</p>
+            <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
             <input name="color" type="color">
             {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
             {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
@@ -61,6 +61,8 @@
             {#                <option value="darkorange" style="background-color: darkorange; color: darkorange;">Оранжевый</option>#}
             {#                <option value="green" style="background-color: green; color: green;">Зеленый</option>#}
             {#            </select></p>#}
+        </div>
+        <div class="col-lg-6">
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
@@ -112,6 +114,6 @@
                 </tbody>
             </table>
             <button type="submit" class="btn btn-warning">Готово!</button> <span style="color: red" id="error-form"></span>
-        </form>
-    </div>
+        </div>
+    </form>
 {% endblock %}

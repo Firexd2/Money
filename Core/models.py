@@ -32,6 +32,7 @@ class CostCategory(models.Model):
     """
     name = models.CharField('Название', max_length=100)
     cost = models.ManyToManyField(Cost, verbose_name='Траты', blank=True)
+    included_week_table = models.BooleanField(default=True)
     max = models.IntegerField('Предел затраты')
 
 
@@ -60,6 +61,13 @@ class Configuration(models.Model):
 
     def get_absolute_url(self):
         return reverse('conf', args=[str(self.name_url)])
+
+    def get_now_week(self):
+        return (datetime.today().date() - self.date).days // 8
+
+    def get_number_days(self):
+        days = (datetime.today().date() - self.date).days
+        return (days // 8 + 1) * 8 - days
 
 
 class Settings(models.Model):

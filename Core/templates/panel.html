@@ -9,20 +9,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-money.ru</b></a>
+                <a class="navbar-brand" href="{% url 'panel' %}"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-money.ru</b></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'panel' %}">Панель</a></li>
+                    <li><a href="{% url 'panel' %}"><i class="fa fa-columns" aria-hidden="true"></i> Панель</a></li>
                     <li>
-                        <a href="{% url 'new' %}">Новая конфигурация</a>
+                        <a href="{% url 'new' %}"><i class="fa fa-plus-circle" aria-hidden="true"></i> Новый план бюджета</a>
                     </li>
-                    <li><a href="/">Настройки аккаунта</a></li>
+                    <li><a href="/"><i class="fa fa-address-book-o" aria-hidden="true"></i> Настройки аккаунта</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Конфигурации <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-arrows" aria-hidden="true"></i> Планы бюджета <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% for configuration in user.settings.configurations.all %}
-                                <li><a href="{{ configuration.get_absolute_url }}">{{ configuration.name }}</a></li>
+                                <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -43,7 +43,7 @@
     <div onclick="location.href='{% url 'new' %}'" class="col-lg-4 conf add">
         <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; padding: 20px">
             <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
-            <p style="padding-top: 10px; font-size: 19px; font-weight: bold">Добавить новую конфигурацию</p>
+            <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
         </div>
     </div>
 {% endblock %}
