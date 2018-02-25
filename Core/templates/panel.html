@@ -32,18 +32,33 @@
     </nav>
 {% endblock %}
 {% block content %}
-    {% for configuration in user.settings.configurations.all %}
-        <div style="color: {{ configuration.color }}" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
-            <div style="border: solid 3px;cursor: pointer; border-radius: 5px; padding: 20px">
-                <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
-                <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>
+    <div class="row">
+    <h3>Ваши данные и настройки:</h3>
+        <hr>
+    <div style="font-size: 19px" class="col-lg-6">
+        <p>
+        Сумма ваших накоплений: <b id="freemoney">{{ user.settings.free_money }}</b> р. <i style="cursor: pointer;color: #ff923a;" id="create-freemoney" class="fa fa-pencil" aria-hidden="true"></i>
+        </p>
+        <p>Деньги в обороте: <b>{{ money_circulation }}</b> р.</p>
+        <p>Вся сумма денег: <b>{{ user.settings.free_money|add:money_circulation }}</b> р.</p>
+    </div>
+    </div>
+    <div class="row">
+        <h3>Планы распределения бюджета</h3>
+        <hr>
+        {% for configuration in user.settings.configurations.all %}
+            <div style="color: {{ configuration.color }}" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
+                <div style="border: solid 3px;cursor: pointer; border-radius: 5px; padding: 20px">
+                    <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
+                    <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-    <div onclick="location.href='{% url 'new' %}'" class="col-lg-4 conf add">
-        <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; padding: 20px">
-            <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
-            <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
+        {% endfor %}
+        <div onclick="location.href='{% url 'new' %}'" class="col-lg-4 conf add">
+            <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; padding: 20px">
+                <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
+                <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
+            </div>
         </div>
     </div>
 {% endblock %}

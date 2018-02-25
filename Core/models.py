@@ -62,13 +62,6 @@ class Configuration(models.Model):
     def get_absolute_url(self):
         return reverse('conf', args=[str(self.name_url)])
 
-    def get_now_week(self):
-        return (datetime.today().date() - self.date).days // 8
-
-    def get_number_days(self):
-        days = (datetime.today().date() - self.date).days
-        return (days // 8 + 1) * 8 - days
-
 
 class Settings(models.Model):
     """

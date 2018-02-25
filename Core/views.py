@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -5,8 +7,17 @@ from django.views.decorators.csrf import csrf_exempt
 from Core.models import Configuration, CostCategory, Cost, Tags
 
 
+@csrf_exempt
 @login_required
 def panel(request):
+
+    money_circulation = sum([conf.income for conf in request.user.settings.configurations.all()])
+
+    if request.is_ajax():
+        settings = request.user.settings
+        settings.free_money = request.POST['value']
+        settings.save()
+
     return render(request, 'panel.html', locals())
 
 
@@ -34,8 +45,16 @@ def conf(request, name_url):
 
 @csrf_exempt
 def stat(request, name_url):
-    configuration = request.user.settings.configurations.all().get(name_url=name_url)
-    last_cost = Cost.objects.filter(costcategory__configuration=configuration).order_by('-datetime')
+
+    configuration = request.user.settings.configurations.get(name_url=name_url)
+    costs = Cost.objects.filter(costcategory__configuration=configuration).order_by('-datetime')
+    max_cost = max(costs, key=lambda x: x.value, default=0)
+    middle_cost = round(sum([cost.value for cost in costs]) / (datetime.now().date() - configuration.date).days)
+    middle_cost_of_week = middle_cost * 8
+
+    days = (datetime.today().date() - configuration.date).days
+    now_week = days // 8
+    number_days_for_week = (days // 8 + 1) * 8 - days
 
     if request.is_ajax():
         bool_field = configuration.category.all().get(name=request.POST['category'])

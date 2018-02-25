@@ -52,6 +52,27 @@ $(document).ready(function() {
     });
     onNavbar();
 
+    function panel() {
+        $('#create-freemoney').on('click', function () {
+            if (!($('#create')).length) {
+                $(this).parent().after('<div style="background: #f0f0f0; padding: 10px 10px 10px 10px">' +
+                    '<p style="font-size: 14px">Предполагатеся, что эту сумму вы введете один раз после регистрации, так как в дальнейшем она будет корректироваться системой.</p>' +
+                    '<div style="margin-bottom: 0" class="input-group"><input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="number"><button id="btn-freemoney" class="btn btn-default"><i class="fa fa-check" aria-hidden="true"></i></button></div>' +
+                    '</div>')
+            }
+        })
+
+        $('body').on('click', '#btn-freemoney', function () {
+            var val = $(this).prev().val();
+            if (val) {
+                $.post('', {value: val});
+                location.reload()
+            }
+        })
+    }
+
+    panel();
+
     function procent(value) {
         var amount = parseInt($('input[name=income]').val());
         if (amount && value) {
