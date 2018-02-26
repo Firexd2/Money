@@ -51,7 +51,7 @@
                 </div>
             </div>
             <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
-            <input name="color" type="color">
+            <input value="#ff923a" style="height: 30px; width: 60px" name="color" type="color">
             {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
             {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
             {#                <option value="red" style="background-color: red; color: red;">Красный</option>#}
@@ -69,13 +69,14 @@
                 <input style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
             </div>
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
+            <p style="color: rgba(191,101,84,0.99); font-size: 13px">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет запрешено, но изменять их название и значение максимума будет допущено.</p>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Название</th>
                     <th width="200">Максимум</th>
-                    <th style="min-width: 100px">% от <span id="amount">--</span></th>
+                    <th style="min-width: 100px">Процент</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -53,14 +53,16 @@ $(document).ready(function() {
     onNavbar();
 
     function panel() {
-        $('#create-freemoney').on('click', function () {
-            if (!($('#create')).length) {
-                $(this).parent().after('<div style="background: #f0f0f0; padding: 10px 10px 10px 10px">' +
-                    '<p style="font-size: 14px">Предполагатеся, что эту сумму вы введете один раз после регистрации, так как в дальнейшем она будет корректироваться системой.</p>' +
-                    '<div style="margin-bottom: 0" class="input-group"><input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="number"><button id="btn-freemoney" class="btn btn-default"><i class="fa fa-check" aria-hidden="true"></i></button></div>' +
-                    '</div>')
+        $('.slider-block-panel').on('click', function (event) {
+            var elem = $(this).children().eq(0);
+            if ($('.input-group').has(event.target).length === 0) {
+                if (elem.css('margin-top') === '0px') {
+                    elem.animate({'margin-top': '-105px'}, 300)
+                } else {
+                    elem.animate({'margin-top': '0'}, 300)
+                }
             }
-        })
+        });
 
         $('body').on('click', '#btn-freemoney', function () {
             var val = $(this).prev().val();
@@ -132,16 +134,20 @@ $(document).ready(function() {
     }
 
     function New() {
+
+        // Для редактирования конфигурации
+        MaxProcent();
+        if ($('#table-icon').length > 0) {
+            $('#table-icon').find('.' + $('input[name=icon]').val().slice(3)).parent().addClass('active-icons');
+        }
+        //
+
         $('input[name=income]').on('input', function () {
             OnOffInputs();
-
-            if ($(this).val()) {
-                $('#amount').text($(this).val());
-            } else {
-                $('#amount').text('--');
-            }
             MaxProcent();
         });
+
+
 
         $('body').on('input', '.cat', function () {
             MaxProcent();

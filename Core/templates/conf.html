@@ -1,4 +1,102 @@
 {% extends 'base.html' %}
 {% block content %}
-
+    <h2>Настройки и редактирование текущего плана</h2>
+    <hr>
+    <form name="new" method="POST">{% csrf_token %}
+        <div class="col-lg-6">
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
+            <div class="input-group">
+                <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
+                <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" value="{{ configuration.name }}" placeholder="Пример: Семья"/>
+            </div>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
+            <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
+            <input name="icon" hidden type="text" value="{{ configuration.icon }}">
+            <div id="table-icon" style="margin-bottom: 10px" class="container-fluid">
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-cogs" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-user-o" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-ravelry" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-eercast" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-at" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-bolt" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-check" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-sun-o" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-credit-card" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-money" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-rub" aria-hidden="true"></i>
+                </div>
+                <div class="icons lg">
+                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
+                </div>
+            </div>
+            <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
+            <input value="{{ configuration.color }}" style="height: 30px; width: 60px" name="color" type="color">
+            {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
+            {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
+            {#                <option value="red" style="background-color: red; color: red;">Красный</option>#}
+            {#                <option value="blue" style="background-color: blue; color: blue;">Синий</option>#}
+            {#                <option value="yellow" style="background-color: yellow; color: yellow;">Желтый</option>#}
+            {#                <option value="blueviolet" style="background-color: blueviolet; color: blueviolet;">Фиолетовый</option>#}
+            {#                <option value="darkorange" style="background-color: darkorange; color: darkorange;">Оранжевый</option>#}
+            {#                <option value="green" style="background-color: green; color: green;">Зеленый</option>#}
+            {#            </select></p>#}
+        </div>
+        <div class="col-lg-6">
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
+            <div class="input-group">
+                <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
+                <input value="{{ configuration.income }}" style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
+            </div>
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Редактирование категорий:</h4>
+            <p style="color: #b2b2b2; font-size: 13px">Редактировать можно только название и значение максимума категории. Добавлять или удалять категории нельзя.</p>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th width="200">Максимум</th>
+                    <th style="min-width: 100px">Процент</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in configuration.category.all %}
+                <tr>
+                    <td><b>{{ forloop.counter0 }}</b></td>
+                    <td><input name="name-cat{{ forloop.counter }}" type="text" class="form-control ca" value="{{ category.name }}" placeholder="Пример: На еду"/></td>
+                    <td><input name="income1{{ forloop.counter }}" type="number" class="form-control cat" value="{{ category.max }}"/></td>
+                    <td style="text-align: center"><span>-- </span>%</td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight: bold" id="total-tr">
+                    <td><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i></td>
+                    <td>Остаток:</td>
+                    <td><span id="o">--</span></td>
+                    <td style="text-align: center"><span id="p">-- </span>% </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-warning">Сохранить</button> <span style="color: red" id="error-form"></span>
+        </div>
+    </form>
 {% endblock %}

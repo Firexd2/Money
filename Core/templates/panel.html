@@ -17,10 +17,10 @@
                     <li>
                         <a href="{% url 'new' %}"><i class="fa fa-plus-circle" aria-hidden="true"></i> Новый план бюджета</a>
                     </li>
-                    <li><a href="/"><i class="fa fa-address-book-o" aria-hidden="true"></i> Настройки аккаунта</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-arrows" aria-hidden="true"></i> Планы бюджета <span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <div class="arrow-up visible-lg"></div>
                             {% for configuration in user.settings.configurations.all %}
                                 <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
                             {% endfor %}
@@ -32,30 +32,69 @@
     </nav>
 {% endblock %}
 {% block content %}
+
     <div class="row">
-    <h3>Ваши данные и настройки:</h3>
+        <h3>Ваши данные и настройки:</h3>
         <hr>
-    <div style="font-size: 19px" class="col-lg-6">
-        <p>
-        Сумма ваших накоплений: <b id="freemoney">{{ user.settings.free_money }}</b> р. <i style="cursor: pointer;color: #ff923a;" id="create-freemoney" class="fa fa-pencil" aria-hidden="true"></i>
-        </p>
-        <p>Деньги в обороте: <b>{{ money_circulation }}</b> р.</p>
-        <p>Вся сумма денег: <b>{{ user.settings.free_money|add:money_circulation }}</b> р.</p>
-    </div>
+        <div style="margin-bottom: 20px" class="col-lg-4">
+            <div class="block-panel">
+                <div class="slider-block-panel">
+                    <div style="height: 102px;">
+                        <b id="freemoney">{{ user.settings.free_money }}</b>
+                        <p style="font-size: 20px">Сумма ваших накоплений</p>
+                    </div>
+                    <div style="height: 102px">
+                        <p style="font-size: 15px">Введите эту сумму один раз, в дальнейшем она будет корректироваться системой.</p>
+                        <div style="margin-bottom: 0;" class="input-group">
+                            <input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="number">
+                            <button id="btn-freemoney" class="btn btn-default">
+                                <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px" class="col-lg-4">
+            <div class="block-panel">
+                <div class="slider-block-panel">
+                    <div style="height: 102px;">
+                        <b style="font-size: 45px; color: #ff5c00">{{ money_circulation }}</b>
+                        <p style="font-size: 20px">Деньги в обороте</p>
+                    </div>
+                    <div style="height: 102px">
+                        <p style="font-size: 15px">Сумма ваших средств задейственных в ваших планах распределения бюджета. Неизменяемая в ручную величина, так как напрямую зависит от ваших настроек в системе.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px" class="col-lg-4">
+            <div class="block-panel">
+                <div class="slider-block-panel">
+                    <div style="height: 102px;">
+                        <b style="font-size: 45px;">{{ user.settings.free_money|add:money_circulation }}</b>
+                        <p style="font-size: 20px">Общая сумма</p>
+                    </div>
+                    <div style="height: 102px">
+                        <p style="font-size: 15px">Сумма накоплений и денег в планах распределения бюджета. По факту является суммой всех ваших денег на данный момент (если вы правильно ввели изначально сумму накоплений).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <h3>Планы распределения бюджета</h3>
         <hr>
         {% for configuration in user.settings.configurations.all %}
-            <div style="color: {{ configuration.color }}" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
-                <div style="border: solid 3px;cursor: pointer; border-radius: 5px; padding: 20px">
+            <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
+                <div class="list-plan">
                     <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
-                    <p style="padding-top: 10px; font-size: 45px; font-weight: bold">{{ configuration.name }}</p>
+                    <p style="padding-top: 10px; font-size: 30px; font-weight: bold">{{ configuration.name }}</p>
                 </div>
             </div>
         {% endfor %}
         <div onclick="location.href='{% url 'new' %}'" class="col-lg-4 conf add">
-            <div style="border: dashed 3px;cursor: pointer; border-radius: 5px; padding: 20px">
+            <div class="list-plan" style="border: dashed 3px;">
                 <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
                 <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
             </div>

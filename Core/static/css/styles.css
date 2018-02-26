@@ -125,13 +125,28 @@ input::-webkit-inner-spin-button {
 }
 
 .dropdown-menu {
-    background-color: #707070;
-    border-color: #707070;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px black;
     border-radius: 0;
 }
 
+.arrow-up {
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 5px;
+    top: -10px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #ffffff;
+}
+
 .dropdown-menu > li > a {
-        color: #ffb57c;
+    color: rgb(0, 0, 0)
+}
+
+.navbar-nav > li > .dropdown-menu {
+    margin-top: -5px;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
@@ -393,3 +408,34 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     font-size: 12px;
     outline: none;
 }
+
+.block-panel {
+    background: linear-gradient(45deg, #f8dac4, #d3ebf6);
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center
+}
+
+.block-panel:hover {
+        background: linear-gradient(45deg, #C5DDE8, #EECFBA);
+}
+
+.slider-block-panel {
+    height: 102px;
+    overflow: hidden;
+}
+
+#freemoney {
+    font-size: 45px;
+    color: #5cb85c
+}
+
+.list-plan {
+    border: solid 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 20px;
+    height: 310px;
+}
+

@@ -39,7 +39,31 @@ def new(request):
 
 
 def conf(request, name_url):
+
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
+
+    if request.POST:
+        configuration.name = request.POST['name']
+        configuration.income = request.POST['income']
+        configuration.icon = request.POST['icon']
+        configuration.color = request.POST['color']
+        configuration.save()
+
+    current_category = configuration.category.all()
+    number_category = 0
+    c = [item[1] for item in request.POST.items()][5:]
+    for n, item in enumerate(c):
+        if n % 2 == 1 and c[n - 1] and c[n]:
+            print(current_category[number_category].max, c[n])
+            if not (current_category[number_category].name == c[n - 1] and current_category[number_category].max == c[n]):
+                for_save = current_category[number_category]
+                print(for_save)
+                for_save.name = c[n - 1]
+                for_save.max = c[n]
+                for_save.save()
+
+            number_category += 1
+
     return render(request, 'conf.html', locals())
 
 

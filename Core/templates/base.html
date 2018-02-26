@@ -26,7 +26,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="color: {{ configuration.color }}" href="#"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
+                <a class="navbar-brand" style="color: {{ configuration.color }}" href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
@@ -34,7 +34,7 @@
                     <li>
                         <a href="{% url 'stat' name_url=configuration.name_url %}"><i class="fa fa-sort-numeric-desc" aria-hidden="true"></i> Статистика</a>
                     </li>
-                    <li><a href="/"><i class="fa fa-cog" aria-hidden="true"></i> Настройки плана</a></li>
+                    <li><a href="{{ configuration.get_absolute_url }}"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
                     <li class="dropdown">
                         <a href="{% url 'panel' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-columns" aria-hidden="true"></i> Панель <span class="caret"></span></a>
                         <ul class="dropdown-menu">
