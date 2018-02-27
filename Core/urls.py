@@ -22,8 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', views.panel, name='panel'),
     path('panel/new/', views.new, name='new'),
-    path('conf/<name_url>/', views.conf, name='conf'),
+    path('conf/<name_url>/', views.home, name='home'),
     path('conf/<name_url>/cost/', views.cost, name='cost'),
     path('conf/<name_url>/stat/', views.stat, name='stat'),
+    path('conf/<name_url>/settings/', views.settings, name='settings'),
     path('auth/', include('Auth.urls')),
 ]

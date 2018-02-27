@@ -60,7 +60,7 @@ class Configuration(models.Model):
         super(Configuration, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('conf', args=[str(self.name_url)])
+        return reverse('home', args=[str(self.name_url)])
 
 
 class Settings(models.Model):

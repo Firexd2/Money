@@ -30,11 +30,12 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
+                    <li><a href="{% url 'home' name_url=configuration.name_url %}"><i class="fa fa-home" aria-hidden="true"></i> Главная</a></li>
                     <li><a href="{% url 'cost' name_url=configuration.name_url %}"><i class="fa fa-plus" aria-hidden="true"></i> Ввод расходов</a></li>
                     <li>
-                        <a href="{% url 'stat' name_url=configuration.name_url %}"><i class="fa fa-sort-numeric-desc" aria-hidden="true"></i> Статистика</a>
+                        <a href="{% url 'stat' name_url=configuration.name_url %}"><i class="fa fa-line-chart" aria-hidden="true"></i> Статистика</a>
                     </li>
-                    <li><a href="{{ configuration.get_absolute_url }}"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
+                    <li><a href="{% url 'settings' name_url=configuration.name_url %}"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
                     <li class="dropdown">
                         <a href="{% url 'panel' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-columns" aria-hidden="true"></i> Панель <span class="caret"></span></a>
                         <ul class="dropdown-menu">

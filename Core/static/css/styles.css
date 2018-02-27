@@ -3,6 +3,12 @@ body {
     font-size: 16px;
 }
 
+h2 {
+    margin: 0;
+    font-weight: bold;
+    text-shadow: white;
+}
+
 h3 {
     padding-left: 15px
 }
@@ -10,6 +16,18 @@ h3 {
 .row {
     margin-left: 0;
     margin-right: 0;
+}
+
+h4 {
+    margin-bottom: 20px;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.col-lg-4 {
+    margin-bottom: 20px;
 }
 
 input::-webkit-outer-spin-button,
@@ -439,3 +457,21 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     height: 310px;
 }
 
+.block-conf {
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    min-height: 200px;
+    transition: 0.3s;
+}
+
+.block-conf:hover h2 {
+    color: #ff923a;
+    transition: 0.3s;
+}
+
+.manage-block {
+    border-radius: 5px;
+    padding: 20px;
+}

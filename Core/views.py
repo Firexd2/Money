@@ -1,9 +1,7 @@
 from datetime import datetime
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
 from Core.models import Configuration, CostCategory, Cost, Tags
 
 
@@ -18,7 +16,7 @@ def panel(request):
         settings.free_money = request.POST['value']
         settings.save()
 
-    return render(request, 'panel.html', locals())
+    return render(request, 'panel/panel.html', locals())
 
 
 @login_required
@@ -35,10 +33,16 @@ def new(request):
                 configuration.category.add(cost_category)
         request.user.settings.configurations.add(configuration)
         return redirect('panel')
-    return render(request, 'new.html', locals())
+    return render(request, 'panel/new.html', locals())
 
 
-def conf(request, name_url):
+def home(request, name_url):
+    configuration = request.user.settings.configurations.all().get(name_url=name_url)
+
+    return render(request, 'conf/home.html', locals())
+
+
+def settings(request, name_url):
 
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
 
@@ -49,22 +53,20 @@ def conf(request, name_url):
         configuration.color = request.POST['color']
         configuration.save()
 
-    current_category = configuration.category.all()
-    number_category = 0
-    c = [item[1] for item in request.POST.items()][5:]
-    for n, item in enumerate(c):
-        if n % 2 == 1 and c[n - 1] and c[n]:
-            print(current_category[number_category].max, c[n])
-            if not (current_category[number_category].name == c[n - 1] and current_category[number_category].max == c[n]):
-                for_save = current_category[number_category]
-                print(for_save)
-                for_save.name = c[n - 1]
-                for_save.max = c[n]
-                for_save.save()
+        current_category = configuration.category.all()
+        number_category = 0
+        c = [item[1] for item in request.POST.items()][5:]
+        for n, item in enumerate(c):
+            if n % 2 == 1 and c[n - 1] and c[n]:
+                if not (current_category[number_category].name == c[n - 1] and current_category[number_category].max == c[n]):
+                    for_save = current_category[number_category]
+                    for_save.name = c[n - 1]
+                    for_save.max = c[n]
+                    for_save.save()
+                number_category += 1
+        return redirect('/conf/' + configuration.name_url)
 
-            number_category += 1
-
-    return render(request, 'conf.html', locals())
+    return render(request, 'conf/settings.html', locals())
 
 
 @csrf_exempt
@@ -85,7 +87,7 @@ def stat(request, name_url):
         bool_field.included_week_table = not bool_field.included_week_table
         bool_field.save()
 
-    return render(request, 'stat.html', locals())
+    return render(request, 'conf/stat.html', locals())
 
 
 def cost(request, name_url):
@@ -114,4 +116,4 @@ def cost(request, name_url):
                 cat.cost.add(cost)
                 n += 1
 
-    return render(request, 'cost.html', locals())
+    return render(request, 'conf/cost.html', locals())

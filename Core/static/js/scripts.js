@@ -133,6 +133,7 @@ $(document).ready(function() {
         }
     }
 
+
     function New() {
 
         // Для редактирования конфигурации
@@ -200,6 +201,12 @@ $(document).ready(function() {
 
     }
     New();
+
+    // ГЛАВНАЯ КОНФИГУРАЦИИ
+
+    function home() {
+
+    }
 
 
 
