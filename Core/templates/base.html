@@ -60,11 +60,32 @@
         {% endblock %}
     </div>
 </div>
-    <script>
-        $('body').show();
-        $('.version').text(NProgress.version);
-        NProgress.start();
-        setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
-    </script>
+<div class="modal">
+    <div class="modal-window">
+        <h2 id="modal-tittle"></h2>
+        <p id="modal-message"></p>
+        <div class="modal-buttons">
+            <button class="btn btn-default button-input-cost btn-close">Окей</button>
+        </div>
+        <div id="close-modal"><i class="fa fa-times" aria-hidden="true"></i></div>
+    </div>
+</div>
+<script>
+    $('body').show();
+    $('.version').text(NProgress.version);
+    NProgress.start();
+    setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+
+    $('#close-modal, .btn-close').on('click', function () {
+        $('.modal').css({'display': 'none'})
+    });
+
+    $('body').on('click', function (event) {
+        if ($('.modal').has(event.target).length === 0) {
+            $('.modal').css({'display': 'none'})
+        }
+    });
+
+</script>
 </body>
 </html>

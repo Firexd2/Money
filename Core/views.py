@@ -45,15 +45,32 @@ def home(request, name_url):
             configuration.income = int(POST['income'])
             configuration.date = datetime.now().date()
             configuration.save()
+            balance = configuration.income - \
+                      sum(list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
+            settings = configuration.settings_set.all()[0]
+            settings.free_money += balance
+            settings.save()
             for category in configuration.category.all():
                 category.cost.all().delete()
+
+            return HttpResponse(json.dumps({'status': 1, 'balance': balance}), content_type='application/json')
+
         elif 'date' in POST:
             date = datetime.strptime(POST['date'], '%Y-%m-%d').date()
             if datetime.now().date() > date:
                 configuration.date = date
                 configuration.save()
         elif 'delete' in POST:
-            status = configuration.delete()[0]
+            balance = configuration.income - \
+                      sum(list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
+            settings = configuration.settings_set.all()[0]
+            settings.free_money += balance
+            settings.save()
+            try:
+                configuration.delete()
+                status = 1
+            except:
+                status = 0
             return HttpResponse(json.dumps({'status': status}), content_type='application/json')
 
     return render(request, 'conf/home.html', locals())

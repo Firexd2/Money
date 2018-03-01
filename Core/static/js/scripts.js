@@ -20,6 +20,23 @@ function removeTag(el) {
 
 $(document).ready(function() {
 
+    function modal(message, status) {
+
+        var modal = $('.modal');
+        var title_obj = $('#modal-tittle');
+        var message_obj = $('#modal-message');
+
+        if (status === 0) {
+            title_obj.html('Неудача <i class="fa fa-times-circle" aria-hidden="true"></i>').css({'color': 'red'});
+            message_obj.text(message);
+            modal.css({'display': 'flex'})
+        } else if (status === 1) {
+            title_obj.html('Успех! <i class="fa fa-check" aria-hidden="true"></i>').css({'color': 'green'});
+            message_obj.html(message);
+            modal.css({'display': 'flex'})
+        }
+    }
+
     function onNavbar() {
         if (window.innerWidth >= 768) {
             $('.navbar-default .dropdown').on('mouseover', function(){
@@ -206,7 +223,17 @@ $(document).ready(function() {
 
     function home() {
         $('#income').on('click', function () {
-            $.post('', {income: $(this).prev().val()})
+
+            $.post('', {income: $(this).prev().val()}, function (data) {
+                if (confirm('Вы точно хотите ввести месячный доход и начать новый месяц?')) {
+                    if (data.status === 1) {
+                        var message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
+                            'обнулены все траты, ' +
+                            'история трат перемещена в архив.';
+                        modal(message, data.status)
+                    }
+                }
+            })
         });
 
         $('#date').on('click', function () {
@@ -214,11 +241,16 @@ $(document).ready(function() {
         });
 
         $('#delete').on('click', function () {
-            $.post('', {delete: '200'}, function (data) {
-                if (data.status === 3) {
-                    location.href='/panel/'
-                }
-            })
+            if (confirm('Вы точно хотите удалить ваш план распределения бюджета?')) {
+                $.post('', {delete: '200'}, function (data) {
+                    if (data.status === 1) {
+                        location.href = '/panel/';
+                    } else {
+                        var message = 'Произошла ошибка. Попробуйте еще раз!';
+                        modal(message, data.status)
+                    }
+                })
+            }
         })
     }
 
