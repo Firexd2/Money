@@ -205,8 +205,24 @@ $(document).ready(function() {
     // ГЛАВНАЯ КОНФИГУРАЦИИ
 
     function home() {
+        $('#income').on('click', function () {
+            $.post('', {income: $(this).prev().val()})
+        });
 
+        $('#date').on('click', function () {
+            $.post('', {date: $(this).prev().val()})
+        });
+
+        $('#delete').on('click', function () {
+            $.post('', {delete: '200'}, function (data) {
+                if (data.status === 3) {
+                    location.href='/panel/'
+                }
+            })
+        })
     }
+
+    home();
 
 
 
@@ -529,7 +545,12 @@ $(document).ready(function() {
                 $('.input-tags').focus()
             })
         }
-        tags()
+        tags();
+        
+        $('.action-cost').on('click', function () {
+            $.post('', {id:$(this).attr('id')});
+            $(this).remove()
+        })
 
     }
 

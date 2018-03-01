@@ -5,19 +5,19 @@
         <hr>
 
         <div onclick="location.href='{% url 'cost' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #d3ebf6);" class="block-conf">
+            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
                 <h2><i class="fa fa-plus fa-4x" aria-hidden="true"></i> <br>
                     Ввести трату</h2>
             </div>
         </div>
         <div onclick="location.href='{% url 'stat' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #d3ebf6);" class="block-conf">
+            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
                 <h2><i class="fa fa-line-chart fa-4x" aria-hidden="true"></i> <br>
                     Статистика</h2>
             </div>
         </div>
         <div onclick="location.href='{% url 'settings' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #d3ebf6);" class="block-conf">
+            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
                 <h2><i class="fa fa-cog fa-4x" aria-hidden="true"></i> <br>
                     Настройки</h2>
             </div>
@@ -31,7 +31,7 @@
                 <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Ввод месячного дохода</h4>
                 <div style="margin-bottom: 10px;" class="input-group">
                     <input value="{{ configuration.income }}" class="form-control" style="height:50px;font-size:20px;width: 210px" type="number">
-                    <button id="" style="height: 50px;font-size: 25px" class="btn btn-default">
+                    <button id="income" style="height: 50px;font-size: 25px" class="btn btn-default">
                         <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -52,7 +52,7 @@
                 <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Изменение даты</h4>
                 <div style="margin-bottom: 10px;" class="input-group">
                     <input class="form-control" value="{{ configuration.date|date:"Y-m-d" }}" style="height:50px;font-size:20px;width: 210px" type="date">
-                    <button id="" style="height: 50px;font-size: 25px" class="btn btn-default">
+                    <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">
                         <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -67,7 +67,7 @@
                 <p style="color: gray; font-size: 13px">
                     После удаления неиспользованные средства перейдут на ваш накопительный счет. Восстановить план будет невозможно.
                 </p>
-                <button type="button" class="btn btn-danger">Удалить план "{{ configuration.name }}"</button>
+                <button id="delete" type="button" class="btn btn-danger">Удалить план "{{ configuration.name }}"</button>
             </div>
         </div>
     </div>

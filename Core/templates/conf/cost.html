@@ -72,8 +72,51 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-warning" style="font-size: 18px;margin-bottom: 50px" type="submit">Записать расходы</button>
+                <button class="button-input-cost btn btn-default" style="font-size: 18px;margin-bottom: 50px;" type="submit">Записать расходы</button>
             </div>
         </form>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4 style="color: #707070"><i class="fa fa-clock-o" aria-hidden="true"></i> Последние действия:</h4>
+            <p style="color: #b2b2b2; font-size: 13px">Последние действия при вводе трат. При необходимости, вы можете отменить определенную трату, нажав на нужную вам строку таблицы.</p>
+            <table style="font-size: 16px" class="table table-hover">
+                <thead>
+                    <tr style="font-weight: bold">
+                        <td>Категория</td>
+                        <td>Сумма</td>
+                        <td width="150">Комментарий и теги</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if costs %}
+                    {% for cost in costs %}
+                        <tr id="{{ cost.id }}" class="action-cost" style="cursor: pointer">
+                            <td>
+                                {% with cost.costcategory_set.all|first as category %}
+                                    <b>{{ category.name }}</b>
+                                {% endwith %}
+                            </td>
+                            <td>
+                                {{ cost.value }} р.
+                            </td>
+                            <td>
+                                {{ cost.detailed_comment }}<br><br>
+                                {% for tag in cost.tags.all %}
+                                    <span class="tags-in-action">{{ tag.name }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>
+                            Покупок пока не было
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

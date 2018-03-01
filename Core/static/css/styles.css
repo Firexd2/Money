@@ -88,7 +88,7 @@ input::-webkit-inner-spin-button {
 }
 /* Цвет пунктов навигационного меню */
 .navbar-default .navbar-nav > li > a {
-    color: gray;
+    color: #f4d0b2;
 }
 /* Цвет пункта меню, при поднесении к нему курсора мышки или при его нахождении в фокусе */
 .navbar-default .navbar-nav > li > a:hover,
@@ -99,8 +99,10 @@ input::-webkit-inner-spin-button {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-    color: #ffb57c;
+    color: #f4d0b2;
     background-color: #3d3c41;
+    border-left: 2px solid #f4d0b2;
+    border-right: 2px solid #f4d0b2;
 }
 /* Цвет и фон открытого пункта меню, а также поднесении к нему курсора мышки или при его нахождении в фокусе */
 .navbar-default .navbar-nav > .open > a,
@@ -135,11 +137,11 @@ input::-webkit-inner-spin-button {
 /* Цвет фона кнопки (которая открывает меню) при поднесении к ней курсора мышки или при нахождении её в фокусе */
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-    background-color: rgba(255, 146, 57, 0.86);
+    background-color: #ffb57c;
 }
 /* Цвет полосочек в кнопочке, которая открывает меню */
 .navbar-default .navbar-toggle .icon-bar {
-    background-color: rgba(255, 146, 57, 0.86);
+    background-color: #ffb57c;
 }
 
 .dropdown-menu {
@@ -168,7 +170,7 @@ input::-webkit-inner-spin-button {
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-    color: rgba(255, 146, 57, 0.86);
+    color: #ffb57c;
     text-decoration: none;
     background-color: #3d3c41;
 }
@@ -176,12 +178,12 @@ input::-webkit-inner-spin-button {
 @media (max-width: 767px) {
 /* Цвет пунктов меню в раскрывающихся списках */
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-        color: rgba(255, 146, 57, 0.86);
+        color: #ffb57c;
     }
 /* Цвет и фон пункта меню в раскрывающихся списках, при поднесении к нему курсора мышки или при нахождении его в фокусе */
     .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
     .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-        color: rgba(255, 146, 57, 0.86);
+        color: #ffb57c;
         background-color: transparent;
     }
 }
@@ -222,11 +224,6 @@ input::-webkit-inner-spin-button {
   transform: translate3d(0px,-14px,0) rotate(-135deg);
   transform-origin: right top;
     width: 11px;
-}
-
-.active {
-    border-left: 2px solid #ff923a;
-    border-right: 2px solid #ff923a;
 }
 
 .conf {
@@ -428,7 +425,7 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
 }
 
 .block-panel {
-    background: linear-gradient(45deg, #f8dac4, #d3ebf6);
+    background: linear-gradient(45deg, #ffd3b0, #f3f6f1);
     cursor: pointer;
     border-radius: 5px;
     padding: 20px;
@@ -436,7 +433,7 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
 }
 
 .block-panel:hover {
-        background: linear-gradient(45deg, #C5DDE8, #EECFBA);
+        background: linear-gradient(45deg, #f3f6f1, #ffd3b0);
 }
 
 .slider-block-panel {
@@ -467,11 +464,22 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
 }
 
 .block-conf:hover h2 {
-    color: #ff923a;
+    color: #f4d0b2;
     transition: 0.3s;
 }
 
 .manage-block {
     border-radius: 5px;
     padding: 20px;
+}
+
+.tags-in-action {
+    border: 1px solid #e3e3e3;
+    background: #e3e3e3;
+    display: inline-block;
+    float: left;
+    list-style: none;
+    font-size: 10px;
+    margin: 0 2px 2px 0;
+    padding: 0 3px 4px 5px;
 }

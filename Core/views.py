@@ -1,11 +1,11 @@
+import json
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
 from Core.models import Configuration, CostCategory, Cost, Tags
 
 
-@csrf_exempt
 @login_required
 def panel(request):
 
@@ -39,6 +39,23 @@ def new(request):
 def home(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
 
+    if request.is_ajax():
+        POST = request.POST
+        if 'income' in POST:
+            configuration.income = int(POST['income'])
+            configuration.date = datetime.now().date()
+            configuration.save()
+            for category in configuration.category.all():
+                category.cost.all().delete()
+        elif 'date' in POST:
+            date = datetime.strptime(POST['date'], '%Y-%m-%d').date()
+            if datetime.now().date() > date:
+                configuration.date = date
+                configuration.save()
+        elif 'delete' in POST:
+            status = configuration.delete()[0]
+            return HttpResponse(json.dumps({'status': status}), content_type='application/json')
+
     return render(request, 'conf/home.html', locals())
 
 
@@ -69,13 +86,12 @@ def settings(request, name_url):
     return render(request, 'conf/settings.html', locals())
 
 
-@csrf_exempt
 def stat(request, name_url):
 
     configuration = request.user.settings.configurations.get(name_url=name_url)
     costs = Cost.objects.filter(costcategory__configuration=configuration).order_by('-datetime')
     max_cost = max(costs, key=lambda x: x.value, default=0)
-    middle_cost = round(sum([cost.value for cost in costs]) / (datetime.now().date() - configuration.date).days)
+    middle_cost = round(sum([cost.value for cost in costs]) / ((datetime.now().date() - configuration.date).days + 1))
     middle_cost_of_week = middle_cost * 8
 
     days = (datetime.today().date() - configuration.date).days
@@ -92,9 +108,13 @@ def stat(request, name_url):
 
 def cost(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
+    costs = Cost.objects.filter(costcategory__configuration=configuration).order_by('-datetime')
     tags = Tags.objects.filter(user=str(request.user)).order_by('-datetime')[:10]
 
-    if request.POST:
+    if request.is_ajax():
+        costs.get(id=request.POST['id']).delete()
+
+    if request.POST and not request.is_ajax():
         dict_value_and_comment = dict()
         for cat in configuration.category.all():
             value = 'value-' + str(cat.id)
