@@ -57,9 +57,13 @@ def home(request, name_url):
 
         elif 'date' in POST:
             date = datetime.strptime(POST['date'], '%Y-%m-%d').date()
-            if datetime.now().date() > date:
+            status = 0
+            if datetime.now().date() >= date:
                 configuration.date = date
                 configuration.save()
+                status = 1
+            return HttpResponse(json.dumps({'status': status}), content_type='application/json')
+
         elif 'delete' in POST:
             balance = configuration.income - \
                       sum(list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))

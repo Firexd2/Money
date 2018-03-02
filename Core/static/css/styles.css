@@ -484,60 +484,68 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     padding: 0 3px 4px 5px;
 }
 
-.modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 24px;
-    display: none;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: rgba(0,0,0,0.5);
+.jconfirm-title {
+    line-height: 26px !important;
 }
 
-.modal-window {
-    width: 400px;
-    position: relative;
-    max-width: 100%;
-    max-height: 100%;
-    padding: 10px 20px 10px 20px;
-    overflow: auto;
-    background: #ffffff;
-    text-align: center;
-    border-radius: 5px;
-    box-shadow: 0 0 4px black;
-}
+/*.modal {*/
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*padding: 24px;*/
+    /*display: none;*/
+    /*flex-flow: column nowrap;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*overflow: hidden;*/
+    /*background-color: rgba(0,0,0,0.15);*/
+/*}*/
 
-#modal-tittle {
-    margin: 5px 0 10px 0;
-}
+/*.modal-window {*/
+    /*width: 350px;*/
+    /*position: relative;*/
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+    /*padding: 10px 20px 10px 20px;*/
+    /*overflow: auto;*/
+    /*background: #ffffff;*/
+    /*border-radius: 5px;*/
+    /*-webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2);*/
+    /*box-shadow: 0 2px 6px rgba(0,0,0,0.2);*/
+/*}*/
 
-#close-modal {
-    position: absolute;
-    font-size: 25px;
-    top: 0;
-    right: 10px;
-    cursor: pointer;
-}
+/*#modal-tittle {*/
+    /*margin: 5px 0 10px 0;*/
+/*}*/
 
-#close-modal:hover {
-    color: red;
-}
+/*#close-modal {*/
+    /*position: absolute;*/
+    /*font-size: 25px;*/
+    /*top: 0;*/
+    /*right: 10px;*/
+    /*cursor: pointer;*/
+/*}*/
 
-#modal-message {
-    font-size: 20px;
-    padding: 5px 0 10px 0;
-}
+/*#close-modal:hover {*/
+    /*color: red;*/
+/*}*/
 
-.modal-buttons {
-    margin-bottom: 15px;
-}
+/*#modal-message {*/
+    /*font-size: 16px;*/
+    /*padding: 5px 0 10px 0;*/
+/*}*/
 
-.modal-buttons button {
-    font-size: 20px;
-}
+/*.modal-buttons {*/
+    /*margin-bottom: 15px;*/
+/*}*/
+
+/*.modal-buttons button {*/
+    /*font-size: 16px;*/
+/*}*/
+
+/*.modal-window h2 {*/
+    /*font-size: 22px;*/
+/*}*/
 

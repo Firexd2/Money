@@ -18,24 +18,28 @@ function removeTag(el) {
     $("#inputTag").focus();
 }
 
-$(document).ready(function() {
+jQuery(document).ready(function($) {
 
-    function modal(message, status) {
+    jconfirm.defaults = {
+        theme: 'modern'
+    };
 
-        var modal = $('.modal');
-        var title_obj = $('#modal-tittle');
-        var message_obj = $('#modal-message');
-
-        if (status === 0) {
-            title_obj.html('Неудача <i class="fa fa-times-circle" aria-hidden="true"></i>').css({'color': 'red'});
-            message_obj.text(message);
-            modal.css({'display': 'flex'})
-        } else if (status === 1) {
-            title_obj.html('Успех! <i class="fa fa-check" aria-hidden="true"></i>').css({'color': 'green'});
-            message_obj.html(message);
-            modal.css({'display': 'flex'})
-        }
-    }
+    // function modal(message, status) {
+    //
+    //     var modal = $('.modal');
+    //     var title_obj = $('#modal-tittle');
+    //     var message_obj = $('#modal-message');
+    //
+    //     if (status === 0) {
+    //         title_obj.html('Неудача <i class="fa fa-times-circle" aria-hidden="true"></i>').css({'color': 'red'});
+    //         message_obj.text(message);
+    //         modal.css({'display': 'flex'})
+    //     } else if (status === 1) {
+    //         title_obj.html('Успех! <i class="fa fa-check" aria-hidden="true"></i>').css({'color': 'green'});
+    //         message_obj.html(message);
+    //         modal.css({'display': 'flex'})
+    //     }
+    // }
 
     function onNavbar() {
         if (window.innerWidth >= 768) {
@@ -222,35 +226,90 @@ $(document).ready(function() {
     // ГЛАВНАЯ КОНФИГУРАЦИИ
 
     function home() {
-        $('#income').on('click', function () {
 
-            $.post('', {income: $(this).prev().val()}, function (data) {
-                if (confirm('Вы точно хотите ввести месячный доход и начать новый месяц?')) {
-                    if (data.status === 1) {
-                        var message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
-                            'обнулены все траты, ' +
-                            'история трат перемещена в архив.';
-                        modal(message, data.status)
+        $('#income').on('click', function () {
+            var message;
+            $.confirm({
+                title: 'Подтверждение начала нового раcсчётного периода',
+                icon: 'fa fa-question',
+                content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
+                buttons: {
+                    Да: {
+                        action: function () {
+                            $.post('', {income: $('#income').prev().val()}, function (data) {
+                                if (data.status === 1) {
+                                    message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
+                                        'обнулены все траты, ' +
+                                        'история трат перемещена в архив.';
+                                    $.alert({
+                                        icon: 'fa fa-check',
+                                        title: '<b style="color:#4edf14">Операция выполнена!</b>',
+                                        content: message
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    Отмена: function () {
                     }
                 }
             })
         });
 
         $('#date').on('click', function () {
-            $.post('', {date: $(this).prev().val()})
+            var message;
+            $.confirm({
+                title: 'Подтверждение изменения траты',
+                icon: 'fa fa-question',
+                content: 'Вы точно хотите изменить дату вашего плана?',
+                buttons: {
+                    Да: {
+                        action: function () {
+                            $.post('', {date: $('#date').prev().val()}, function (data) {
+                                if (data.status === 1) {
+                                    message = 'Дата успешно изменена!';
+                                    $.alert({
+                                        icon: 'fa fa-check',
+                                        title: '<b style="color: #4edf14">Операция выполнена!</b>',
+                                        content: message
+                                    });
+                                } else if (data.status === 0) {
+                                    message = 'Дата не была изменена, так как нельзя поменять дату на будущую.';
+                                    $.alert({
+                                        icon: 'fa fa-times-circle',
+                                        title: '<b style="color: red">Операция отменена!</b>',
+                                        content: message
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    Отмена: function () {
+                    }
+                }
+            });
         });
 
         $('#delete').on('click', function () {
-            if (confirm('Вы точно хотите удалить ваш план распределения бюджета?')) {
-                $.post('', {delete: '200'}, function (data) {
-                    if (data.status === 1) {
-                        location.href = '/panel/';
-                    } else {
-                        var message = 'Произошла ошибка. Попробуйте еще раз!';
-                        modal(message, data.status)
+
+            $.confirm({
+                title: 'Подтверждение удаления плана',
+                icon: 'fa fa-question',
+                content: 'Вы точно хотите удалить ваш план распределения бюджета?',
+                buttons: {
+                    Да: {
+                        action: function () {
+                            $.post('', {delete: ''}, function (data) {
+                                if (data.status === 1) {
+                                    location.href = '/panel/';
+                                }
+                            })
+                        }
+                    },
+                    Отмена: function () {
                     }
-                })
-            }
+                }
+            })
         })
     }
 
