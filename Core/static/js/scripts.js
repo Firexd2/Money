@@ -21,7 +21,9 @@ function removeTag(el) {
 jQuery(document).ready(function($) {
 
     jconfirm.defaults = {
-        theme: 'modern'
+        theme: 'modern',
+        closeIcon: true,
+        closeIconClass: 'fa fa-close',
     };
 
     // function modal(message, status) {
@@ -232,9 +234,11 @@ jQuery(document).ready(function($) {
             $.confirm({
                 title: 'Подтверждение начала нового раcсчётного периода',
                 icon: 'fa fa-question',
+                type: 'orange',
                 content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
                 buttons: {
                     Да: {
+                        btnClass: 'btn',
                         action: function () {
                             $.post('', {income: $('#income').prev().val()}, function (data) {
                                 if (data.status === 1) {
@@ -243,7 +247,8 @@ jQuery(document).ready(function($) {
                                         'история трат перемещена в архив.';
                                     $.alert({
                                         icon: 'fa fa-check',
-                                        title: '<b style="color:#4edf14">Операция выполнена!</b>',
+                                        type: 'green',
+                                        title: '<b>Операция выполнена!</b>',
                                         content: message
                                     });
                                 }
@@ -261,6 +266,7 @@ jQuery(document).ready(function($) {
             $.confirm({
                 title: 'Подтверждение изменения траты',
                 icon: 'fa fa-question',
+                type: 'orange',
                 content: 'Вы точно хотите изменить дату вашего плана?',
                 buttons: {
                     Да: {
@@ -270,13 +276,15 @@ jQuery(document).ready(function($) {
                                     message = 'Дата успешно изменена!';
                                     $.alert({
                                         icon: 'fa fa-check',
-                                        title: '<b style="color: #4edf14">Операция выполнена!</b>',
+                                        type: 'green',
+                                        title: '<b>Операция выполнена!</b>',
                                         content: message
                                     });
                                 } else if (data.status === 0) {
                                     message = 'Дата не была изменена, так как нельзя поменять дату на будущую.';
                                     $.alert({
                                         icon: 'fa fa-times-circle',
+                                        type: 'red',
                                         title: '<b style="color: red">Операция отменена!</b>',
                                         content: message
                                     });
@@ -295,6 +303,7 @@ jQuery(document).ready(function($) {
             $.confirm({
                 title: 'Подтверждение удаления плана',
                 icon: 'fa fa-question',
+                type: 'red',
                 content: 'Вы точно хотите удалить ваш план распределения бюджета?',
                 buttons: {
                     Да: {
@@ -450,36 +459,6 @@ jQuery(document).ready(function($) {
     stat();
 
     function input_cost() {
-        $('.btn-cost').on('click', function () {
-            var comment = $(this).siblings('.middle-comment').val();
-            var cost = $(this).siblings('.middle-cost').val();
-            var table = $(this).parent().parent().next().find('.table-cost');
-            var number = table.children().length;
-            var category_id = $(this).attr('id');
-
-            if (!(comment)) {
-                comment = 'Без комментария';
-            }
-            if ((cost) && cost !== '0') {
-                table.append('<tr>\n' +
-                    '             <td>\n' +
-                    '                 <input readonly value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
-                    '             </td>\n' +
-                    '             <td>\n' +
-                    '                 <input readonly name="value-' + category_id + '-' + number + '" class="middle-costs" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
-                    '             </td>\n' +
-                    '             <td class="remove-middle-cost">\n' +
-                    '                 <i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
-                    '             </td>\n' +
-                    '         </tr>');
-
-                $(this).siblings('.middle-comment').val('');
-                $(this).siblings('.middle-cost').val('');
-                $(this).parent().hide();
-                count_amount();
-            }
-        });
-
 
         $('.caret-hide').on('click', function () {
             var item = $(this).parent().parent().find('.hide-detail');
@@ -517,8 +496,57 @@ jQuery(document).ready(function($) {
         }
 
         $('.button-input-cost').on('click', function () {
-            $('.input-cost').hide();
-            $(this).prev().show()
+            var category_id = $(this).attr('id');
+            var category_name = $(this).attr('name');
+            var table = $(this).parent().next().find('.table-cost');
+
+            $.confirm({
+                title: 'Ввод траты в "' + category_name + '"',
+                icon: 'fa fa-plus-circle',
+                content: '<div style="margin: 0" class="input-cost">\n' +
+                '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
+                '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
+                '</div>',
+                buttons: {
+                    Ok: {
+                        text: 'Внести',
+                        btnClass: 'btn',
+                        action: function () {
+                            var comment = this.$content.find('.middle-comment').val();
+                            var cost = this.$content.find('.middle-cost').val();
+                            var number = table.children().length;
+
+                            if (!(comment)) {
+                                comment = 'Без комментария';
+                            }
+                            if ((cost) && cost !== '0') {
+                                table.append('<tr>\n' +
+                                    '<td>\n' +
+                                    '<input readonly value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
+                                    '</td>\n' +
+                                    '<td>\n' +
+                                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                                    '</td>\n' +
+                                    '<td class="remove-middle-cost">\n' +
+                                    '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
+                                    '</td>\n' +
+                                    '</tr>');
+
+                                $(this).siblings('.middle-comment').val('');
+                                $(this).siblings('.middle-cost').val('');
+                                $(this).parent().hide();
+                                count_amount();
+                            }
+                        }
+                    },
+                    cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
+                    }
+                }
+            });
+
         });
 
         $('.table-cost').on('click', '.remove-middle-cost', function () {
@@ -527,14 +555,9 @@ jQuery(document).ready(function($) {
         });
 
         $('body').click(function (event) {
-            if ($('.td-cost').has(event.target).length === 0) {
-                $('.input-cost').hide()
-            }
-
             if ($('.td-amount').has(event.target).length === 0) {
                 $('.hide-detail').hide()
             }
-
         });
 
         function tags() {

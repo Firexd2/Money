@@ -23,7 +23,20 @@ h4 {
 }
 
 .btn {
-    border-radius: 0;
+    border-radius: 0 !important;
+    background: #ffe2c1;
+}
+
+.btn:hover {background: #d1d7db;}
+
+.btn-r {
+    background: rgba(255, 0, 0, 0.67) !important;
+    color: white;
+}
+
+.btn-r:hover {
+    background: rgba(255, 0, 0, 0.51) !important;
+    color: white;
 }
 
 .col-lg-4 {
@@ -320,30 +333,21 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     right: 50px;
     z-index: 1001;
     font-size: 13px;
-    box-shadow: 0 0 4px black;
+    box-shadow: 0 0 1px black;
 }
 
 .input-cost {
-    display: none;
-    position: absolute;
     margin-left: 50px;
     padding: 10px 10px 10px 10px;
     background: white;
-    width: 200px;
-    box-shadow: 0 0 4px black;
 }
 
 .input-cost input {
-    width: 100%;
     margin-bottom: 10px;
 }
 
 .caret-hide:hover {
     color: #ff6116;
-}
-
-.button-input-cost {
-    background: #ffe2c1;
 }
 
 .td-cost {
@@ -368,6 +372,7 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     background: white;
     cursor: text;
 }
+
 .ulTags {
     padding: 0;
     margin: 0;
@@ -461,10 +466,11 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     text-align: center;
     min-height: 200px;
     transition: 0.3s;
+
 }
 
 .block-conf:hover h2 {
-    color: #f4d0b2;
+    color: #4f4f4f;
     transition: 0.3s;
 }
 
