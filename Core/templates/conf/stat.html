@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+{% block scripts %}
+    <script src="{% static 'js/stat.js' %}"></script>
+{% endblock %}
 {% block content %}
     <h3>Общая статистика</h3>
     <hr>

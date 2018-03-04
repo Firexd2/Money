@@ -25,7 +25,7 @@ def new(request):
         configuration = Configuration(name=request.POST['name'], income=request.POST['income'],
                                       icon=request.POST['icon'], color=request.POST['color'])
         configuration.save()
-        c = [item[1] for item in request.POST.items()][5:]
+        c = [item[1] for item in request.POST.items()][4:]
         for n, item in enumerate(c):
             if n % 2 == 1 and c[n - 1] and c[n]:
                 cost_category = CostCategory(name=c[n - 1], max=c[n])
@@ -52,8 +52,7 @@ def home(request, name_url):
             settings.save()
             for category in configuration.category.all():
                 category.cost.all().delete()
-
-            return HttpResponse(json.dumps({'status': 1, 'balance': balance}), content_type='application/json')
+            response = {'status': 1, 'balance': balance}
 
         elif 'date' in POST:
             date = datetime.strptime(POST['date'], '%Y-%m-%d').date()
@@ -62,7 +61,7 @@ def home(request, name_url):
                 configuration.date = date
                 configuration.save()
                 status = 1
-            return HttpResponse(json.dumps({'status': status}), content_type='application/json')
+            response = {'status': status}
 
         elif 'delete' in POST:
             balance = configuration.income - \
@@ -75,7 +74,9 @@ def home(request, name_url):
                 status = 1
             except:
                 status = 0
-            return HttpResponse(json.dumps({'status': status}), content_type='application/json')
+            response = {'status': status}
+
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
     return render(request, 'conf/home.html', locals())
 

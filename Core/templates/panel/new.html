@@ -1,8 +1,12 @@
 {% extends 'panel/panel.html' %}
+{% load staticfiles %}
+{% block scripts %}
+    <script src="{% static 'js/new.js' %}"></script>
+{% endblock %}
 {% block content %}
     <h3>Создание нового плана распределения бюджета</h3>
     <hr>
-    <form name="new" method="POST">{% csrf_token %}
+    <form name="new" method="POST">
         <div class="col-lg-6">
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
             <div class="input-group">

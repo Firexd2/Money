@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block scripts %}
+    <script src="{% static 'js/panel.js' %}"></script>
+{% endblock %}
 {% block menu %}
     <nav style="border-radius: 0; border: none" class="navbar navbar-default">
         <div class="container">
-            <div class="navbar-header">
+        <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
