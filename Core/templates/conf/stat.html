@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                 {% for category in configuration.category.all %}
-                    <tr>
+                    <tr id="{{ category.id }}" name="{{ category.name }}" class="category-detail" style="cursor: pointer">
                         <td class="hide" style="display: none">{% for cost in category.cost.all %}{{ cost.value }} {% endfor %}</td>
                         <th scope="row" >{{ category.name }}</th>
                         <td style="opacity: 0.8" class="category-table">
@@ -115,7 +115,7 @@
                         <tr>
                             <td>
                                 <b>{{ cost.datetime }}</b><br>
-                                Покупка на сумму: <b>{{ cost.value }}</b>. Комментарий: <b>{{ cost.detailed_comment }}</b>
+                                Покупка на сумму: <b>{{ cost.value }} р</b>. Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
                             </td>
                         </tr>
                     {% endfor %}

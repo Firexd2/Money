@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Время</th>
+        <th>Сумма</th>
+        <th>Тег</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in category.cost.all %}
+        <tr>
+            <th scope="row">{{ item.datetime|date:'d M H:i' }}</th>
+            <td>{{ item.value }}</td>
+            <td>
+                {% for tag in item.tags.all %}
+                    <span class="tags-in-action">{{ tag.name }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

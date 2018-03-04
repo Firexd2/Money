@@ -201,6 +201,26 @@ jQuery(document).ready(function($) {
 
         $('form[name=new]').on('submit', function (e) {
 
+            function repeat_category() {
+                var names_category = $('.ca');
+                var array = [];
+                var val;
+                for (var i=0;i<names_category.length;i++) {
+                    val = names_category.eq(i).val();
+                    if (array.indexOf(val) === -1) {
+                        array.push(val)
+                    }
+                }
+                if (names_category.length !== array.length) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            if (repeat_category()) {
+                e.preventDefault();
+                $('#error-form').text(' Категории не могут иметь одинаковое название')
+            }
             if ($('#o').text() !== '0') {
                 e.preventDefault();
                 if (!($('#name-input').val())) {
@@ -213,6 +233,9 @@ jQuery(document).ready(function($) {
                     $('#error-form').text(' Вы превысили лимит вашей суммы')
                 }
             }
+
+
+
         });
 
         $('.icons').on('click', function () {
@@ -283,7 +306,7 @@ jQuery(document).ready(function($) {
                                 } else if (data.status === 0) {
                                     message = 'Дата не была изменена, так как нельзя поменять дату на будущую.';
                                     $.alert({
-                                        icon: 'fa fa-times-circle',
+                                        icon: 'fa fa-exclamation-triangle',
                                         type: 'red',
                                         title: '<b style="color: red">Операция отменена!</b>',
                                         content: message
@@ -302,7 +325,7 @@ jQuery(document).ready(function($) {
 
             $.confirm({
                 title: 'Подтверждение удаления плана',
-                icon: 'fa fa-question',
+                icon: 'fa fa-exclamation-triangle',
                 type: 'red',
                 content: 'Вы точно хотите удалить ваш план распределения бюджета?',
                 buttons: {
@@ -454,6 +477,17 @@ jQuery(document).ready(function($) {
             var proc = 100 - ((cost - limit_for_week * week) / limit_for_week * 100);
             return [diff, proc]
         }
+
+
+        $('.category-detail').on('click', function () {
+            var id = $(this).attr('id');
+            var name = $(this).attr('name');
+            $.alert({
+                title: name,
+                content: 'url:/conf/category/' + id + '/',
+            });
+        })
+
     }
 
     stat();
@@ -664,22 +698,9 @@ jQuery(document).ready(function($) {
         $('.action-cost').on('click', function () {
             $.post('', {id:$(this).attr('id')});
             $(this).remove()
-        })
-
+        });
     }
 
     input_cost()
 
 });
-
-// <tr>
-//     <td>
-//         <textarea style="background: inherit;border: none;width: 180px; height: 22px; cursor: inherit;">Полотенце Максюшке</textarea>
-//     </td>
-//     <td>
-//         <input class="" style="background: inherit;border: none;width: 40px; cursor: inherit;" value="3567" type="number">
-//     </td>
-//     <td style="text-align: center">
-//         <i class="fa fa-times" style="color: red" aria-hidden="true"></i>
-//     </td>
-// </tr>

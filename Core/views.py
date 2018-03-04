@@ -107,6 +107,11 @@ def settings(request, name_url):
     return render(request, 'conf/settings.html', locals())
 
 
+def category_detail(request, id):
+    category = CostCategory.objects.get(id=id)
+    return render(request, 'conf/category_detail.html', locals())
+
+
 def stat(request, name_url):
 
     configuration = request.user.settings.configurations.get(name_url=name_url)
