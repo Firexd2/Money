@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from math import floor
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -38,20 +39,37 @@ def new(request):
 
 def home(request, name_url):
     configuration = request.user.settings.configurations.all().get(name_url=name_url)
-
     if request.is_ajax():
         POST = request.POST
         if 'income' in POST:
+
+            last_income = configuration.income
+
+            balance = last_income - \
+                      sum(list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
             configuration.income = int(POST['income'])
             configuration.date = datetime.now().date()
             configuration.save()
-            balance = configuration.income - \
-                      sum(list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
             settings = configuration.settings_set.all()[0]
             settings.free_money += balance
             settings.save()
-            for category in configuration.category.all():
+
+            count_category = configuration.category.all().count()
+
+            distribution = (int(POST['income']) - last_income) / count_category
+
+            if distribution == int(distribution):
+                list_values_add = [distribution] * count_category
+            else:
+                list_values_add = [floor(distribution)] * count_category
+                list_values_add[-1] += int(POST['income']) - last_income - (floor(distribution) * count_category)
+
+            for n, category in enumerate(configuration.category.all()):
                 category.cost.all().delete()
+                cat = category
+                cat.max += list_values_add[n]
+                cat.save()
+
             response = {'status': 1, 'balance': balance}
 
         elif 'date' in POST:
@@ -103,7 +121,7 @@ def settings(request, name_url):
                     for_save.max = c[n]
                     for_save.save()
                 number_category += 1
-        return redirect('/conf/' + configuration.name_url)
+        return redirect(configuration.get_absolute_url())
 
     return render(request, 'conf/settings.html', locals())
 

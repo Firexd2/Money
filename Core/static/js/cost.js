@@ -84,10 +84,10 @@ jQuery(document).ready(function($) {
                             if ((cost) && cost !== '0') {
                                 table.append('<tr>\n' +
                                     '<td>\n' +
-                                    '<input readonly class="value-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
+                                    '<input readonly class="comment-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
                                     '</td>\n' +
                                     '<td>\n' +
-                                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs value-cost" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
                                     '</td>\n' +
                                     '<td class="remove-middle-cost">\n' +
                                     '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
@@ -224,16 +224,100 @@ jQuery(document).ready(function($) {
         tags();
 
         $('.action-cost').on('click', function () {
-            $.post('', {id:$(this).attr('id')});
-            $(this).remove()
+            var _this = $(this);
+            var id = _this.attr('id');
+
+            $.confirm({
+                title: 'Вы точно хотите удалить трату?',
+                type: 'red',
+                icon: 'fa fa-exclamation-triangle',
+                content: 'Восстановить ее будет невозможно',
+                buttons: {
+                    Ok: {
+                        text: 'Да',
+                        btnClass: 'btn',
+                        action: function () {
+                            $.post('', {id:id});
+                            _this.remove()
+                        }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
+                    }
+                }
+            })
         });
 
         $('#submit-cost').on('click', function () {
-            var values = $('.value-cost'); // инпуты с водом
-            var n;
-            // сделать действия после нажатия на кнопку Записать расходы
-        })
 
+            if ($('.value-cost').length && $('input[name=tags]').length) {
+
+                $.confirm({
+
+                    title: 'Подтвердите ввод',
+
+                    content: function () {
+                        var values = $('.value-cost'); // инпуты с водом
+                        var comments = $('.comment-cost');
+                        var html = '<table class="table">\n' +
+                            '<thead>\n' +
+                            '<tr>\n' +
+                            '<th>Сумма</th>\n' +
+                            '<th>Комментарий</th>\n' +
+                            '</tr>\n' +
+                            '</thead>\n' +
+                            '<tbody style="text-align: left">';
+                        var amount = 0;
+                        var value;
+                        var comment;
+
+                        for (var i = 0; i < values.length; i++) {
+                            value = values.eq(i).val();
+                            comment = comments.eq(i).val();
+                            amount += parseInt(value);
+                            html += '<tr>\n' +
+                                '<td>' + value + ' р.</td>\n' +
+                                '<td>' + comment + '</td>\n' +
+                                '</tr>'
+                        }
+                        return html + '</tbody>\n' +
+                            '</table> ' +
+                            '<div style="text-align: left"><h4>Общая сумма <b>' + amount + '</b> р.</h4></div>'
+
+                    },
+
+                    buttons: {
+                        Ok: {
+                            btnClass: 'btn',
+                            text: 'Ок',
+                            action: function () {
+                                $('form[name=cost]').submit()
+                            }
+                        },
+                        Cancel: {
+                            text: 'Отмена',
+                            action: function () {
+                            }
+                        }
+                    }
+                })
+            } else {
+                var content = '';
+                if (!($('input[name=tags]').length)) {
+                    content = 'Вы не указали ни одной метки'
+                } else {
+                    content = 'Вы не ввели ни одной траты'
+                }
+                $.alert({
+                    title: 'Операция отменена',
+                    type: 'orange',
+                    icon: 'fa fa-exclamation-triangle',
+                    content: content
+                })
+            }
+        })
     }
 
     input_cost()

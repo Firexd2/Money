@@ -68,9 +68,10 @@
         </div>
         <div class="col-lg-6">
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
+            <p style="font-size: 13px;color: grey">Эту сумму, как и суммы в категориях, вы можете изменять в любое время после создания плана.</p>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
+                <input style="width: 140%" name="income" type="number" class="form-control d-only" placeholder="Пример: 100000"/>
             </div>
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
             <p style="color: rgba(191,101,84,0.99); font-size: 13px">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
@@ -121,4 +122,7 @@
             <button type="submit" class="btn">Готово!</button> <span style="color: red" id="error-form"></span>
         </div>
     </form>
+    <script>
+        $('body').on('keypress', '.d-only, .cat', function(key) {if(key.charCode < 48 || key.charCode > 57) return false;});
+    </script>
 {% endblock %}

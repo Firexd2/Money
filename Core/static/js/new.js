@@ -145,7 +145,7 @@ jQuery(document).ready(function($) {
             $('input[name=icon]').val(Class);
             $('.icons').removeClass('active-icons');
             $(this).addClass('active-icons');
-        })
+        });
 
     }
     New();
