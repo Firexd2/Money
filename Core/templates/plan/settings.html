@@ -6,7 +6,8 @@
 {% block content %}
     <h3>Настройки и редактирование текущего плана</h3>
     <hr>
-    <form name="new" method="POST">{% csrf_token %}
+    <form name="new" method="POST">
+        <input hidden name="id" value="{{ configuration.id }}" type="text">
         <div class="col-lg-6">
             <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
             <div class="input-group">

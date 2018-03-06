@@ -9,6 +9,11 @@ DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye
                 '"': '_', '(': '_', ')': '_', '№': '_'}
 
 
+class History(models.Model):
+    description = models.CharField('Описание действия', max_length=300, blank=True)
+    datetime = models.DateTimeField('Время и дата', auto_now=True)
+
+
 class Tags(models.Model):
 
     name = models.CharField('Название метки', max_length=100)
@@ -47,6 +52,7 @@ class Configuration(models.Model):
     income = models.IntegerField('Деньги в обороте')
     icon = models.CharField('Иконка на главной', max_length=100)
     color = models.CharField('Цвет иконки', max_length=20)
+    history = models.ManyToManyField(History, related_name='plan_history', blank=True)
     date = models.DateField('Дата ввода', default=datetime.now)
 
     def save(self, *args, **kwargs):
@@ -70,6 +76,8 @@ class Settings(models.Model):
     """
     configurations = models.ManyToManyField(Configuration, verbose_name='Конфигурация')
     free_money = models.IntegerField('Свободные деньги', default=0)
+    history = models.ManyToManyField(History, related_name='amount_history', blank=True)
+
 
     # def __str__(self):
     #     return 'TEST'

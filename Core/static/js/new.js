@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
         });
 
         $('form[name=new]').on('submit', function (e) {
-
+            e.preventDefault();
             function repeat_category() {
                 var names_category = $('.ca');
                 var array = [];
@@ -119,24 +119,36 @@ jQuery(document).ready(function($) {
                     return false
                 }
             }
-            if (repeat_category()) {
-                e.preventDefault();
-                $('#error-form').text(' Категории не могут иметь одинаковое название')
-            }
-            if ($('#o').text() !== '0') {
-                e.preventDefault();
+
+            if ($('#o').text() !== '0' || repeat_category()) {
                 if (!($('#name-input').val())) {
                     $('#error-form').text(' Вы не ввели название плана')
                 } else if ($('#o').text() === '--') {
                     $('#error-form').text(' Вы не ввели и не распределили сумму')
                 } else if (parseInt($('#o').text()) > 0) {
                     $('#error-form').text(' У вас остался неиспользованный остаток')
+                } else if (repeat_category()) {
+                    $('#error-form').text(' Категории не могут иметь одинаковое название')
                 } else {
                     $('#error-form').text(' Вы превысили лимит вашей суммы')
                 }
+            } else {
+                var data = $(this).serializeArray();
+                var url = location.pathname.split('/').indexOf('settings') !== -1 ? '/ajax/settings_plan/' : '/ajax/create_new_plan/';
+                var redirect = location.pathname.split('/').indexOf('settings') !== -1 ? '' : '/panel/';
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function() {
+                        if (redirect.length > 0) {
+                            location.href = redirect
+                        } else {
+                            location.reload()
+                        }
+                    }
+                });
             }
-
-
 
         });
 
@@ -146,7 +158,6 @@ jQuery(document).ready(function($) {
             $('.icons').removeClass('active-icons');
             $(this).addClass('active-icons');
         });
-
     }
     New();
 

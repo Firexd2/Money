@@ -226,6 +226,7 @@ jQuery(document).ready(function($) {
         $('.action-cost').on('click', function () {
             var _this = $(this);
             var id = _this.attr('id');
+            var name = location.pathname.slice(1,-1);
 
             $.confirm({
                 title: 'Вы точно хотите удалить трату?',
@@ -237,7 +238,7 @@ jQuery(document).ready(function($) {
                         text: 'Да',
                         btnClass: 'btn',
                         action: function () {
-                            $.post('', {id:id});
+                            $.post('/ajax/delete_cost/', {id:id, name:name});
                             _this.remove()
                         }
                     },
@@ -255,9 +256,7 @@ jQuery(document).ready(function($) {
             if ($('.value-cost').length && $('input[name=tags]').length) {
 
                 $.confirm({
-
                     title: 'Подтвердите ввод',
-
                     content: function () {
                         var values = $('.value-cost'); // инпуты с водом
                         var comments = $('.comment-cost');
@@ -287,18 +286,26 @@ jQuery(document).ready(function($) {
                             '<div style="text-align: left"><h4>Общая сумма <b>' + amount + '</b> р.</h4></div>'
 
                     },
-
                     buttons: {
                         Ok: {
                             btnClass: 'btn',
                             text: 'Ок',
                             action: function () {
-                                $('form[name=cost]').submit()
-                            }
-                        },
-                        Cancel: {
-                            text: 'Отмена',
-                            action: function () {
+                                var data = $('form[name=cost]').serializeArray();
+                                var url = '/ajax/input_cost/';
+                                $.ajax({
+                                    type: "POST",
+                                    url: url,
+                                    data: data,
+                                    success: function () {
+                                        location.reload()
+                                    }
+                                })
+                            },
+                            Cancel: {
+                                text: 'Отмена',
+                                action: function () {
+                                }
                             }
                         }
                     }
@@ -319,6 +326,5 @@ jQuery(document).ready(function($) {
             }
         })
     }
-
     input_cost()
 });

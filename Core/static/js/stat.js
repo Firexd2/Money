@@ -101,10 +101,11 @@ jQuery(document).ready(function($) {
                 count_table()
             });
 
-            function checked_week_cat(name) {
+            function checked_week_cat(category) {
                 var names = $('.name-cat');
+                var name = location.pathname.slice(1,-1);
                 for (var i=0;i<names.length;i++) {
-                    if (name === names.eq(i).text()) {
+                    if (category === names.eq(i).text()) {
                         if (names.eq(i).parent().is(':hidden')) {
                             names.eq(i).parent().show();
                         } else {
@@ -113,7 +114,7 @@ jQuery(document).ready(function($) {
                         break
                     }
                 }
-                $.post('', {category: name})
+                $.post('/ajax/toggle_category_week_table/', {category: category, name: name})
             }
         }
 

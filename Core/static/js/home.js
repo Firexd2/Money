@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
     function home() {
+        var name = location.pathname.slice(1,-1);
 
         $('#income').on('click', function () {
             var message;
@@ -9,10 +10,11 @@ jQuery(document).ready(function($) {
                 type: 'orange',
                 content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
                 buttons: {
-                    Да: {
+                    Ok: {
+                        text: 'Да',
                         btnClass: 'btn',
                         action: function () {
-                            $.post('', {income: $('#income').prev().val()}, function (data) {
+                            $.post('/ajax/start_new_period/', {income: $('#income').prev().val(), name: name}, function (data) {
                                 if (data.status === 1) {
                                     message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
                                         'обнулены все траты, ' +
@@ -27,7 +29,10 @@ jQuery(document).ready(function($) {
                             })
                         }
                     },
-                    Отмена: function () {
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
                     }
                 }
             })
@@ -41,10 +46,11 @@ jQuery(document).ready(function($) {
                 type: 'orange',
                 content: 'Вы точно хотите изменить дату вашего плана?',
                 buttons: {
-                    Да: {
+                    Ok: {
+                        text: 'Да',
                         btnClass: 'btn',
                         action: function () {
-                            $.post('', {date: $('#date').prev().val()}, function (data) {
+                            $.post('/ajax/edit_date/', {date: $('#date').prev().val(), name: name}, function (data) {
                                 if (data.status === 1) {
                                     message = 'Дата успешно изменена!';
                                     $.alert({
@@ -65,31 +71,37 @@ jQuery(document).ready(function($) {
                             })
                         }
                     },
-                    Отмена: function () {
+                    Cancel: {
+                        text: 'Отмена',
+                        action : function () {
+                        }
                     }
                 }
             });
         });
 
         $('#delete').on('click', function () {
-
             $.confirm({
                 title: 'Подтверждение удаления плана',
                 icon: 'fa fa-exclamation-triangle',
                 type: 'red',
                 content: 'Вы точно хотите удалить ваш план распределения бюджета?',
                 buttons: {
-                    Да: {
+                    Ok: {
+                        text: 'Да',
                         btnClass: 'btn',
                         action: function () {
-                            $.post('', {delete: ''}, function (data) {
+                            $.post('/ajax/delete_plan/', {name: name}, function (data) {
                                 if (data.status === 1) {
                                     location.href = '/panel/';
                                 }
                             })
                         }
                     },
-                    Отмена: function () {
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
                     }
                 }
             })

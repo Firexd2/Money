@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
         $('body').on('click', '#btn-freemoney', function () {
             var val = $(this).prev().val();
             if (val) {
-                $.post('', {value: val});
+                $.post('/ajax/correct_free_money/', {value: val});
                 location.reload()
             }
         })
