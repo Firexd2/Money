@@ -1,83 +1,73 @@
-{% extends 'base.html' %}
 {% load staticfiles %}
-{% block scripts %}
-    <script src="{% static 'js/home.js' %}"></script>
-{% endblock %}
-{% block content %}
-    <div class="row">
-        <h3>Навигация</h3>
-        <hr>
-
-        <div onclick="location.href='{% url 'cost' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
-                <h2><i class="fa fa-plus fa-4x" aria-hidden="true"></i> <br>
-                    Ввести трату</h2>
-            </div>
-        </div>
-        <div onclick="location.href='{% url 'stat' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
-                <h2><i class="fa fa-line-chart fa-4x" aria-hidden="true"></i> <br>
-                    Статистика</h2>
-            </div>
-        </div>
-        <div onclick="location.href='{% url 'settings' name_url=configuration.name_url %}'" style="margin-bottom: 20px" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
-                <h2><i class="fa fa-cog fa-4x" aria-hidden="true"></i> <br>
-                    Настройки</h2>
-            </div>
+<div class="row">
+    <h3>Навигация</h3>
+    <hr>
+    <div onclick="load('cost/')" style="margin-bottom: 20px" class="col-lg-4 navigation">
+        <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
+            <h2><i class="fa fa-plus fa-4x" aria-hidden="true"></i> <br>
+                Ввести трату</h2>
         </div>
     </div>
-    <div class="row">
-        <h3>Управление</h3>
-        <hr>
-        <div class="col-lg-4">
-            <div class="manage-block">
-                <h4 id="manage-block-title-1"><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Новый рассчетный период</h4>
-                <div style="margin-bottom: 10px;" class="input-group">
-                    <input value="{{ configuration.income }}" class="form-control" style="height:50px;font-size:20px;width: 210px" type="number">
-                    <button id="income" style="height: 50px;font-size: 25px" class="btn btn-default">
-                        <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <p style="color: gray; font-size: 13px">При начале нового рассчетного периода: <br>
-                    - обнулятся текущие траты <br>
-                    - неиспользованная сумма перейдет на ваш накопительный счет <br>
-                    - отсчет месяца пойдет с сегодняшнего дня <br>
-                    - <b>в случае ввода другой суммы, максимумы в категориях будут пропорционально рассчитаны автоматически. Вы всегда можете подкорректировать их в настройках.</b><br>
-                    - вся история трат переместится в <a href="">архив</a>. <br>
-                    По умолчанию стоит ранее введеная вами сумма. <br>
-                </p>
-                <p style="color: rgba(191,101,84,0.99); font-size: 13px">
-                    ВНИМАНИЕ! После ввода дохода, возвратиться к прежнему состоянию плана будет невозможно.
-                </p>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="manage-block">
-                <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Изменение даты</h4>
-                <div style="margin-bottom: 10px;" class="input-group">
-                    <input class="form-control" value="{{ configuration.date|date:"Y-m-d" }}" style="height:50px;font-size:20px;width: 210px" type="date">
-                    <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">
-                        <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <p style="color: gray; font-size: 13px">
-                    Если после ввода дохода вы ошиблись днем, вы можете поменять текущую дату не создавая новый план. По умолчанию стоит текущая дата вашего плана распределения бюджета.
-                </p>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="manage-block">
-                <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Удаление плана</h4>
-                <p style="color: gray; font-size: 13px">
-                    После удаления неиспользованные средства перейдут на ваш накопительный счет. Восстановить план будет невозможно.
-                </p>
-                <button id="delete" type="button" class="btn btn-r">Удалить план "{{ configuration.name }}"</button>
-            </div>
+    <div onclick="load('stat/')" style="margin-bottom: 20px" class="col-lg-4 navigation">
+        <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
+            <h2><i class="fa fa-line-chart fa-4x" aria-hidden="true"></i> <br>
+                Статистика</h2>
         </div>
     </div>
-    <div class="row">
-        <h3>История плана</h3>
-        <hr>
-
-{% endblock %}
+    <div onclick="load('settings/')" style="margin-bottom: 20px" class="col-lg-4 navigation">
+        <div style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);" class="block-conf">
+            <h2><i class="fa fa-cog fa-4x" aria-hidden="true"></i> <br>
+                Настройки</h2>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h3>Управление</h3>
+    <hr>
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4 id="manage-block-title-1"><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Новый рассчетный период</h4>
+            <div style="margin-bottom: 10px;" class="input-group">
+                <input value="{{ configuration.income }}" class="form-control" style="height:50px;font-size:20px;width: 210px" type="number">
+                <button id="income" style="height: 50px;font-size: 25px" class="btn btn-default">
+                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p style="color: gray; font-size: 13px">При начале нового рассчетного периода: <br>
+                - обнулятся текущие траты <br>
+                - неиспользованная сумма перейдет на ваш накопительный счет <br>
+                - отсчет месяца пойдет с сегодняшнего дня <br>
+                - <b>в случае ввода другой суммы, максимумы в категориях будут пропорционально рассчитаны автоматически. Вы всегда можете подкорректировать их в настройках.</b><br>
+                - вся история трат переместится в <a href="">архив</a>. <br>
+                По умолчанию стоит ранее введеная вами сумма. <br>
+            </p>
+            <p style="color: rgba(191,101,84,0.99); font-size: 13px">
+                ВНИМАНИЕ! После ввода дохода, возвратиться к прежнему состоянию плана будет невозможно.
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Изменение даты</h4>
+            <div style="margin-bottom: 10px;" class="input-group">
+                <input class="form-control" value="{{ configuration.date|date:"Y-m-d" }}" style="height:50px;font-size:20px;width: 210px" type="date">
+                <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">
+                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p style="color: gray; font-size: 13px">
+                Если после ввода дохода вы ошиблись днем, вы можете поменять текущую дату не создавая новый план. По умолчанию стоит текущая дата вашего плана распределения бюджета.
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Удаление плана</h4>
+            <p style="color: gray; font-size: 13px">
+                После удаления неиспользованные средства перейдут на ваш накопительный счет. Восстановить план будет невозможно.
+            </p>
+            <button id="delete" type="button" class="btn btn-r">Удалить план "{{ configuration.name }}"</button>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/home.js' %}"></script>

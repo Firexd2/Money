@@ -301,11 +301,11 @@ jQuery(document).ready(function($) {
                                         location.reload()
                                     }
                                 })
-                            },
-                            Cancel: {
-                                text: 'Отмена',
-                                action: function () {
-                                }
+                            }
+                        },
+                        Cancel: {
+                            text: 'Отмена',
+                            action: function () {
                             }
                         }
                     }

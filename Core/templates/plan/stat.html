@@ -1,137 +1,130 @@
-{% extends 'base.html' %}
 {% load staticfiles %}
-{% block scripts %}
-    <script src="{% static 'js/stat.js' %}"></script>
-{% endblock %}
-{% block content %}
-    <h3>Общая статистика</h3>
-    <hr>
-    <div class="row">
-        <div class="col-lg-6">
-            <h4 style="color: #707070"><i class="fa fa-table" aria-hidden="true"></i> Таблица лимитов и трат:</h4>
-            <p style="color: #b2b2b2; font-size: 13px">Здесь ваши суммы ваших трат разбиты по категориям. Чтобы получить детализацию трат определенной категории, нажмите на неё.</p>
-            <table style="font-size: 15px" id="current-month-table" class="table table-hover">
-                <thead>
-                <tr style="background: linear-gradient(45deg, #ffd3b0, #f3f6f1);;font-size: 18px">
-                    <th>Категория</th>
-                    <th>Отношение</th>
-                    <th>Остаток</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category in configuration.category.all %}
-                    <tr id="{{ category.id }}" name="{{ category.name }}" class="category-detail" style="cursor: pointer">
-                        <td class="hide" style="display: none">{% for cost in category.cost.all %}{{ cost.value }} {% endfor %}</td>
-                        <th scope="row" >{{ category.name }}</th>
-                        <td style="opacity: 0.8" class="category-table">
-                            <span class="cost-table"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>/{{ category.max }}
-                        </td>
-                        <td style="font-weight: bold;opacity: 0.8;color: #b1b1b1;"><span class="balance-table"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span></td>
-                    </tr>
-                {% endfor %}
-                <tr style="background: #efeae8;font-weight: bold">
-                    <th scope="row">В итоге:</th>
-                    <td>
-                        <span id="amount-table-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>/<span id="amount-table-2"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+<h3>Общая статистика</h3>
+<hr>
+<div class="row">
+    <div class="col-lg-6">
+        <h4 style="color: #707070"><i class="fa fa-table" aria-hidden="true"></i> Таблица лимитов и трат:</h4>
+        <p style="color: #b2b2b2; font-size: 13px">Здесь ваши суммы ваших трат разбиты по категориям. Чтобы получить детализацию трат определенной категории, нажмите на неё.</p>
+        <table style="font-size: 15px" id="current-month-table" class="table table-hover">
+            <thead>
+            <tr style="background: linear-gradient(45deg, #ffd3b0, #f3f6f1);;font-size: 18px">
+                <th>Категория</th>
+                <th>Отношение</th>
+                <th>Остаток</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in configuration.category.all %}
+                <tr id="{{ category.id }}" name="{{ category.name }}" class="category-detail" style="cursor: pointer">
+                    <td class="hide" style="display: none">{% for cost in category.cost.all %}{{ cost.value }} {% endfor %}</td>
+                    <th scope="row" >{{ category.name }}</th>
+                    <td style="opacity: 0.8" class="category-table">
+                        <span class="cost-table"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>/{{ category.max }}
                     </td>
-                    <td><span id="amount-balance"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span> (<span id="amount-balance-procent"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>)</td>
+                    <td style="font-weight: bold;opacity: 0.8;color: #b1b1b1;"><span class="balance-table"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span></td>
                 </tr>
-                <tr style="background-color: #f5f5f5; color: #4f4f4f">
-                    <td colspan="3">
-                        <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> Краткая статистика:</b> <br>
-                        <p style="padding-left: 15px">
-                            - {% if max_cost %}Cамая крупная покупка в <b>{{ max_cost.value }}</b> р. с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
-                            - Средние траты в день в <b>{{ middle_cost }}</b> р. <br>
-                            - Средние траты за неделю:<b> {{ middle_cost_of_week }}</b> р. <br>
-                            - До конца месяца <b>~{{ days|add:'-30'|cut:'-' }}</b> дн.
-                        </p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-lg-6">
-            <h4 style="color: #707070"><i class="fa fa-table" aria-hidden="true"></i> Таблица распределения на неделю:</h4>
-            <p style="color: #b2b2b2; font-size: 13px">Ты можешь выбрать, какие категории включить в недельный контроль. Для более равномерного распределения неделя считается как 8 дней.</p>
-
-            <table style="font-size: 15px" id="current-month-table" class="table table-hover">
-                <thead>
-                <tr style="background: linear-gradient(45deg, #ffd3b0, #f3f6f1);font-size: 18px">
-                    <th>Категория</th>
-                    <th>Остаток</th>
-                    <th>Процент</th>
-                </tr>
-                </thead>
-                <tbody>
-                <input hidden id="week" value="{{ now_week }}" type="text">
-                {% for category in configuration.category.all %}
-                    <tr {% if category.included_week_table %}{% else %}hidden{% endif %}>
-                        <th class="name-cat">{{ category.name }}</th>
-                        <th class="balance-week" style="opacity: 0.8"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></th>
-                        <th class="proc-week" style="opacity: 0.8"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></th>
-                    </tr>
-                {% endfor %}
-                <tr style="background: #efeae8;font-weight: bold">
-                    <th scope="row">В итоге:</th>
-                    <td>
-                        <span id="amount-table-week-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
-                    </td>
-                    <td>
-                        <span id="amount-balance-week"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span> %
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <p style="color: #b2b2b2; font-size: 13px">
-                            Вы можете выбрать те категории, которые будут учитываться в недельной таблице.
-                            Например, у вас есть категория "Большие покупки". Эту категорию не стоит включать
-                            в недельный учет, так как большие покупки считать по неделям бессмысленно.
-                        </p>
-                        {% for category in configuration.category.all %}
-                            <label>
-                                <input class="check-cat" {% if category.included_week_table %}checked{% else %}{% endif %} type="checkbox">
-                                <span class="pseudocheckbox">{{ category.name }}</span>
-                            </label>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr style="background-color: #f5f5f5;">
-                    <td colspan="3" style="color: #4f4f4f">
-                        <i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> До новой недели: <b>{{ number_days_for_week }}</b> д.
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+            {% endfor %}
+            <tr style="background: #efeae8;font-weight: bold">
+                <th scope="row">В итоге:</th>
+                <td>
+                    <span id="amount-table-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>/<span id="amount-table-2"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                </td>
+                <td><span id="amount-balance"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span> (<span id="amount-balance-procent"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>)</td>
+            </tr>
+            <tr style="background-color: #f5f5f5; color: #4f4f4f">
+                <td colspan="3">
+                    <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> Краткая статистика:</b> <br>
+                    <p style="padding-left: 15px">
+                        - {% if max_cost %}Cамая крупная покупка в <b>{{ max_cost.value }}</b> р. с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
+                        - Средние траты в день в <b>{{ middle_cost }}</b> р. <br>
+                        - Средние траты за неделю:<b> {{ middle_cost_of_week }}</b> р. <br>
+                        - До конца месяца <b>~{{ days|add:'-30'|cut:'-' }}</b> дн.
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <h4 style="color: #707070"><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
-            <p style="color: #b2b2b2; font-size: 13px">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
+    <div class="col-lg-6">
+        <h4 style="color: #707070"><i class="fa fa-table" aria-hidden="true"></i> Таблица распределения на неделю:</h4>
+        <p style="color: #b2b2b2; font-size: 13px">Ты можешь выбрать, какие категории включить в недельный контроль. Для более равномерного распределения неделя считается как 8 дней.</p>
 
-            <table class="table">
-                <thead>
-                </thead>
-                <tbody style="font-size: 15px">
-                {% if costs %}
-                    {% for cost in costs|slice:":15" %}
-                        <tr>
-                            <td>
-                                <b>{{ cost.datetime }}</b><br>
-                                Покупка на сумму: <b>{{ cost.value }} р</b>. Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
-                            </td>
-                        </tr>
+        <table style="font-size: 15px" id="current-month-table" class="table table-hover">
+            <thead>
+            <tr style="background: linear-gradient(45deg, #ffd3b0, #f3f6f1);font-size: 18px">
+                <th>Категория</th>
+                <th>Остаток</th>
+                <th>Процент</th>
+            </tr>
+            </thead>
+            <tbody>
+            <input hidden id="week" value="{{ now_week }}" type="text">
+            {% for category in configuration.category.all %}
+                <tr {% if category.included_week_table %}{% else %}hidden{% endif %}>
+                    <th class="name-cat">{{ category.name }}</th>
+                    <th class="balance-week" style="opacity: 0.8"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></th>
+                    <th class="proc-week" style="opacity: 0.8"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></th>
+                </tr>
+            {% endfor %}
+            <tr style="background: #efeae8;font-weight: bold">
+                <th scope="row">В итоге:</th>
+                <td>
+                    <span id="amount-table-week-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                </td>
+                <td>
+                    <span id="amount-balance-week"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span> %
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p style="color: #b2b2b2; font-size: 13px">
+                        Вы можете выбрать те категории, которые будут учитываться в недельной таблице.
+                        Например, у вас есть категория "Большие покупки". Эту категорию не стоит включать
+                        в недельный учет, так как большие покупки считать по неделям бессмысленно.
+                    </p>
+                    {% for category in configuration.category.all %}
+                        <label>
+                            <input class="check-cat" {% if category.included_week_table %}checked{% else %}{% endif %} type="checkbox">
+                            <span class="pseudocheckbox">{{ category.name }}</span>
+                        </label>
                     {% endfor %}
-                {% else %}
+                </td>
+            </tr>
+            <tr style="background-color: #f5f5f5;">
+                <td colspan="3" style="color: #4f4f4f">
+                    <i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> До новой недели: <b>{{ number_days_for_week }}</b> д.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <h4 style="color: #707070"><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
+        <p style="color: #b2b2b2; font-size: 13px">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody style="font-size: 15px">
+            {% if costs %}
+                {% for cost in costs|slice:":15" %}
                     <tr>
                         <td>
-                            Покупок пока не было
+                            <b>{{ cost.datetime }}</b><br>
+                            Покупка на сумму: <b>{{ cost.value }} р</b>. Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
                         </td>
                     </tr>
-                {% endif %}
-                </tbody>
-            </table>
-        </div>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>
+                        Покупок пока не было
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
     </div>
-{% endblock %}
+</div>
+<script src="{% static 'js/stat.js' %}"></script>

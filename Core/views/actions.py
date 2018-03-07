@@ -5,6 +5,9 @@ from django.http import HttpResponse
 from Core.models import Configuration, CostCategory, Cost, Tags
 
 
+
+
+
 def correct_free_money(request):
     if request.POST:
         settings = request.user.settings
@@ -166,3 +169,8 @@ def delete_cost(request):
         .order_by('-datetime').get(id=request.POST['id']).delete()
 
     return HttpResponse('ok')
+
+
+def archiving(name, *args):
+
+    pass

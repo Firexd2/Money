@@ -93,6 +93,7 @@ input::-webkit-inner-spin-button {
 .navbar-default .navbar-brand {
     color: #ff923a;
     font-size: 25px;
+    cursor: pointer;
 }
 /* цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или при его нахождении в фокусе */
 .navbar-default .navbar-brand:hover,
@@ -101,6 +102,7 @@ input::-webkit-inner-spin-button {
 }
 /* Цвет пунктов навигационного меню */
 .navbar-default .navbar-nav > li > a {
+    cursor: pointer;
     color: #f4d0b2;
 }
 /* Цвет пункта меню, при поднесении к нему курсора мышки или при его нахождении в фокусе */

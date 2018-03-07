@@ -1,128 +1,123 @@
-{% extends 'panel/panel.html' %}
 {% load staticfiles %}
-{% block scripts %}
-    <script src="{% static 'js/new.js' %}"></script>
-{% endblock %}
-{% block content %}
-    <h3>Создание нового плана распределения бюджета</h3>
-    <hr>
-    <form name="new" method="POST">
-        <div class="col-lg-6">
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
-            <div class="input-group">
-                <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
-            </div>
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
-            <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
-            <input name="icon" hidden type="text" value="fa fa-cogs">
-            <div style="margin-bottom: 10px" class="container-fluid">
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-cogs" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-user-o" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-ravelry" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-eercast" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-at" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-bolt" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-check" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-sun-o" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-credit-card" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-money" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-rub" aria-hidden="true"></i>
-                </div>
-                <div class="icons lg">
-                    <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
-                </div>
-            </div>
-            <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
-            <input value="#ff923a" style="height: 30px; width: 60px" name="color" type="color">
-            {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
-            {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
-            {#                <option value="red" style="background-color: red; color: red;">Красный</option>#}
-            {#                <option value="blue" style="background-color: blue; color: blue;">Синий</option>#}
-            {#                <option value="yellow" style="background-color: yellow; color: yellow;">Желтый</option>#}
-            {#                <option value="blueviolet" style="background-color: blueviolet; color: blueviolet;">Фиолетовый</option>#}
-            {#                <option value="darkorange" style="background-color: darkorange; color: darkorange;">Оранжевый</option>#}
-            {#                <option value="green" style="background-color: green; color: green;">Зеленый</option>#}
-            {#            </select></p>#}
+<h3>Создание нового плана распределения бюджета</h3>
+<hr>
+<form name="new" method="POST">
+    <div class="col-lg-6">
+        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
+        <div class="input-group">
+            <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
+            <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
         </div>
-        <div class="col-lg-6">
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
-            <p style="font-size: 13px;color: grey">Эту сумму, как и суммы в категориях, вы можете изменять в любое время после создания плана.</p>
-            <div class="input-group">
-                <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="income" type="number" class="form-control d-only" placeholder="Пример: 100000"/>
+        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
+        <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
+        <input name="icon" hidden type="text" value="fa fa-cogs">
+        <div style="margin-bottom: 10px" class="container-fluid">
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-cogs" aria-hidden="true"></i>
             </div>
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
-            <p style="color: rgba(191,101,84,0.99); font-size: 13px">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Название</th>
-                    <th width="200">Максимум</th>
-                    <th style="min-width: 100px">Процент</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><b>1</b></td>
-                    <td><input disabled name="name-cat1" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="income1" type="number" class="form-control cat"/></td>
-                    <td style="text-align: center"><span>-- </span>%</td>
-                </tr>
-                <tr>
-                    <td><b>2</b></td>
-                    <td><input disabled name="name-cat2" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="income2" type="number" class="form-control cat"/></td>
-                    <td style="text-align: center"><span>-- </span>%</td>
-                </tr>
-                <tr>
-                    <td><b>3</b></td>
-                    <td><input disabled name="name-cat3" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
-                    <td><input disabled name="income3" type="number" class="form-control cat"/></td>
-                    <td style="text-align: center"><span>-- </span>%</td>
-                </tr>
-                <tr style="font-weight: bold" id="total-tr">
-                    <td><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i></td>
-                    <td>Остаток:</td>
-                    <td><span id="o">--</span></td>
-                    <td style="text-align: center"><span id="p">-- </span>% </td>
-                </tr>
-                <tr>
-                    <td><i class="fa fa-plus-circle" style="color: #5cb85c;opacity: 0.8;" aria-hidden="true"></i></td>
-                    <td colspan="3"><a style="cursor: pointer;" id="add-category">Добавить еще одну категорию</a></td>
-                </tr>
-                <tr>
-                    <td><i class="fa fa-minus-circle" style="color: red;opacity: 0.8;" aria-hidden="true"></i></td>
-                    <td colspan="3"><a style="cursor: pointer;" id="remove-category">Удалить категорию</a></td>
-                </tr>
-                </tbody>
-            </table>
-            <button type="submit" class="btn">Готово!</button> <span style="color: red" id="error-form"></span>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-user-o" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-ravelry" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-eercast" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-at" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-bolt" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-check" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-sun-o" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-credit-card" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-money" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-rub" aria-hidden="true"></i>
+            </div>
+            <div class="icons lg">
+                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
+            </div>
         </div>
-    </form>
-    <script>
-        $('body').on('keypress', '.d-only, .cat', function(key) {if(key.charCode < 48 || key.charCode > 57) return false;});
-    </script>
-{% endblock %}
+        <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
+        <input value="#ff923a" style="height: 30px; width: 60px" name="color" type="color">
+        {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
+        {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
+        {#                <option value="red" style="background-color: red; color: red;">Красный</option>#}
+        {#                <option value="blue" style="background-color: blue; color: blue;">Синий</option>#}
+        {#                <option value="yellow" style="background-color: yellow; color: yellow;">Желтый</option>#}
+        {#                <option value="blueviolet" style="background-color: blueviolet; color: blueviolet;">Фиолетовый</option>#}
+        {#                <option value="darkorange" style="background-color: darkorange; color: darkorange;">Оранжевый</option>#}
+        {#                <option value="green" style="background-color: green; color: green;">Зеленый</option>#}
+        {#            </select></p>#}
+    </div>
+    <div class="col-lg-6">
+        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
+        <p style="font-size: 13px;color: grey">Эту сумму, как и суммы в категориях, вы можете изменять в любое время после создания плана.</p>
+        <div class="input-group">
+            <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
+            <input style="width: 140%" name="income" type="number" class="form-control d-only" placeholder="Пример: 100000"/>
+        </div>
+        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
+        <p style="color: rgba(191,101,84,0.99); font-size: 13px">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Название</th>
+                <th width="200">Максимум</th>
+                <th style="min-width: 100px">Процент</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><b>1</b></td>
+                <td><input disabled name="name-cat1" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                <td><input disabled name="income1" type="number" class="form-control cat"/></td>
+                <td style="text-align: center"><span>-- </span>%</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td><input disabled name="name-cat2" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                <td><input disabled name="income2" type="number" class="form-control cat"/></td>
+                <td style="text-align: center"><span>-- </span>%</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td><input disabled name="name-cat3" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>
+                <td><input disabled name="income3" type="number" class="form-control cat"/></td>
+                <td style="text-align: center"><span>-- </span>%</td>
+            </tr>
+            <tr style="font-weight: bold" id="total-tr">
+                <td><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i></td>
+                <td>Остаток:</td>
+                <td><span id="o">--</span></td>
+                <td style="text-align: center"><span id="p">-- </span>% </td>
+            </tr>
+            <tr>
+                <td><i class="fa fa-plus-circle" style="color: #5cb85c;opacity: 0.8;" aria-hidden="true"></i></td>
+                <td colspan="3"><a style="cursor: pointer;" id="add-category">Добавить еще одну категорию</a></td>
+            </tr>
+            <tr>
+                <td><i class="fa fa-minus-circle" style="color: red;opacity: 0.8;" aria-hidden="true"></i></td>
+                <td colspan="3"><a style="cursor: pointer;" id="remove-category">Удалить категорию</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn">Готово!</button> <span style="color: red" id="error-form"></span>
+    </div>
+</form>
+<script>
+    $('body').on('keypress', '.d-only, .cat', function(key) {if(key.charCode < 48 || key.charCode > 57) return false;});
+</script>
+<script src="{% static 'js/new.js' %}"></script>

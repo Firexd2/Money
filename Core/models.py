@@ -60,13 +60,13 @@ class Configuration(models.Model):
         for letter in self.name.lower():
             try:
                 self.name_url += DICT_LETTERS[letter]
-            except:
+            except KeyError:
                 self.name_url += letter
 
         super(Configuration, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('home', args=[str(self.name_url)])
+        return reverse('base', args=[str(self.name_url)])
 
 
 class Settings(models.Model):

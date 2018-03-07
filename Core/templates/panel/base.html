@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block menu %}
+    <nav style="border-radius: 0; border: none" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" onclick="load('home/')"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-money.ru</b></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a onclick="load('home/')"><i class="fa fa-columns" aria-hidden="true"></i> Панель</a></li>
+                    <li>
+                        <a onclick="load('new/')"><i class="fa fa-plus-circle" aria-hidden="true"></i> Новый план бюджета</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-arrows" aria-hidden="true"></i> Планы бюджета <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <div class="arrow-up visible-lg"></div>
+                            {% for configuration in user.settings.configurations.all %}
+                                <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+{% block content %}
+    <div id="content">
+        {% include 'panel/panel.html' %}
+    </div>
+{% endblock %}
+{% block load_script %}
+    <script>
+        function load(url) {
+            NProgress.start();
+            $('#content').load(url, function () {
+                NProgress.done();
+            });
+            var li = $('.navbar-nav').children();
+            li.removeClass('active');
+            for (var i=0;i<li.length;i++) {
+                if (String(li.eq(i).children().attr('onclick')).indexOf(url) !== -1 ) {
+                    li.eq(i).addClass('active')
+                }
+            }
+        }
+    </script>
+{% endblock %}

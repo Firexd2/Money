@@ -21,41 +21,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 </head>
 <header>
-    {% block menu %}
-        <nav class="navbar navbar-default">
-            <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" style="color: {{ configuration.color }}" href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'home' name_url=configuration.name_url %}"><i class="fa fa-home" aria-hidden="true"></i> Главная</a></li>
-                    <li><a href="{% url 'cost' name_url=configuration.name_url %}"><i class="fa fa-plus" aria-hidden="true"></i> Ввод расходов</a></li>
-                    <li>
-                        <a href="{% url 'stat' name_url=configuration.name_url %}"><i class="fa fa-line-chart" aria-hidden="true"></i> Статистика</a>
-                    </li>
-                    <li><a href="{% url 'settings' name_url=configuration.name_url %}"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
-                    <li class="dropdown">
-                        <a href="{% url 'panel' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-columns" aria-hidden="true"></i> Панель <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            {% for configuration in user.settings.configurations.all %}
-                                <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
-                            {% endfor %}
-                            <li role="separator" class="divider"></li>
-                            <li><a href="{% url 'new' %}">Новый план бюджета</a></li>
-                        </ul>
-                    </li>
-{#                <p class="navbar-text">32233 р. </p>#}
-                </ul>
-            </div>
-        </div>
-    </nav>
-    {% endblock %}
+{% block menu %}
+{% endblock %}
 </header>
 <body>
 <div class="container">
@@ -74,21 +41,7 @@
         <div id="close-modal"><i class="fa fa-times" aria-hidden="true"></i></div>
     </div>
 </div>
-<script>
-    $('body').show();
-    $('.version').text(NProgress.version);
-    NProgress.start();
-    setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
-
-    {#$('#close-modal, .btn-close').on('click', function () {#}
-    {#    $('.modal').css({'display': 'none'})#}
-
-    {##}
-    {#$('body').on('click', function (event) {#}
-    {#    if ($('.modal').has(event.target).length === 0) {#}
-    {#        $('.modal').css({'display': 'none'})#}
-    {#    }#}
-
-</script>
+    {% block load_script %}
+    {% endblock %}
 </body>
 </html>
