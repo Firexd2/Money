@@ -2,122 +2,120 @@ import json
 from datetime import datetime
 from math import floor
 from django.http import HttpResponse
+from django.views.generic.base import View
+
 from Core.models import Configuration, CostCategory, Cost, Tags
 
 
+class ActionsView(View):
+    @classmethod
+    def configuration(cls, request):
+        return request.user.settings.configurations.all().get(name_url=request.POST['name'])
 
 
-
-def correct_free_money(request):
-    if request.POST:
-        settings = request.user.settings
-        settings.free_money = request.POST['value']
+class CorrectFreeMoney(ActionsView):
+    def post(self, *args, **kwargs):
+        settings = self.request.user.settings
+        settings.free_money = self.request.POST['value']
         settings.save()
         return HttpResponse('ok')
 
 
-def create_new_plan(request):
-    if request.POST:
-        configuration = Configuration(name=request.POST['name'], income=request.POST['income'],
-                                      icon=request.POST['icon'], color=request.POST['color'])
+class CreateNewPlan(ActionsView):
+    def post(self, *args, **kwargs):
+        configuration = Configuration(name=self.request.POST['name-plan'], income=self.request.POST['income'],
+                                      icon=self.request.POST['icon'], color=self.request.POST['color'])
         configuration.save()
-        c = [item[1] for item in request.POST.items()][4:]
+        c = [item[1] for item in self.request.POST.items()][4:]
         for n, item in enumerate(c):
             if n % 2 == 1 and c[n - 1] and c[n]:
                 cost_category = CostCategory(name=c[n - 1], max=c[n])
                 cost_category.save()
                 configuration.category.add(cost_category)
-        request.user.settings.configurations.add(configuration)
-
-        # h = History(description='')
-        # configuration.history.add(h)
+        self.request.user.settings.configurations.add(configuration)
 
         return HttpResponse('ok')
 
 
-def start_new_period(request):
-    configuration = request.user.settings.configurations.all().get(name_url=request.POST['name'])
-    if request.POST:
+class StartNewPeriod(ActionsView):
+    def post(self, *args, **kwargs):
+        # Наша конфигурация
+        configuration = self.configuration(self.request)
+        # Предыдущее значение income
         last_income = configuration.income
-
+        # Рассчитываем непотраченный остаток с предыдущего месяца
         balance = last_income - sum(
             list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
-        configuration.income = int(request.POST['income'])
+        # Вносим новые правки в план
+        configuration.income = int(self.request.POST['income'])
         configuration.date = datetime.now().date()
         configuration.save()
+        # Непотраченный остаток присваиваем к общему счету
         settings = configuration.settings_set.all()[0]
         settings.free_money += balance
         settings.save()
-
+        # Удаляем траты и производим перерасчет максимумов в категориях на основе введенных данных
         count_category = configuration.category.all().count()
-
-        distribution = (int(request.POST['income']) - last_income) / count_category
-
+        distribution = (int(self.request.POST['income']) - last_income) / count_category
         if distribution == int(distribution):
             list_values_add = [distribution] * count_category
         else:
             list_values_add = [floor(distribution)] * count_category
-            list_values_add[-1] += int(request.POST['income']) - last_income - (floor(distribution) * count_category)
-
+            list_values_add[-1] += int(self.request.POST['income']) - last_income - (floor(distribution) * count_category)
         for n, category in enumerate(configuration.category.all()):
             category.cost.all().delete()
             cat = category
             cat.max += list_values_add[n]
             cat.save()
-
         response = {'status': 1, 'balance': balance}
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
-    return HttpResponse(json.dumps(response), content_type='application/json')
 
-
-def edit_date(request):
-    configuration = request.user.settings.configurations.all().get(name_url=request.POST['name'])
-    if request.POST:
-        date = datetime.strptime(request.POST['date'], '%Y-%m-%d').date()
+class EditDate(ActionsView):
+    def post(self, *args, **kwargs):
+        date = datetime.strptime(self.request.POST['date'], '%Y-%m-%d').date()
         status = 0
         if datetime.now().date() >= date:
-            configuration.date = date
-            configuration.save()
+            self.configuration(self.request).date = date
+            self.configuration(self.request).save()
             status = 1
         response = {'status': status}
 
-    return HttpResponse(json.dumps(response), content_type='application/json')
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-def delete_plan(request):
-    configuration = request.user.settings.configurations.all().get(name_url=request.POST['name'])
-    if request.POST:
-        balance = configuration.income - sum(
-            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
-        settings = configuration.settings_set.all()[0]
+class DeletePlan(ActionsView):
+    def post(self, *args, **kwargs):
+        balance = self.configuration(self.request).income - sum(
+            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=self.configuration(self.request)))))
+        settings = self.configuration(self.request).settings_set.all()[0]
         settings.free_money += balance
         settings.save()
         try:
-            configuration.delete()
+            self.configuration(self.request).delete()
             status = 1
         except:
             status = 0
         response = {'status': status}
-    return HttpResponse(json.dumps(response), content_type='application/json')
+
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-def settings_plan(request):
+class SettingsPlan(ActionsView):
+    def post(self, *args, **kwargs):
+        self.configuration(self.request).name = self.request.POST['name-plan']
+        self.configuration(self.request).income = self.request.POST['income']
+        self.configuration(self.request).icon = self.request.POST['icon']
+        self.configuration(self.request).color = self.request.POST['color']
+        self.configuration(self.request).save()
 
-    configuration = request.user.settings.configurations.all().get(id=request.POST['id'])
-
-    if request.POST:
-        configuration.name = request.POST['name']
-        configuration.income = request.POST['income']
-        configuration.icon = request.POST['icon']
-        configuration.color = request.POST['color']
-        configuration.save()
-
-        current_category = configuration.category.all()
+        current_category = self.configuration(self.request).category.all()
         number_category = 0
-        c = [item[1] for item in request.POST.items()][5:]
+        c = [item[1] for item in self.request.POST.items()][5:]
         for n, item in enumerate(c):
             if n % 2 == 1 and c[n - 1] and c[n]:
-                if not (current_category[number_category].name == c[n - 1] and current_category[number_category].max == c[n]):
+                if not (current_category[number_category].name == c[n - 1] and
+                        current_category[number_category].max == c[n]):
                     for_save = current_category[number_category]
                     for_save.name = c[n - 1]
                     for_save.max = c[n]
@@ -127,48 +125,45 @@ def settings_plan(request):
         return HttpResponse('ok')
 
 
-def toggle_category_week_table(request):
-    configuration = request.user.settings.configurations.get(name_url=request.POST['name'])
-
-    bool_field = configuration.category.all().get(name=request.POST['category'])
-    bool_field.included_week_table = not bool_field.included_week_table
-    bool_field.save()
-
-    return HttpResponse('ok')
+class ToggleCategoryWeekTable(ActionsView):
+    def post(self, *args, **kwargs):
+        bool_field = self.configuration(self.request).category.all().get(name=self.request.POST['category'])
+        bool_field.included_week_table = not bool_field.included_week_table
+        bool_field.save()
+        return HttpResponse('ok')
 
 
-def input_cost(request):
-    configuration = request.user.settings.configurations.get(name_url=request.POST['name'])
+class InputCost(ActionsView):
+    def post(self, *args, **kwargs):
+        for cat in self.configuration(self.request).category.all():
+            value = 'value-' + str(cat.id)
+            detailed_comment = 'detail-comment-' + str(cat.id)
+            n = 0
+            while True:
+                complete_value = value + '-' + str(n)
+                complete_detailed_comment = detailed_comment + '-' + str(n)
+                try:
+                    cost = Cost(value=self.request.POST[complete_value],
+                                detailed_comment=self.request.POST[complete_detailed_comment])
+                except KeyError:
+                    break
+                cost.save()
 
-    for cat in configuration.category.all():
-        value = 'value-' + str(cat.id)
-        detailed_comment = 'detail-comment-' + str(cat.id)
-        n = 0
-        while True:
-            complete_value = value + '-' + str(n)
-            complete_detailed_comment = detailed_comment + '-' + str(n)
-            try:
-                cost = Cost(value=request.POST[complete_value],
-                            detailed_comment=request.POST[complete_detailed_comment])
-            except KeyError:
-                break
-            cost.save()
+                for tag in self.request.POST.getlist('tags'):
+                    tag_obj, b = Tags.objects.update_or_create(user=str(self.request.user), name=tag)
+                    cost.tags.add(tag_obj)
+                cat.cost.add(cost)
+                n += 1
 
-            for tag in request.POST.getlist('tags'):
-                tag_obj, b = Tags.objects.update_or_create(user=str(request.user), name=tag)
-                cost.tags.add(tag_obj)
-            cat.cost.add(cost)
-            n += 1
-
-    return HttpResponse('ok')
+        return HttpResponse('ok')
 
 
-def delete_cost(request):
-    configuration = request.user.settings.configurations.all().get(name_url=request.POST['name'])
-    Cost.objects.filter(costcategory__configuration=configuration)\
-        .order_by('-datetime').get(id=request.POST['id']).delete()
+class DeleteCost(ActionsView):
+    def post(self, *args, **kwargs):
+        Cost.objects.filter(costcategory__configuration=self.configuration(self.request)) \
+            .order_by('-datetime').get(id=self.request.POST['id']).delete()
+        return HttpResponse('ok')
 
-    return HttpResponse('ok')
 
 
 def archiving(name, *args):

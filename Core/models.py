@@ -69,6 +69,7 @@ class Configuration(models.Model):
         return reverse('base', args=[str(self.name_url)])
 
 
+
 class Settings(models.Model):
     """
     Пользователь заходит и регистрируется. У него создается связь с эзкмпляром Settings

@@ -134,8 +134,8 @@ jQuery(document).ready(function($) {
                 }
             } else {
                 var data = $(this).serializeArray();
-                var url = location.pathname.split('/').indexOf('settings') !== -1 ? '/ajax/settings_plan/' : '/ajax/create_new_plan/';
-                var redirect = location.pathname.split('/').indexOf('settings') !== -1 ? '' : '/panel/';
+                var url = location.pathname.split('/').indexOf('panel') !== -1 ? '/ajax/create_new_plan/' : '/ajax/settings_plan/';
+                var redirect = location.pathname.split('/').indexOf('panel') !== -1 ? '/panel/' : '';
                 $.ajax({
                     type: "POST",
                     url: url,

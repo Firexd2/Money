@@ -2,12 +2,12 @@
 <h3>Настройки и редактирование текущего плана</h3>
 <hr>
 <form name="new" method="POST">
-    <input hidden name="id" value="{{ configuration.id }}" type="text">
+    <input hidden name="name" value="{{ configuration.name_url }}" type="text">
     <div class="col-lg-6">
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
         <div class="input-group">
             <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
-            <input style="width: 140%" name="name" id="name-input" type="text" class="form-control" value="{{ configuration.name }}" placeholder="Пример: Семья"/>
+            <input style="width: 140%" name="name-plan" id="name-input" type="text" class="form-control" value="{{ configuration.name }}" placeholder="Пример: Семья"/>
         </div>
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
         <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
