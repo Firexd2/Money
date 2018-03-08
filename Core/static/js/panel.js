@@ -15,8 +15,19 @@ jQuery(document).ready(function($) {
         $('body').on('click', '#btn-freemoney', function () {
             var val = $(this).prev().val();
             if (val) {
-                $.post('/ajax/correct_free_money/', {value: val});
-                location.reload()
+                $.post('/ajax/correct_free_money/', {value: val}, function (data) {
+                    if (data.status) {
+                        location.reload()
+                    } else {
+                        $.alert({
+                            type: 'red',
+                            icon: 'fa fa-exclamation-triangle',
+                            title: 'Операция отменена!',
+                            content: 'Для успешного изменения суммы ваших накоплений вам нужно ввести число и/или использовать +/- перед числом для манипуляций с текущей суммой.'
+                        })
+                    }
+                });
+
             }
         })
     }

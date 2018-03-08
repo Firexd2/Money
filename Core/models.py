@@ -9,15 +9,15 @@ DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye
                 '"': '_', '(': '_', ')': '_', '№': '_'}
 
 
-class History(models.Model):
-    description = models.CharField('Описание действия', max_length=300, blank=True)
-    datetime = models.DateTimeField('Время и дата', auto_now=True)
-
-
 class Tags(models.Model):
 
     name = models.CharField('Название метки', max_length=100)
     user = models.CharField('Пользователь', max_length=100)
+    datetime = models.DateTimeField('Время и дата', auto_now=True)
+
+
+class History(models.Model):
+    description = models.CharField('Описание действия', max_length=300, blank=True)
     datetime = models.DateTimeField('Время и дата', auto_now=True)
 
 
@@ -29,6 +29,12 @@ class Cost(models.Model):
     tags = models.ManyToManyField(Tags, verbose_name='Метки')
     detailed_comment = models.CharField('Подробрый комментарий', max_length=100)
     datetime = models.DateTimeField('Время и дата', auto_now=True)
+
+
+class Archive(models.Model):
+    date_one = models.DateField()
+    date_two = models.DateField('Дата ввода', default=datetime.now)
+    archive_costs = models.ManyToManyField(Cost, verbose_name='Траты')
 
 
 class CostCategory(models.Model):
@@ -67,7 +73,6 @@ class Configuration(models.Model):
 
     def get_absolute_url(self):
         return reverse('base', args=[str(self.name_url)])
-
 
 
 class Settings(models.Model):

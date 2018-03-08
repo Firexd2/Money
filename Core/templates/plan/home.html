@@ -70,4 +70,9 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <h3>История действий в плане {{ configuration.name }}</h3>
+    <hr>
+{% include 'history_table.html' %}
+</div>
 <script src="{% static 'js/home.js' %}"></script>

@@ -25,6 +25,7 @@ jQuery(document).ready(function($) {
                                         title: '<b>Операция выполнена!</b>',
                                         content: message
                                     });
+                                    $('#home-button-menu').click()
                                 }
                             })
                         }
@@ -68,6 +69,7 @@ jQuery(document).ready(function($) {
                                         content: message
                                     });
                                 }
+                                $('#home-button-menu').click()
                             })
                         }
                     },

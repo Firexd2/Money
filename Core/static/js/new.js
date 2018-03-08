@@ -103,6 +103,7 @@ jQuery(document).ready(function($) {
 
         $('form[name=new]').on('submit', function (e) {
             e.preventDefault();
+            var valid_name = $('list').text().indexOf($('input[name=name-plan]').val());
             function repeat_category() {
                 var names_category = $('.ca');
                 var array = [];
@@ -120,7 +121,7 @@ jQuery(document).ready(function($) {
                 }
             }
 
-            if ($('#o').text() !== '0' || repeat_category()) {
+            if ($('#o').text() !== '0' || repeat_category() || valid_name !== -1) {
                 if (!($('#name-input').val())) {
                     $('#error-form').text(' Вы не ввели название плана')
                 } else if ($('#o').text() === '--') {
@@ -129,10 +130,13 @@ jQuery(document).ready(function($) {
                     $('#error-form').text(' У вас остался неиспользованный остаток')
                 } else if (repeat_category()) {
                     $('#error-form').text(' Категории не могут иметь одинаковое название')
+                } else if (valid_name !== -1) {
+                    $('#error-form').text(' Вы не можете иметь два плана с одним названием')
                 } else {
                     $('#error-form').text(' Вы превысили лимит вашей суммы')
                 }
             } else {
+                NProgress.set(0.4);
                 var data = $(this).serializeArray();
                 var url = location.pathname.split('/').indexOf('panel') !== -1 ? '/ajax/create_new_plan/' : '/ajax/settings_plan/';
                 var redirect = location.pathname.split('/').indexOf('panel') !== -1 ? '/panel/' : '';
@@ -144,7 +148,8 @@ jQuery(document).ready(function($) {
                         if (redirect.length > 0) {
                             location.href = redirect
                         } else {
-                            location.reload()
+                            location.href='/panel/';
+                            NProgress.done();
                         }
                     }
                 });

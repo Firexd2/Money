@@ -10,9 +10,9 @@
                     <p style="font-size: 20px">Сумма ваших накоплений</p>
                 </div>
                 <div style="height: 102px">
-                    <p style="font-size: 15px">Введите эту сумму один раз, в дальнейшем она будет корректироваться системой.</p>
+                    <p style="font-size: 13px">Введите эту сумму один раз, в дальнейшем она будет корректироваться системой. (Если просто добавить к сумме, используй +/-: прим. +100)</p>
                     <div style="margin-bottom: 0;" class="input-group">
-                        <input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="number">
+                        <input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="text">
                         <button id="btn-freemoney" class="btn btn-default">
                             <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                         </button>
@@ -59,11 +59,16 @@
             </div>
         </div>
     {% endfor %}
-    <div onclick="location.href=''" class="col-lg-4 conf add">
+    <div onclick="load('new/')" class="col-lg-4 conf add">
         <div class="list-plan" style="border: dashed 3px;">
             <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
             <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
         </div>
     </div>
+</div>
+<div class="row">
+    <h3>История действий на вашем аккаунте:</h3>
+    <hr>
+{% include 'history_table.html' %}
 </div>
 <script src="{% static 'js/panel.js' %}"></script>

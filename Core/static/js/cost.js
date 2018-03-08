@@ -298,7 +298,7 @@ jQuery(document).ready(function($) {
                                     url: url,
                                     data: data,
                                     success: function () {
-                                        location.reload()
+                                        $('#input-cost-button-menu').click()
                                     }
                                 })
                             }

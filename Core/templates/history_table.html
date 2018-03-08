@@ -1,0 +1,22 @@
+
+<div style="max-height: 700px;overflow: auto" class="col-lg-6">
+    <table class="table">
+        <tbody>
+        {% if history %}
+            {% for item in history %}
+                <tr>
+                    <td>
+                        <b>{{ item.datetime }}</b>
+                        <br>
+                        {{ item.description|safe }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                История пуста
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>

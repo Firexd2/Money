@@ -96,6 +96,7 @@
             </tr>
             </tbody>
         </table>
+        <list>{% for item in user.settings.configurations.all %}{{ item.name }} {% endfor %}</list>
         <button type="submit" class="btn">Сохранить</button> <span style="color: red" id="error-form"></span>
     </div>
 </form>

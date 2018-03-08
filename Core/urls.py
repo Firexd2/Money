@@ -22,7 +22,7 @@ from Core.views import actions, views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('favicon.ico/', RedirectView.as_view(url='/static/images/favicon.ico'), name='favicon'),
-    path('panel/', views.BaseTemplateView.as_view(template_name='panel/base.html')),
+    path('panel/', views.BaseTemplateView.as_view(template_name='panel/base.html'), name='panel'),
     path('panel/home/', views.BaseTemplateView.as_view(template_name='panel/panel.html')),
     path('panel/new/', views.BaseTemplateView.as_view(template_name='panel/new.html')),
     path('<name_url>/', views.BaseTemplatePlanView.as_view(template_name='plan/base.html'), name='base'),

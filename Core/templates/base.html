@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="{% static 'js/bootstrap/bootstrap.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    {% block scripts %}
-    {% endblock %}
     <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Alegreya+SC|Encode+Sans+Expanded|Exo+2" rel="stylesheet">
@@ -29,16 +27,6 @@
     <div class="row">
         {% block content %}
         {% endblock %}
-    </div>
-</div>
-<div class="modal">
-    <div class="modal-window">
-        <h2 id="modal-tittle"></h2>
-        <p id="modal-message"></p>
-        <div class="modal-buttons">
-            <button class="btn btn-default button-input-cost btn-close">Окей</button>
-        </div>
-        <div id="close-modal"><i class="fa fa-times" aria-hidden="true"></i></div>
     </div>
 </div>
     {% block load_script %}
