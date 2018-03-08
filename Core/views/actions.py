@@ -115,7 +115,7 @@ class StartNewPeriod(ActionsView):
         for n, category in enumerate(configuration.category.all()):
             costs = category.cost.all()
             # Сохраняется только последняя трата
-            archive.archive_costs.set([cost for cost in costs])
+            archive.archive_costs.add(*[cost for cost in costs])
             category.cost.clear()
             cat = category
             cat.max += list_values_add[n]
