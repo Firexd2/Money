@@ -2,14 +2,14 @@
 <div class="row">
     <h3>Ваши данные и настройки:</h3>
     <hr>
-    <div style="margin-bottom: 20px" class="col-lg-4">
+    <div class="col-lg-4">
         <div class="block-panel">
             <div class="slider-block-panel">
-                <div style="height: 102px;">
+                <div>
                     <b id="freemoney">{{ user.settings.free_money }}</b>
                     <p style="font-size: 20px">Сумма ваших накоплений</p>
                 </div>
-                <div style="height: 102px">
+                <div>
                     <p style="font-size: 13px">Введите эту сумму один раз, в дальнейшем она будет корректироваться системой. (Если просто добавить к сумме, используй +/-: прим. +100)</p>
                     <div style="margin-bottom: 0;" class="input-group">
                         <input placeholder="Введите вашу сумму" class="form-control" style="width: 200px" id="create" type="text">
@@ -21,27 +21,27 @@
             </div>
         </div>
     </div>
-    <div style="margin-bottom: 20px" class="col-lg-4">
+    <div class="col-lg-4">
         <div class="block-panel">
             <div class="slider-block-panel">
-                <div style="height: 102px;">
-                    <b style="font-size: 45px; color: #ff5c00">{{ money_circulation }}</b>
+                <div>
+                    <b id="circ" style="color: #ff5c00">{{ money_circulation }}</b>
                     <p style="font-size: 20px">Деньги в обороте</p>
                 </div>
-                <div style="height: 102px">
+                <div>
                     <p style="font-size: 15px">Сумма ваших средств задейственных в ваших планах распределения бюджета. Неизменяемая в ручную величина, так как напрямую зависит от ваших настроек в системе.</p>
                 </div>
             </div>
         </div>
     </div>
-    <div style="margin-bottom: 20px" class="col-lg-4">
+    <div class="col-lg-4">
         <div class="block-panel">
             <div class="slider-block-panel">
-                <div style="height: 102px;">
-                    <b style="font-size: 45px;">{{ user.settings.free_money|add:money_circulation }}</b>
+                <div>
+                    <b id="freecirc">{{ user.settings.free_money|add:money_circulation }}</b>
                     <p style="font-size: 20px">Общая сумма</p>
                 </div>
-                <div style="height: 102px">
+                <div>
                     <p style="font-size: 15px">Сумма накоплений и денег в планах распределения бюджета. По факту является суммой всех ваших денег на данный момент (если вы правильно ввели изначально сумму накоплений).</p>
                 </div>
             </div>
@@ -54,15 +54,15 @@
     {% for configuration in user.settings.configurations.all %}
         <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
             <div class="list-plan">
-                <i style="font-size: 200px" class="{{ configuration.icon }}" aria-hidden="true"></i>
-                <p style="padding-top: 10px; font-size: 30px; font-weight: bold">{{ configuration.name }}</p>
+                <i class="{{ configuration.icon }}" aria-hidden="true"></i>
+                <p class="name-configuration-panel">{{ configuration.name }}</p>
             </div>
         </div>
     {% endfor %}
     <div onclick="load('new/')" class="col-lg-4 conf add">
         <div class="list-plan" style="border: dashed 3px;">
             <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
-            <p style="padding-top: 10px; font-size: 19px; font-weight: bold">План распределения бюджета</p>
+            <p id="add-plan">План распределения бюджета</p>
         </div>
     </div>
 </div>

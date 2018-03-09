@@ -49,9 +49,8 @@ h4 {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    margin: 0;
 }
 
 #nprogress .bar {
@@ -195,11 +194,9 @@ input::-webkit-inner-spin-button {
 }
 
 @media (max-width: 767px) {
-/* Цвет пунктов меню в раскрывающихся списках */
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ffb57c;
     }
-/* Цвет и фон пункта меню в раскрывающихся списках, при поднесении к нему курсора мышки или при нахождении его в фокусе */
     .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
     .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #ffb57c;
@@ -295,6 +292,12 @@ input::-webkit-inner-spin-button {
 
 .group-category {
     display: inline-block;
+}
+
+.input-home {
+    height:50px;
+    font-size:20px;
+    width: 210px !important;
 }
 
 input[type=checkbox] { display: none; }
@@ -452,9 +455,23 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     overflow: hidden;
 }
 
-#freemoney {
+#freemoney, #freecirc, #circ {
     font-size: 45px;
+}
+
+#freemoney {
     color: #5cb85c
+}
+
+#add-plan {
+    padding-top: 10px;
+    font-size: 19px;
+    font-weight: bold
+}
+
+.info-text {
+    font-size: 13px;
+    color: grey
 }
 
 .list-plan {
@@ -463,6 +480,15 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     border-radius: 5px;
     padding: 20px;
     height: 310px;
+}
+
+.icons-i {
+    font-size: 50px;
+    padding-bottom: 10px
+}
+
+.list-plan i {
+    font-size: 200px
 }
 
 .block-conf {
@@ -499,64 +525,10 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     line-height: 26px !important;
 }
 
-/*.modal {*/
-    /*position: fixed;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
-    /*left: 0;*/
-    /*padding: 24px;*/
-    /*display: none;*/
-    /*flex-flow: column nowrap;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
-    /*overflow: hidden;*/
-    /*background-color: rgba(0,0,0,0.15);*/
-/*}*/
+.name-configuration-panel {
+    padding-top: 10px;
+    font-size: 30px;
+    font-weight: bold;
+}
 
-/*.modal-window {*/
-    /*width: 350px;*/
-    /*position: relative;*/
-    /*max-width: 100%;*/
-    /*max-height: 100%;*/
-    /*padding: 10px 20px 10px 20px;*/
-    /*overflow: auto;*/
-    /*background: #ffffff;*/
-    /*border-radius: 5px;*/
-    /*-webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2);*/
-    /*box-shadow: 0 2px 6px rgba(0,0,0,0.2);*/
-/*}*/
-
-/*#modal-tittle {*/
-    /*margin: 5px 0 10px 0;*/
-/*}*/
-
-/*#close-modal {*/
-    /*position: absolute;*/
-    /*font-size: 25px;*/
-    /*top: 0;*/
-    /*right: 10px;*/
-    /*cursor: pointer;*/
-/*}*/
-
-/*#close-modal:hover {*/
-    /*color: red;*/
-/*}*/
-
-/*#modal-message {*/
-    /*font-size: 16px;*/
-    /*padding: 5px 0 10px 0;*/
-/*}*/
-
-/*.modal-buttons {*/
-    /*margin-bottom: 15px;*/
-/*}*/
-
-/*.modal-buttons button {*/
-    /*font-size: 16px;*/
-/*}*/
-
-/*.modal-window h2 {*/
-    /*font-size: 22px;*/
-/*}*/
 

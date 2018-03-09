@@ -10,47 +10,11 @@
             <input style="width: 140%" name="name-plan" id="name-input" type="text" class="form-control" value="{{ configuration.name }}" placeholder="Пример: Семья"/>
         </div>
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
-        <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
+        <p class="info-text">Выбери иконку в качестве "лого" конфигурации:</p>
         <input name="icon" hidden type="text" value="{{ configuration.icon }}">
-        <div id="table-icon" style="margin-bottom: 10px" class="container-fluid">
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-cogs" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-user-o" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-ravelry" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-eercast" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-at" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-bolt" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-check" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-sun-o" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-credit-card" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-money" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-rub" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
-            </div>
+        <div id="icons" style="margin-bottom: 10px; max-height: 350px; overflow: auto" class="container-fluid">
         </div>
-        <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
+        <p class="info-text">Выбери цвет стилизации:</p>
         <input value="{{ configuration.color }}" style="height: 30px; width: 60px" name="color" type="color">
         {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
         {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
@@ -69,7 +33,7 @@
             <input value="{{ configuration.income }}" style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
         </div>
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Редактирование категорий:</h4>
-        <p style="color: grey; font-size: 13px">Редактировать можно только название и значение максимума категории. Добавлять или удалять категории нельзя.</p>
+        <p class="info-text">Редактировать можно только название и значение максимума категории. Добавлять или удалять категории нельзя.</p>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -96,7 +60,7 @@
             </tr>
             </tbody>
         </table>
-        <list>{% for item in user.settings.configurations.all %}{{ item.name }} {% endfor %}</list>
+        <list>{% for item in user.settings.configurations.all %}{% if item.name != configuration.name %}{{ item.name }} {% endif %}{% endfor %}</list>
         <button type="submit" class="btn">Сохранить</button> <span style="color: red" id="error-form"></span>
     </div>
 </form>

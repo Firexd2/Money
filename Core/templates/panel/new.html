@@ -9,47 +9,11 @@
             <input style="width: 140%" name="name-plan" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
         </div>
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
-        <p style="font-size: 13px; color: grey">Выбери иконку в качестве "лого" конфигурации:</p>
+        <p class="info-text">Выбери иконку в качестве "лого" конфигурации:</p>
         <input name="icon" hidden type="text" value="fa fa-cogs">
-        <div style="margin-bottom: 10px" class="container-fluid">
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-cogs" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-user-o" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-ravelry" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-eercast" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-at" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-bolt" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-check" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-sun-o" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-credit-card" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-money" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-rub" aria-hidden="true"></i>
-            </div>
-            <div class="icons lg">
-                <i style="font-size: 50px;padding-bottom: 10px" class="fa fa-asterisk" aria-hidden="true"></i>
-            </div>
+        <div id="icons" style="margin-bottom: 10px; max-height: 350px; overflow: auto" class="container-fluid">
         </div>
-        <p style="font-size: 13px; color: grey">Выбери цвет стилизации:</p>
+        <p class="info-text">Выбери цвет стилизации:</p>
         <input value="#ff923a" style="height: 30px; width: 60px" name="color" type="color">
         {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
         {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
@@ -63,13 +27,13 @@
     </div>
     <div class="col-lg-6">
         <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
-        <p style="font-size: 13px;color: grey">Эту сумму, как и суммы в категориях, вы можете изменять в любое время после создания плана.</p>
+        <p class="info-text">Эту сумму, как и суммы в категориях, вы можете изменять в любое время после создания плана.</p>
         <div class="input-group">
             <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
             <input style="width: 140%" name="income" type="number" class="form-control d-only" placeholder="Пример: 100000"/>
         </div>
-        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Создание категорий:</h4>
-        <p style="color: rgba(191,101,84,0.99); font-size: 13px">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
+        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Планирование бюджета:</h4>
+        <p class="info-text" style="color: rgba(191,101,84,0.99);">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
         <table class="table table-hover">
             <thead>
             <tr>

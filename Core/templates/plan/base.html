@@ -1,57 +1,24 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block menu %}
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" style="color: {{ configuration.color }}" href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a id="home-button-menu" onclick="load('home/')"><i class="fa fa-home" aria-hidden="true"></i> Главная</a></li>
-                    <li><a id="input-cost-button-menu" onclick="load('cost/')"><i class="fa fa-plus" aria-hidden="true"></i> Ввод расходов</a></li>
-                    <li><a onclick="load('stat/')"><i class="fa fa-line-chart" aria-hidden="true"></i> Статистика</a></li>
-                    <li><a onclick="load('settings/')"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
-                    <li class="dropdown">
-                        <a href="{% url 'panel' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-columns" aria-hidden="true"></i> Панель <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            {% for configuration in user.settings.configurations.all %}
-                                <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
-                            {% endfor %}
-                            <li role="separator" class="divider"></li>
-                            <li><a onclick="load('new/')">Новый план бюджета</a></li>
-                        </ul>
-                    </li>
-                    {#                <p class="navbar-text">32233 р. </p>#}
+    <div class="collapse navbar-collapse" id="navbar-main">
+        <ul class="nav navbar-nav">
+            <li class="active"><a id="home-button-menu" onclick="load('home/')"><i class="fa fa-home" aria-hidden="true"></i> Главная</a></li>
+            <li><a id="input-cost-button-menu" onclick="load('cost/')"><i class="fa fa-plus" aria-hidden="true"></i> Ввод расходов</a></li>
+            <li><a onclick="load('stat/')"><i class="fa fa-line-chart" aria-hidden="true"></i> Статистика</a></li>
+            <li><a onclick="load('settings/')"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
+            <li class="dropdown">
+                <a href="{% url 'panel' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-columns" aria-hidden="true"></i> Панель <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% for configuration in user.settings.configurations.all %}
+                        <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
+                    {% endfor %}
                 </ul>
-            </div>
-        </div>
-    </nav>
+            </li>
+        </ul>
+    </div>
+
 {% endblock %}
 {% block content %}
-    <div id="content">
-        {% include 'plan/home.html' %}
-    </div>
-{% endblock %}
-{% block load_script %}
-    <script>
-        function load(url) {
-            NProgress.set(0.4);
-            $('#content').load(location.pathname + url, function () {
-                NProgress.done();
-            });
-            var li = $('.navbar-nav').children();
-            li.removeClass('active');
-            for (var i=0;i<li.length;i++) {
-                if (String(li.eq(i).children().attr('onclick')).indexOf(url) !== -1 ) {
-                    li.eq(i).addClass('active')
-                }
-            }
-        }
-    </script>
+    {% include 'plan/home.html' %}
 {% endblock %}

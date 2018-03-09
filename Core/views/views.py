@@ -3,12 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from Core.models import CostCategory, Cost, Tags, History
+from Core.models import CostCategory, Cost, Tags
 
 
 @method_decorator(login_required, name='dispatch')
 class BaseTemplatePlanView(TemplateView):
-
     def get_context_data(self, **kwargs):
         context = super(BaseTemplatePlanView, self).get_context_data(**kwargs)
         context['configuration'] = self.request.user.settings.configurations.all().get(name_url=self.kwargs['name_url'])
@@ -17,7 +16,6 @@ class BaseTemplatePlanView(TemplateView):
 
 
 class StatTemplatePlanView(BaseTemplatePlanView):
-
     def get_context_data(self, **kwargs):
         context = super(StatTemplatePlanView, self).get_context_data(**kwargs)
         context['costs'] = Cost.objects.filter(costcategory__configuration=context['configuration'])\
@@ -33,7 +31,6 @@ class StatTemplatePlanView(BaseTemplatePlanView):
 
 
 class CostTemplatePlanView(BaseTemplatePlanView):
-
     def get_context_data(self, **kwargs):
         context = super(CostTemplatePlanView, self).get_context_data(**kwargs)
         context['costs'] = Cost.objects.filter(costcategory__configuration=context['configuration'])\

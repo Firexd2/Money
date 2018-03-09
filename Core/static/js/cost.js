@@ -1,4 +1,4 @@
-var arrayTags = [""];	// Массив, который содержит метки
+var arrayTags = [""];
 var index = 0;
 
 function removeByValue(arr, val) {
@@ -132,16 +132,13 @@ jQuery(document).ready(function($) {
                 var isExist = jQuery.inArray(text, arrayTags);
 
                 if (isExist === -1) {
-                    // Вставляем новую метку (видимый элемент)
                     $(insertTag(text)).insertBefore("#newTagInput");
 
-                    // Вставляем новую метку в массив JavaScript
                     arrayTags[index] = text;
                     index++;
                 }
             });
 
-            // Вставка метки в список
             function insertTag(tag) {
                 var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
                     '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
@@ -155,24 +152,20 @@ jQuery(document).ready(function($) {
             $("#inputTag").focus().val("");
             $("#hiddenTags").val("");
 
-            // Проверяем нажатие клавиши
             $("#inputTag").keydown(function(event) {
                 var textVal = jQuery.trim($(this).val()).toLowerCase();
                 var keyCode = event.which;
 
-                // Перемещаемся влево (нажата клавиша влево)
                 if (keyCode === 37 && textVal === '') {
                     $("#newTagInput").insertBefore($("#newTagInput").prev());
                     $("#inputTag").focus();
                 }
 
-                // Перемещаемся вправо (нажата клавиша вправо)
                 if (keyCode === 39 && textVal === '') {
                     $("#newTagInput").insertAfter($("#newTagInput").next());
                     $("#inputTag").focus();
                 }
 
-                // Удаляем предыдущую метку (нажата клавиша backspace)
                 if (keyCode === 8 && textVal === '') {
                     deletedTag = $("#newTagInput").prev().find(".a_tag").html();
                     removeByValue(arrayTags, deletedTag);
@@ -180,7 +173,6 @@ jQuery(document).ready(function($) {
                     $("#inputTag").focus();
                 }
 
-                // Удаляем следующую метку (нажата клавиша delete)
                 if (keyCode === 46 && textVal === '') {
                     deletedTag = $("#newTagInput").next().find(".a_tag").html();
                     removeByValue(arrayTags, deletedTag);
@@ -191,24 +183,20 @@ jQuery(document).ready(function($) {
                 if ((47 < keyCode && keyCode < 106) || (keyCode === 32)) {
 
                     if (keyCode !== 32) {
-                        // Пользователь все еще вводит метку
                         inputWidth = inputWidth + 7;
                         $(this).attr("style", "width:"+inputWidth+"px");
                         $("#newTagInput").attr("style", "width:"+inputWidth+"px");
                     } else if (keyCode === 32 && (textVal !== '')) {
-                        // Пользователь создает новую метку
                         var isExist = jQuery.inArray(textVal, arrayTags);
 
                         if (isExist === -1) {
-                            // Вставляем новую метку (видимый элемент)
                             $(insertTag(textVal)).insertBefore("#newTagInput");
 
-                            // Вставляем новую метку в массив JavaScript
                             arrayTags[index] = textVal;
                             index++;
                         }
                         inputWidth = 16;
-                        $(this).attr("style", "width:"+inputWidth+"px"); // Ширина элемента будет соответствовать длине ввода
+                        $(this).attr("style", "width:"+inputWidth+"px");
                         $("#newTagInput").attr("style", "width:23px");
                         $(this).val("");
                     } else {
@@ -252,7 +240,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#submit-cost').on('click', function () {
-
+            NProgress.set(0.4);
             if ($('.value-cost').length && $('input[name=tags]').length) {
 
                 $.confirm({
@@ -298,7 +286,8 @@ jQuery(document).ready(function($) {
                                     url: url,
                                     data: data,
                                     success: function () {
-                                        $('#input-cost-button-menu').click()
+                                        $('#input-cost-button-menu').click();
+                                        NProgress.done();
                                     }
                                 })
                             }
@@ -306,6 +295,7 @@ jQuery(document).ready(function($) {
                         Cancel: {
                             text: 'Отмена',
                             action: function () {
+                                NProgress.done();
                             }
                         }
                     }
@@ -322,7 +312,8 @@ jQuery(document).ready(function($) {
                     type: 'orange',
                     icon: 'fa fa-exclamation-triangle',
                     content: content
-                })
+                });
+                NProgress.done();
             }
         })
     }

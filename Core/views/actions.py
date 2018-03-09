@@ -9,12 +9,16 @@ from Core.models import Configuration, CostCategory, Cost, Tags, History, Archiv
 
 
 class ActionsView(View):
-    @classmethod
-    def configuration(cls, request):
-        return request.user.settings.configurations.all().get(name_url=request.POST['name'])
 
-    @classmethod
-    def action_dispatch(cls, **kwargs):
+    def POST(self, data):
+        return self.request.POST[data]
+
+    @property
+    def configuration(self):
+        return self.request.user.settings.configurations.all().get(name_url=self.request.POST['name'])
+
+    @staticmethod
+    def action_dispatch(**kwargs):
 
         if len(kwargs) == 3:
             history_for_settings = History(description='<b>' + kwargs['configuration'].name + '</b>: ' + kwargs['description'])
@@ -37,13 +41,13 @@ class CorrectFreeMoney(ActionsView):
 
     def post(self, *args, **kwargs):
         settings = self.request.user.settings
-        value = str(self.request.POST['value'])
+        value = str(self.POST('value'))
         status = 0
 
         if re.fullmatch(r'(\+|\-)?\d+', value):
-            if self.request.POST['value'].isdigit():
+            if self.POST('value').isdigit():
                 settings.free_money = int(value)
-            elif self.request.POST['value'][0] == '+':
+            elif self.POST('value')[0] == '+':
                 settings.free_money += int(value)
             else:
                 settings.free_money -= int(value)
@@ -61,8 +65,8 @@ class CreateNewPlan(ActionsView):
 
     def post(self, *args, **kwargs):
 
-        configuration = Configuration(name=self.request.POST['name-plan'], income=self.request.POST['income'],
-                                      icon=self.request.POST['icon'], color=self.request.POST['color'])
+        configuration = Configuration(name=self.POST('name-plan'), income=self.POST('income'),
+                                      icon=self.POST('icon'), color=self.POST('color'))
         configuration.save()
         c = [item[1] for item in self.request.POST.items()][4:]
         for n, item in enumerate(c):
@@ -84,7 +88,7 @@ class StartNewPeriod(ActionsView):
 
     def post(self, *args, **kwargs):
         # Наша конфигурация
-        configuration = self.configuration(self.request)
+        configuration = self.configuration
         # Значения configuration перед обновлением
         last_income = configuration.income
         last_date = configuration.date
@@ -92,7 +96,7 @@ class StartNewPeriod(ActionsView):
         balance = last_income - sum(
             list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
         # Вносим новые правки в план
-        configuration.income = int(self.request.POST['income'])
+        configuration.income = int(self.POST('income'))
         configuration.date = datetime.now().date()
         configuration.save()
         # Непотраченный остаток присваиваем к общему счету
@@ -101,12 +105,12 @@ class StartNewPeriod(ActionsView):
         settings.save()
         # Удаляем траты и производим перерасчет максимумов в категориях на основе введенных данных
         count_category = configuration.category.all().count()
-        distribution = (int(self.request.POST['income']) - last_income) / count_category
+        distribution = (int(self.POST('income')) - last_income) / count_category
         if distribution == int(distribution):
             list_values_add = [distribution] * count_category
         else:
             list_values_add = [floor(distribution)] * count_category
-            list_values_add[-1] += int(self.request.POST['income']) - last_income - (floor(distribution) * count_category)
+            list_values_add[-1] += int(self.POST('income')) - last_income - (floor(distribution) * count_category)
 
         # Создаем таблицу архива
         archive = Archive(date_one=last_date)
@@ -114,10 +118,11 @@ class StartNewPeriod(ActionsView):
 
         for n, category in enumerate(configuration.category.all()):
             costs = category.cost.all()
-            # Сохраняется только последняя трата
+            # Перемещаем данные в архив
             archive.archive_costs.add(*[cost for cost in costs])
             category.cost.clear()
             cat = category
+            # Корректируем лимиты категорий
             cat.max += list_values_add[n]
             cat.save()
 
@@ -133,16 +138,17 @@ class EditDate(ActionsView):
     description_for_action_record = 'Изменена дата на %s.'
 
     def post(self, *args, **kwargs):
-        date = datetime.strptime(self.request.POST['date'], '%Y-%m-%d').date()
+        date = datetime.strptime(self.POST('date'), '%Y-%m-%d').date()
         status = 0
         if datetime.now().date() >= date:
-            self.configuration(self.request).date = date
-            self.configuration(self.request).save()
+            configuration = self.configuration
+            configuration.date = date
+            configuration.save()
             status = 1
         response = {'status': status}
 
         self.action_dispatch(description=self.description_for_action_record % str(date),
-                             settings=self.request.user.settings, configuration=self.configuration(self.request))
+                             settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse(json.dumps(response), content_type='application/json')
 
@@ -152,18 +158,18 @@ class DeletePlan(ActionsView):
     description_for_action_record = 'План <b>%s</b> был удалён.'
 
     def post(self, *args, **kwargs):
-        balance = self.configuration(self.request).income - sum(
-            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=self.configuration(self.request)))))
-        settings = self.configuration(self.request).settings_set.all()[0]
+        balance = self.configuration.income - sum(
+            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=self.configuration))))
+        settings = self.configuration.settings_set.all()[0]
         settings.free_money += balance
         settings.save()
         # Данные для записи в историю
-        name = self.configuration(self.request).name
+        name = self.configuration.name
 
         self.action_dispatch(description=self.description_for_action_record % name,
                              settings=self.request.user.settings)
         try:
-            self.configuration(self.request).delete()
+            self.configuration.delete()
             status = 1
         except:
             status = 0
@@ -178,11 +184,11 @@ class SettingsPlan(ActionsView):
 
     def post(self, *args, **kwargs):
 
-        configuration = self.configuration(self.request)
-        configuration.name = self.request.POST['name-plan']
-        configuration.income = self.request.POST['income']
-        configuration.icon = self.request.POST['icon']
-        configuration.color = self.request.POST['color']
+        configuration = self.configuration
+        configuration.name = self.POST('name-plan')
+        configuration.income = self.POST('income')
+        configuration.icon = self.POST('icon')
+        configuration.color = self.POST('color')
         configuration.save()
 
         current_category = configuration.category.all()
@@ -206,7 +212,7 @@ class SettingsPlan(ActionsView):
 
 class ToggleCategoryWeekTable(ActionsView):
     def post(self, *args, **kwargs):
-        bool_field = self.configuration(self.request).category.all().get(name=self.request.POST['category'])
+        bool_field = self.configuration.category.all().get(name=self.POST('category'))
         bool_field.included_week_table = not bool_field.included_week_table
         bool_field.save()
         return HttpResponse('ok')
@@ -219,7 +225,7 @@ class InputCost(ActionsView):
     def post(self, *args, **kwargs):
         # Счетчик суммы для записи в историю
         number = 0
-        for cat in self.configuration(self.request).category.all():
+        for cat in self.configuration.category.all():
             value = 'value-' + str(cat.id)
             detailed_comment = 'detail-comment-' + str(cat.id)
             n = 0
@@ -240,7 +246,7 @@ class InputCost(ActionsView):
                 n += 1
 
         self.action_dispatch(description=self.description_for_action_record % number,
-                             settings=self.request.user.settings, configuration=self.configuration(self.request))
+                             settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse('ok')
 
@@ -250,13 +256,13 @@ class DeleteCost(ActionsView):
     description_for_action_record = 'Удалена трата на сумму <b>%s</b> р. с комментарием: %s'
 
     def post(self, *args, **kwargs):
-        cost = Cost.objects.filter(costcategory__configuration=self.configuration(self.request))\
-            .get(id=self.request.POST['id'])
+        cost = Cost.objects.filter(costcategory__configuration=self.configuration)\
+            .get(id=self.POST('id'))
         value = cost.value
         comment = cost.detailed_comment
         cost.delete()
 
         self.action_dispatch(description=self.description_for_action_record % (value, comment),
-                             settings=self.request.user.settings, configuration=self.configuration(self.request))
+                             settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse('ok')

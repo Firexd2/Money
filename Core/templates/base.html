@@ -19,17 +19,46 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 </head>
 <header>
-{% block menu %}
-{% endblock %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {% block brand %}
+                    <a class="navbar-brand" style="color: {{ configuration.color }}" href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> <b>{{ configuration.name }}</b></a>
+                {% endblock %}
+            </div>
+            {% block menu %}
+            {% endblock %}
+        </div>
+    </nav>
 </header>
 <body>
 <div class="container">
     <div class="row">
-        {% block content %}
-        {% endblock %}
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 </div>
-    {% block load_script %}
-    {% endblock %}
+<script>
+    function load(url) {
+        NProgress.set(0.4);
+        $('#content').load(url, function () {
+            NProgress.done();
+        });
+        var li = $('.navbar-nav').children();
+        li.removeClass('active');
+        for (var i=0;i<li.length;i++) {
+            if (String(li.eq(i).children().attr('onclick')).indexOf(url) !== -1 ) {
+                li.eq(i).addClass('active')
+            }
+        }
+    }
+</script>
 </body>
 </html>

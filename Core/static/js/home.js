@@ -3,9 +3,10 @@ jQuery(document).ready(function($) {
         var name = location.pathname.slice(1,-1);
 
         $('#income').on('click', function () {
+            NProgress.set(0.4);
             var message;
             $.confirm({
-                title: 'Подтверждение начала нового раcсчётного периода',
+                title: 'Подтверждение начала нового расчётного периода',
                 icon: 'fa fa-question',
                 type: 'orange',
                 content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
@@ -25,7 +26,8 @@ jQuery(document).ready(function($) {
                                         title: '<b>Операция выполнена!</b>',
                                         content: message
                                     });
-                                    $('#home-button-menu').click()
+                                    $('#home-button-menu').click();
+                                    NProgress.done();
                                 }
                             })
                         }
@@ -33,13 +35,15 @@ jQuery(document).ready(function($) {
                     Cancel: {
                         text: 'Отмена',
                         action: function () {
+                            NProgress.done();
                         }
                     }
                 }
-            })
+            });
         });
 
         $('#date').on('click', function () {
+            NProgress.set(0.4);
             var message;
             $.confirm({
                 title: 'Подтверждение изменения траты',
@@ -69,13 +73,15 @@ jQuery(document).ready(function($) {
                                         content: message
                                     });
                                 }
-                                $('#home-button-menu').click()
+                                $('#home-button-menu').click();
+                                NProgress.done();
                             })
                         }
                     },
                     Cancel: {
                         text: 'Отмена',
                         action : function () {
+                            NProgress.done();
                         }
                     }
                 }
@@ -83,6 +89,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#delete').on('click', function () {
+            NProgress.set(0.4);
             $.confirm({
                 title: 'Подтверждение удаления плана',
                 icon: 'fa fa-exclamation-triangle',
@@ -97,12 +104,14 @@ jQuery(document).ready(function($) {
                                 if (data.status === 1) {
                                     location.href = '/panel/';
                                 }
-                            })
+                            });
+                            NProgress.done();
                         }
                     },
                     Cancel: {
                         text: 'Отмена',
                         action: function () {
+                            NProgress.done();
                         }
                     }
                 }
