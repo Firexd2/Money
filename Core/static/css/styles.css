@@ -26,6 +26,10 @@ h4 {
     margin-bottom: 20px;
 }
 
+tr th {
+    font-weight: unset;
+}
+
 .btn {
     border-radius: 0 !important;
     background: #ffe2c1;
@@ -193,6 +197,10 @@ input::-webkit-inner-spin-button {
     background-color: #3d3c41;
 }
 
+.category-detail {
+    background: linear-gradient(to right, #e8ffdf 0%, #ffffff 0%);
+}
+
 @media (max-width: 767px) {
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ffb57c;
@@ -266,6 +274,12 @@ input::-webkit-inner-spin-button {
     color: #ff923a;
     opacity: 0.7;
     font-size: 14px !important;
+}
+
+
+#amount-tr-month, #amount-tr-week {
+    font-weight: bold;
+    border-bottom: 2px dashed #c8c8c8
 }
 
 .form-control {

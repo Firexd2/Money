@@ -26,9 +26,11 @@ jQuery(document).ready(function($) {
         var balance = $('.balance-table');
         var item;
         var procent;
+        var color_for_bar;
 
         var amount_costs = 0;
         var amount_max = 0;
+        var procent_amount;
 
         for (var q=0;q<category_all.length;q++) {
             item = category_all.eq(q).text().split('/');
@@ -37,22 +39,44 @@ jQuery(document).ready(function($) {
             amount_costs += parseInt(item[0]);
             amount_max += parseInt(item[1]);
 
+
             if (procent > 30) {
                 balance.eq(q).css({'color': '#00f100'});
                 category_all.eq(q).css({'color': '#00f100'});
+                color_for_bar = '#d7ffcf'
             } else if (procent > 5) {
                 balance.eq(q).css({'color': '#ffc211'});
                 category_all.eq(q).css({'color': '#ffc211'});
+                color_for_bar = '#fffbce'
             } else {
                 balance.eq(q).css({'color': 'red'});
                 category_all.eq(q).css({'color': 'red'});
+                color_for_bar = '#ffe3d9'
             }
+
+            $('.category-detail').eq(q).css({'background': 'linear-gradient(to right, ' + color_for_bar + ' ' + (100 - procent) + '%, #ffffff ' + (100 - procent) + '%)'});
         }
+
+
+
+        procent_amount = amount_costs / (amount_max / 100);
 
         $('#amount-table-1').html(amount_costs);
         $('#amount-table-2').html(amount_max);
         $('#amount-balance').html(amount_max - amount_costs);
-        $('#amount-balance-procent').html(Math.round(100 - amount_costs / amount_max * 100) + '%');
+        $('#amount-balance-procent').html(Math.round(100 - procent_amount) + '%');
+
+
+
+        if (procent_amount > 30) {
+            color_for_bar = '#d7ffcf'
+        } else if (procent_amount > 5) {
+            color_for_bar = '#fffbce'
+        } else {
+            color_for_bar = '#ffe3d9'
+        }
+
+        $('#amount-tr-month').css({'background': 'linear-gradient(to right, ' + color_for_bar + ' ' + (procent_amount) + '%, #ffffff ' + (procent_amount) + '%)'});
 
 
         function week_table() {
@@ -67,6 +91,9 @@ jQuery(document).ready(function($) {
                 var current;
                 var cost;
                 var limit;
+                var color_for_bar;
+                var procent;
+                var procent_amount;
 
                 for (var i=0;i<data.length;i++) {
                     current = data.eq(i).text().split('/');
@@ -84,15 +111,37 @@ jQuery(document).ready(function($) {
 
                     if (result[1] > 30) {
                         balance.eq(i).css({'color': '#00f100'});
+                        color_for_bar = '#d7ffcf'
                     } else if (result[1] > 5) {
                         balance.eq(i).css({'color': '#ffc211'});
+                        color_for_bar = '#fffbce'
                     } else {
                         balance.eq(i).css({'color': 'red'});
+                        color_for_bar = '#ffe3d9'
                     }
+
+                    procent = result[1];
+
+                    $('.row-week').eq(i).css({'background': 'linear-gradient(to right, ' + color_for_bar + ' ' + (100 - procent) + '%, white ' + (100 - procent) + '% )'});
+
+                }
+
+
+                procent_amount = parseInt(((for_proc_cost - (for_proc_limit / 4) * week) / (for_proc_limit / 4) * 100));
+
+                if (procent_amount < 70) {
+                    color_for_bar = '#d7ffcf'
+                } else if (procent_amount < 95) {
+                    color_for_bar = '#fffbce'
+                } else {
+                    color_for_bar = '#ffe3d9'
                 }
 
                 $('#amount-table-week-1').html(amount_balance);
-                $('#amount-balance-week').html(parseInt(100 - ((for_proc_cost - (for_proc_limit / 4) * week) / (for_proc_limit / 4) * 100)));
+                $('#amount-balance-week').html(100 - procent_amount);
+
+                $('#amount-tr-week').css({'background': 'linear-gradient(to right, ' + color_for_bar + ' ' + (procent_amount) + '%, white ' + (procent_amount) + '% )'});
+
             }
             count_table();
 
@@ -134,9 +183,9 @@ jQuery(document).ready(function($) {
             var name = $(this).attr('name');
             $.alert({
                 title: name,
-                content: 'url:/category/' + id + '/',
+                content: 'url:/category/' + id + '/'
             });
-        })
+        });
 
     }
 

@@ -220,7 +220,7 @@ class ToggleCategoryWeekTable(ActionsView):
 
 class InputCost(ActionsView):
 
-    description_for_action_record = 'Зафиксирован расход на сумму <b>%s</b> р.'
+    description_for_action_record = 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
 
     def post(self, *args, **kwargs):
         # Счетчик суммы для записи в историю
@@ -253,7 +253,7 @@ class InputCost(ActionsView):
 
 class DeleteCost(ActionsView):
 
-    description_for_action_record = 'Удалена трата на сумму <b>%s</b> р. с комментарием: %s'
+    description_for_action_record = 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: %s'
 
     def post(self, *args, **kwargs):
         cost = Cost.objects.filter(costcategory__configuration=self.configuration)\
