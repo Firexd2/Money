@@ -31,6 +31,7 @@ urlpatterns = [
     path('<name_url>/stat/', views.StatTemplatePlanView.as_view(template_name='plan/stat.html')),
     path('<name_url>/settings/', views.BaseTemplatePlanView.as_view(template_name='plan/settings.html')),
     path('category/<id>/', views.CategoryDetailView.as_view(template_name='plan/category_detail.html')),
+    path('tag/<name_url>/<name>/', views.TagDetailView.as_view(template_name='plan/tag_detail.html')),
     path('auth/', include('Auth.urls')),
 
     path('ajax/correct_free_money/', actions.CorrectFreeMoney.as_view()),

@@ -187,6 +187,15 @@ jQuery(document).ready(function($) {
             });
         });
 
+        $('.tags-view').on('click', function () {
+            var name = $(this).attr('id');
+            var plan = location.pathname;
+            $.alert({
+                title: 'Траты по тэгу: ' + name,
+                content: 'url:/tag' + plan + name + '/'
+            });
+        })
+
     }
 
     stat();

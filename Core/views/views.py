@@ -13,6 +13,10 @@ class BaseTemplatePlanView(TemplateView):
     def configuration(self):
         return self.request.user.settings.configurations.all().get(name_url=self.kwargs['name_url'])
 
+    @property
+    def list_costs(self):
+        return Cost.objects.filter(costcategory__configuration=self.configuration).order_by('-datetime')
+
     def get_context_data(self, **kwargs):
         context = super(BaseTemplatePlanView, self).get_context_data(**kwargs)
         context['configuration'] = self.configuration
@@ -25,14 +29,12 @@ class StatTemplatePlanView(BaseTemplatePlanView):
     @property
     def tags_info(self):
         tags = Tags.objects.filter(user=self.request.user)
+        income = self.configuration.income
         info_list = []
         for tag in tags:
-            info_list.append((tag.name, sum(map(lambda x: x.value, self.list_costs.filter(tags=tag.id)))))
+            number = sum(map(lambda x: x.value, self.list_costs.filter(tags=tag.id)))
+            info_list.append((tag.name, number, round(number / income * 100)))
         return sorted(info_list, key=lambda x: x[1], reverse=True)
-
-    @property
-    def list_costs(self):
-        return Cost.objects.filter(costcategory__configuration=self.configuration).order_by('-datetime')
 
     def get_context_data(self, **kwargs):
         context = super(StatTemplatePlanView, self).get_context_data(**kwargs)
@@ -70,4 +72,12 @@ class CategoryDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['category'] = CostCategory.objects.get(id=kwargs['id'])
+        return context
+
+
+class TagDetailView(BaseTemplatePlanView):
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        tag = Tags.objects.get(name=kwargs['name'])
+        context['cost'] = self.list_costs.filter(tags=tag)
         return context

@@ -101,12 +101,12 @@
         <p class="info-text">Нажмите на метку, чтобы увидеть, какие покупки к ней относятся.</p>
         <table class="table">
             <tbody>
-            {% for name, sum in tags %}
+            {% for name, sum, procent in tags %}
                 <tr>
-                    <td style="width: 80%">
+                    <td class="tags-view" id="{{ name }}" style="background: linear-gradient(to right, #ececec {{ procent }}%, white {{ procent }}%); cursor: pointer">
                         {{ name }}
                     </td>
-                    <td style="width: 20%; border-left: 1px solid #d0d0d0; text-align: center">
+                    <td style="width: 80px; border-left: 1px solid #d0d0d0; text-align: center">
                         <span>{{ sum }}</span>
                         <i class="fa fa-rub" aria-hidden="true"></i>
                     </td>
