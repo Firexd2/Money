@@ -35,6 +35,8 @@ class Archive(models.Model):
     date_one = models.DateField()
     date_two = models.DateField('Дата ввода', default=datetime.now)
     archive_costs = models.ManyToManyField(Cost, verbose_name='Траты')
+    spent = models.IntegerField('Потрачено', blank=True, null=True)
+    saved = models.IntegerField('Сэкономлено', blank=True, null=True)
 
 
 class CostCategory(models.Model):
@@ -59,6 +61,7 @@ class Configuration(models.Model):
     icon = models.CharField('Иконка на главной', max_length=100)
     color = models.CharField('Цвет иконки', max_length=20)
     history = models.ManyToManyField(History, related_name='plan_history', blank=True)
+    archive = models.ManyToManyField(Archive, blank=True)
     date = models.DateField('Дата ввода', default=datetime.now)
 
     def save(self, *args, **kwargs):

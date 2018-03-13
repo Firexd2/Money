@@ -116,15 +116,28 @@ class StartNewPeriod(ActionsView):
         archive = Archive(date_one=last_date)
         archive.save()
 
+        # Переменная суммы трат
+        amount_cost = 0
+
         for n, category in enumerate(configuration.category.all()):
             costs = category.cost.all()
             # Перемещаем данные в архив
             archive.archive_costs.add(*[cost for cost in costs])
+            # Считаем сумму трат
+            amount_cost += sum([cost.value for cost in costs])
             category.cost.clear()
             cat = category
             # Корректируем лимиты категорий
             cat.max += list_values_add[n]
             cat.save()
+
+        # Записываем сумму трат и сэкономленных
+        archive.spent = amount_cost
+        archive.saved = last_income - amount_cost
+        archive.save()
+
+        # Прикрепляем полученный архив в нашей конфгурации
+        configuration.archive.add(archive)
 
         self.action_dispatch(description=self.description_for_action_record % balance,
                              settings=self.request.user.settings, configuration=configuration)

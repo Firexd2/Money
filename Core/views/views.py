@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from Core.models import CostCategory, Cost, Tags
+from Core.models import CostCategory, Cost, Tags, Archive
 
 
 @method_decorator(login_required, name='dispatch')
@@ -33,7 +33,7 @@ class StatTemplatePlanView(BaseTemplatePlanView):
         info_list = []
         for tag in tags:
             number = sum(map(lambda x: x.value, self.list_costs.filter(tags=tag.id)))
-            info_list.append((tag.name, number, round(number / income * 100)))
+            info_list.append((tag.name, number, str(number / income * 100)))
         return sorted(info_list, key=lambda x: x[1], reverse=True)
 
     def get_context_data(self, **kwargs):
@@ -59,6 +59,66 @@ class CostTemplatePlanView(BaseTemplatePlanView):
         return context
 
 
+class ArchiveTemplatePlanView(BaseTemplatePlanView):
+
+    def get_context_data(self, **kwargs):
+        context = super(ArchiveTemplatePlanView, self).get_context_data(**kwargs)
+        context['archive'] = Archive.objects.filter(configuration=self.configuration)[::-1]
+        return context
+
+
+class ArchiveReportLastPeriodView(BaseTemplatePlanView):
+
+    def report_last_period(self, **kwargs):
+
+        date_one = datetime.strptime(kwargs['date_one'], '%Y-%m-%d')
+        date_two = datetime.strptime(kwargs['date_two'], '%Y-%m-%d')
+
+        spent = middle_cost = days = 0
+        biggest_cost = [0, '']
+        dict_tags = dict()
+
+        archives = Archive.objects.filter(configuration=self.configuration)
+        archive_costs = Cost.objects.filter(archive__in=[archive.id for archive in archives]).filter(datetime__lte=date_two, datetime__gte=date_one)[::-1]
+
+        # Считаем количество дней между первым и последним днем выбранного периода
+        days = (date_two - date_one).days
+        for cost in archive_costs:
+            # Считаем, сколько потрачено за выбранный период
+            spent += cost.value
+            # Находим самую большу трату
+            if biggest_cost[0] < cost.value:
+                biggest_cost[0] = cost.value
+                biggest_cost[1] = cost.detailed_comment
+            # Формируем словарь из тегов и их обших сумм
+            for tag in cost.tags.all():
+                if dict_tags.get(tag.name):
+                    dict_tags[tag.name] += cost.value
+                else:
+                    dict_tags[tag.name] = cost.value
+        # Получаем значение средней траты за день
+        middle_cost = round(spent / days)
+
+        return {'spent': spent, 'middle_cost': middle_cost,
+                'biggest_cost': biggest_cost, 'dict_tags': sorted(dict_tags.items(), key=lambda x: x[1], reverse=True),
+                'costs': archive_costs, 'days': days}
+
+    def get_context_data(self, **kwargs):
+        context = super(ArchiveReportLastPeriodView, self).get_context_data(**kwargs)
+        result_report = self.report_last_period(**kwargs)
+        for key in result_report:
+            context[key] = result_report[key]
+        return context
+
+
+class TagDetailView(BaseTemplatePlanView):
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        tag = Tags.objects.get(name=kwargs['name'])
+        context['cost'] = self.list_costs.filter(tags=tag)
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class BaseTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
@@ -72,12 +132,4 @@ class CategoryDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['category'] = CostCategory.objects.get(id=kwargs['id'])
-        return context
-
-
-class TagDetailView(BaseTemplatePlanView):
-    def get_context_data(self, **kwargs):
-        context = super(TagDetailView, self).get_context_data(**kwargs)
-        tag = Tags.objects.get(name=kwargs['name'])
-        context['cost'] = self.list_costs.filter(tags=tag)
         return context

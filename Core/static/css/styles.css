@@ -545,4 +545,13 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     font-weight: bold;
 }
 
+.info-archive {
+    padding-left: 20px;
+}
 
+.help-dates span {
+    color: gray;
+    font-size: 14px;
+    border-bottom: 1px dotted gray;
+    margin-right: 10px;
+}

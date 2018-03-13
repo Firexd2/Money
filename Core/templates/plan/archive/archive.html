@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<div class="row">
+    <h3>Архивная статистика</h3>
+    <hr>
+    <div id="archive-stat">
+    </div>
+</div>
+<div class="row">
+    <h3>Архив плана</h3>
+    <hr>
+    {% for item in archive %}
+        <div onclick="" class="col-lg-4 navigation">
+            <div style="background: linear-gradient(45deg, #f4d0b2, {{ configuration.color }});" class="block-conf">
+                <div style="font-size: 26px; margin-bottom: 10px">
+                    с <b>{{ item.date_one }}</b> по <br>
+                    <b>{{ item.date_two }}</b>
+                </div>
+                <div style="font-size: 23px">
+                    <span style="color: #ff544b;">Потрачено: {{ item.spent }} </span> <i class="fa fa-rub" aria-hidden="true"></i>
+                    <br>
+                    <span style="color: #00b500;">Сохранено: {{ item.saved }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<script src="{% static 'js/archive.js' %}"></script>

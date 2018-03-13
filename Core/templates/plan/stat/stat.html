@@ -49,7 +49,6 @@
     <div class="col-lg-6">
         <h4><i class="fa fa-table" aria-hidden="true"></i> Таблица распределения на неделю:</h4>
         <p class="info-text">Ты можешь выбрать, какие категории включить в недельный контроль. Для более равномерного распределения неделя считается как 8 дней.</p>
-
         <table style="font-size: 15px" class="table">
             <thead>
             <tr style="font-size: 18px">
@@ -119,8 +118,6 @@
         <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
         <p class="info-text">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
         <table class="table">
-            <thead>
-            </thead>
             <tbody style="font-size: 15px">
             {% if costs %}
                 {% for cost in costs|slice:":15" %}

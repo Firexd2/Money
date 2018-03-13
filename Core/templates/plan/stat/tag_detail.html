@@ -1,0 +1,20 @@
+{% if cost %}
+    <table class="table">
+        <thead>
+        <tr style="font-weight: bold">
+            <th>Время</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cost %}
+            <tr>
+                <th scope="row">{{ item.datetime|date:'d M H:i' }}</th>
+                <td>{{ item.value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+<p>Трат с этой меткой пока не было</p>
+{% endif %}
