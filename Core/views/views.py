@@ -1,8 +1,9 @@
-from datetime import datetime
+import json
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-
 from Core.models import CostCategory, Cost, Tags, Archive
 
 
@@ -79,10 +80,12 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         dict_tags = dict()
 
         archives = Archive.objects.filter(configuration=self.configuration)
-        archive_costs = Cost.objects.filter(archive__in=[archive.id for archive in archives]).filter(datetime__lte=date_two, datetime__gte=date_one)[::-1]
+        archive_costs = Cost.objects.filter(archive__in=
+                                            [archive.id for archive in archives]).filter(datetime__lte=
+                                                      date_two + timedelta(days=1), datetime__gte=date_one)[::-1]
 
         # Считаем количество дней между первым и последним днем выбранного периода
-        days = (date_two - date_one).days
+        days = (date_two - date_one).days + 1
         for cost in archive_costs:
             # Считаем, сколько потрачено за выбранный период
             spent += cost.value
@@ -109,6 +112,27 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         for key in result_report:
             context[key] = result_report[key]
         return context
+
+
+class GetDatesInArchive(BaseTemplatePlanView):
+
+    def post(self, *args, **kwargs):
+
+        request = kwargs['type_date'].split('-')
+        if request[0] == 'time':
+            date_now = datetime.now()
+            if request[1].isdigit():
+                date_one = (date_now - timedelta(days=int(request[1])*30)).date()
+            else:
+                date_one = self.request.user.date
+            date_two = date_now.date()
+        else:
+            archives = Archive.objects.filter(configuration=self.configuration)[::-1][:int(request[1])]
+            date_one = archives[-1].date_one
+            date_two = archives[0].date_two
+
+        return HttpResponse(json.dumps({'date_one': date_one.strftime('%Y-%m-%d'),
+                                        'date_two': date_two.strftime('%Y-%m-%d')}), content_type='application/json')
 
 
 class TagDetailView(BaseTemplatePlanView):

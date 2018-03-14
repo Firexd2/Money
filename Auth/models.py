@@ -5,3 +5,4 @@ from Core.models import Settings
 
 class User(AbstractUser):
     settings = models.OneToOneField(Settings, on_delete=models.CASCADE, blank=True, null=True)
+    date = models.DateField(auto_now=True)

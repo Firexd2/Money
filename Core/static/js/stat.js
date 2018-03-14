@@ -68,9 +68,9 @@ jQuery(document).ready(function($) {
 
 
 
-        if (procent_amount > 30) {
+        if (procent_amount < 70) {
             color_for_bar = '#d7ffcf'
-        } else if (procent_amount > 5) {
+        } else if (procent_amount < 95) {
             color_for_bar = '#fffbce'
         } else {
             color_for_bar = '#ffe3d9'

@@ -32,6 +32,7 @@ urlpatterns = [
     path('<name_url>/settings/', views.BaseTemplatePlanView.as_view(template_name='plan/settings.html')),
     path('<name_url>/archive/', views.ArchiveTemplatePlanView.as_view(template_name='plan/archive/archive.html')),
     path('<name_url>/archive/<date_one>/<date_two>/', views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
+    path('<name_url>/archive/<type_date>/', views.GetDatesInArchive.as_view()),
     path('category/<id>/', views.CategoryDetailView.as_view(template_name='plan/stat/category_detail.html')),
     path('tag/<name_url>/<name>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),
     path('auth/', include('Auth.urls')),

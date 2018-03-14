@@ -554,4 +554,5 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     font-size: 14px;
     border-bottom: 1px dotted gray;
     margin-right: 10px;
+    cursor: pointer;
 }
