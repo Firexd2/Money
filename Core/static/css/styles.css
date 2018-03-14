@@ -550,9 +550,14 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
 }
 
 .help-dates span {
+    float: left;
     color: gray;
     font-size: 14px;
     border-bottom: 1px dotted gray;
     margin-right: 10px;
     cursor: pointer;
+}
+
+.help-dates span:hover {
+    color: orange;
 }

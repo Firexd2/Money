@@ -1,31 +1,9 @@
 <div class="col-lg-6">
-
-{#    <h4>#}
-{#        <b><i class="fa fa-question-circle" aria-hidden="true"></i></b> Выбор интервала#}
-{#    </h4>#}
-{#    <p class="info-text">Внимание! Здесь доступны только траты, перенесенные в архив. За текущими вы можете проследить во вкладке "Статистика".</p>#}
-{#    <div style="margin-bottom: 10px" class="input-group">#}
-{#        <span style="width: 40px" class="input-group-addon"><b>1</b></span>#}
-{#        <input style="width: 140%" name="name-plan" id="date-one" value="{{ date_one }}" type="date" class="form-control"/>#}
-{#    </div>#}
-{#    <div style="margin-bottom: 10px" class="input-group">#}
-{#        <span style="width: 40px" class="input-group-addon"><b>2</b></span>#}
-{#        <input style="width: 140%" name="name-plan" id="date-two" value="{{ date_two }}" type="date" class="form-control"/>#}
-{#    </div>#}
-{#    <div class="help-dates" style="margin-bottom: 15px">#}
-{##}
-{#        <span id="time-all">за все время</span> <span id="time-1">за 1 месяц</span> <span id="time-3">за 3 месяца</span> <span id="time-6">за полгода</span> <span id="time-12">за год</span> <br>#}
-{#        <span id="period-1">последний период</span> <span id="period-2">за 2 последних периода</span> <span id="period-3">за 3 последних периода</span>#}
-{#    </div>#}
-{#    <button class="btn btn-default" id="submit-archive" style="font-size: 18px;margin-bottom: 30px;" type="button">Получить статистику</button>#}
-
-    <h4> Выбран интервал: <b>{{ date_one }} / {{ date_two }}</b></h4>
+    <h4> Интервал: <b>{{ date_one }} / {{ date_two }}</b> (<b>{{ days }}</b>&nbsp;дн.)</h4>
     <button class="btn btn-default" id="edit-interval" style="font-size: 18px;margin-bottom: 30px;" type="button">Изменить интервал</button>
-
     <h4>
         <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i></b> Краткая статистика
     </h4>
-    <p class="info-archive"> За <b>{{ days }}</b> дн. между <b>{{ date_one }}</b> и <b>{{ date_two }}</b>:</p>
     <p class="info-archive"><i class="fa fa-caret-right" style="color:{{ configuration.color }}" aria-hidden="true"></i> было потрачено <b>{{ spent }}</b> р.</p>
     <p class="info-archive"><i class="fa fa-caret-right" style="color:{{ configuration.color }}" aria-hidden="true"></i> средняя трата за день <b>{{ middle_cost }}</b> р.</p>
     <p class="info-archive"><i class="fa fa-caret-right" style="color:{{ configuration.color }}" aria-hidden="true"></i> самая большая трата <b>{{ biggest_cost|first }}</b> р. с комментарием: <b>{{ biggest_cost|last }}</b></p>
@@ -72,3 +50,33 @@
         </tbody>
     </table>
 </div>
+<script>
+    $('#edit-interval').on('click', function () {
+        NProgress.set(0.4);
+        $.confirm({
+            title: 'Выбрать период',
+            content: 'url:/alert/change_date/',
+            buttons:
+                {
+                    Ok: {
+                        text: 'Выбрать',
+                        btnClass: 'btn',
+                        action:
+                            function () {
+                                var date_one = $('#date-one').val();
+                                var date_two = $('#date-two').val();
+                                if (date_one || date_two) {
+                                    load_report(date_one, date_two)
+                                }
+                            }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                            NProgress.done();
+                        }
+                    }
+                }
+        })
+    });
+</script>
