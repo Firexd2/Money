@@ -37,6 +37,7 @@ class Archive(models.Model):
     archive_costs = models.ManyToManyField(Cost, verbose_name='Траты')
     spent = models.IntegerField('Потрачено', blank=True, null=True)
     saved = models.IntegerField('Сэкономлено', blank=True, null=True)
+    income = models.IntegerField('Всего', blank=True, null=True)
 
 
 class CostCategory(models.Model):

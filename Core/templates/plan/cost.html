@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load poll_extras %}
 <h3>Ввод траты</h3>
 <hr>
 <div class="row">
@@ -86,7 +87,7 @@
                             {% endwith %}
                         </td>
                         <td>
-                            {{ cost.value }} <i class="fa fa-rub" aria-hidden="true"></i>
+                            {{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i>
                         </td>
                         <td>
                             {{ cost.detailed_comment }}<br><br>

@@ -28,7 +28,7 @@ class BaseTemplatePlanView(TemplateView):
 class StatTemplatePlanView(BaseTemplatePlanView):
 
     @property
-    def tags_info(self):
+    def get_tags_info(self):
         tags = Tags.objects.filter(user=self.request.user)
         income = self.configuration.income
         info_list = []
@@ -37,17 +37,40 @@ class StatTemplatePlanView(BaseTemplatePlanView):
             info_list.append((tag.name, number, str(number / income * 100)))
         return sorted(info_list, key=lambda x: x[1], reverse=True)
 
+    @property
+    def get_days_info(self):
+        days = []
+        income = self.configuration.income
+        day_one = self.configuration.date
+        day_two = datetime.now().date()
+
+        for delta_day in list(range((day_two - day_one).days + 1)):
+            day = (day_one + timedelta(days=delta_day))
+            days.append((day.strftime('%Y-%m-%d'),
+                         income - sum([cost.value for cost in self.list_costs if cost.datetime.date() <= day])))
+
+        return days
+
+    @property
+    def stat(self):
+        costs = self.list_costs
+        max_cost = max(costs, key=lambda x: x.value, default=0)
+        middle_cost = round(sum([cost.value for cost in costs]) /
+                            ((datetime.now().date() - self.configuration.date).days + 1))
+        middle_cost_of_week = middle_cost * 8
+        days = (datetime.today().date() - self.configuration.date).days
+        now_week = days // 8
+        number_days_for_week = (days // 8 + 1) * 8 - days
+        tags = self.get_tags_info
+        days_info = self.get_days_info
+        return locals()
+
     def get_context_data(self, **kwargs):
         context = super(StatTemplatePlanView, self).get_context_data(**kwargs)
-        context['costs'] = self.list_costs
-        context['max_cost'] = max(context['costs'], key=lambda x: x.value, default=0)
-        context['middle_cost'] = round(sum([cost.value for cost in context['costs']]) /
-                            ((datetime.now().date() - self.configuration.date).days + 1))
-        context['middle_cost_of_week'] = context['middle_cost'] * 8
-        context['days'] = (datetime.today().date() - self.configuration.date).days
-        context['now_week'] = context['days'] // 8
-        context['number_days_for_week'] = (context['days'] // 8 + 1) * 8 - context['days']
-        context['tags'] = self.tags_info
+        stat = self.stat
+        for key in stat:
+            if key not in ['self']:
+                context[key] = stat[key]
         return context
 
 
@@ -75,7 +98,7 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         date_one = datetime.strptime(kwargs['date_one'], '%Y-%m-%d')
         date_two = datetime.strptime(kwargs['date_two'], '%Y-%m-%d')
 
-        spent = middle_cost = days = 0
+        spent = 0
         biggest_cost = [0, '']
         dict_tags = dict()
 
@@ -102,15 +125,16 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         # Получаем значение средней траты за день
         middle_cost = round(spent / days)
 
-        return {'spent': spent, 'middle_cost': middle_cost,
-                'biggest_cost': biggest_cost, 'dict_tags': sorted(dict_tags.items(), key=lambda x: x[1], reverse=True),
-                'costs': archive_costs, 'days': days}
+        dict_tags = sorted(dict_tags.items(), key=lambda x: x[1], reverse=True)
+
+        return locals()
 
     def get_context_data(self, **kwargs):
         context = super(ArchiveReportLastPeriodView, self).get_context_data(**kwargs)
         result_report = self.report_last_period(**kwargs)
         for key in result_report:
-            context[key] = result_report[key]
+            if key not in ('date_one', 'date_two', 'self', 'kwargs'):
+                context[key] = result_report[key]
         return context
 
 

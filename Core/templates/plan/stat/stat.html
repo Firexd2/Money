@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load poll_extras %}
 <h3>Общая статистика</h3>
 <hr>
 <div class="row">
@@ -36,9 +37,9 @@
                 <td colspan="3">
                     <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> Краткая статистика:</b> <br>
                     <p style="padding-left: 15px">
-                        - {% if max_cost %}Cамая крупная покупка в <b>{{ max_cost.value }}</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
-                        - Средние траты в день в <b>{{ middle_cost }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
-                        - Средние траты за неделю:<b> {{ middle_cost_of_week }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
+                        - {% if max_cost %}Cамая крупная покупка в <b>{{ max_cost.value|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
+                        - Средние траты в день в <b>{{ middle_cost|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
+                        - Средние траты за неделю:<b> {{ middle_cost_of_week|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
                         - До конца месяца <b>~{{ days|add:'-30'|cut:'-' }}</b> дн.
                     </p>
                 </td>
@@ -99,15 +100,20 @@
         <h4><b>#</b> Статистика и визуализация меток</h4>
         <p class="info-text">Нажмите на метку, чтобы увидеть, какие покупки к ней относятся.</p>
         <table class="table">
+                <thead>
+        <tr style="font-weight: bold">
+            <td>Метка</td>
+            <td style="text-align: center"><i class="fa fa-rub" aria-hidden="true"></i></td>
+        </tr>
+        </thead>
             <tbody>
             {% for name, sum, procent in tags %}
                 <tr>
                     <td class="tags-view" id="{{ name }}" style="background: linear-gradient(to right, #ececec {{ procent }}%, white {{ procent }}%); cursor: pointer">
                         {{ name }}
                     </td>
-                    <td style="width: 80px; border-left: 1px solid #d0d0d0; text-align: center">
-                        <span>{{ sum }}</span>
-                        <i class="fa fa-rub" aria-hidden="true"></i>
+                    <td style="width: 90px; border-left: 1px solid #d0d0d0; text-align: center">
+                        <span>{{ sum|points }}</span>
                     </td>
                 </tr>
             {% endfor %}
@@ -115,28 +121,61 @@
         </table>
     </div>
     <div class="col-lg-6">
-        <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
-        <p class="info-text">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
-        <table class="table">
-            <tbody style="font-size: 15px">
-            {% if costs %}
-                {% for cost in costs|slice:":15" %}
-                    <tr>
-                        <td>
-                            <b>{{ cost.datetime }}</b><br>
-                            Покупка на сумму: <b>{{ cost.value }} <i class="fa fa-rub" aria-hidden="true"></i></b>. Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td>
-                        Покупок пока не было
-                    </td>
-                </tr>
-            {% endif %}
-            </tbody>
-        </table>
+        <h4><i class="fa fa-area-chart" aria-hidden="true"></i> Визуализация остатка по дням</h4>
+        <div style="height: 400px" id="chart-stat-days"></div>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-6">
+        <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
+        <p class="info-text">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
+        <div class="wrapper-history">
+            <table class="table">
+                <tbody style="font-size: 15px">
+                {% if costs %}
+                    {% for cost in costs|slice:":15" %}
+                        <tr>
+                            <td>
+                                <b>{{ cost.datetime }}</b><br>
+                                Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>. Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>
+                            Покупок пока не было
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    new Morris.Line({
+        element: 'chart-stat-days',
+        data: [
+
+            {% for date, value in days_info %}
+                {date: '{{ date }}', value: {{ value }}},
+            {% endfor %}
+        ],
+        xkey: 'date',
+        ykeys: ['value'],
+        lineColors: ['#0d09da'],
+        labels: ['Остаток'],
+        pointFillColors: ['{{ configuration.color }}'],
+        pointStrokeColors: ['#000'],
+        ymax: 'auto',
+        ymin: '0',
+        lineWidth: '1',
+        postUnits: ' р.',
+        xLabels: 'day',
+        xLabelAngle: 45,
+        resize: true
+
+    });
+</script>
 <script src="{% static 'js/stat.js' %}"></script>

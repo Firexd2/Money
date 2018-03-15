@@ -29,10 +29,10 @@ function count_procent_table_tags() {
     var procent;
     var sum = 0;
     for (var i=0;i<values.length;i++) {
-        sum += parseInt(values.eq(i).text())
+        sum += parseInt(values.eq(i).text().replace('.', ''))
     }
     for (var i=0;i<values.length;i++) {
-        procent = parseInt(values.eq(i).text()) / sum * 100;
+        procent = parseInt(values.eq(i).text().replace('.', '')) / sum * 100;
         values.eq(i).prev().css({'background': 'linear-gradient(to right, #ececec ' + procent + '%, white ' + procent + '%)'})
     }
 }

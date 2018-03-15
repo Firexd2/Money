@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load poll_extras %}
 <div class="row">
     <h3>Ваши данные и настройки:</h3>
     <hr>
@@ -6,7 +7,7 @@
         <div class="block-panel">
             <div class="slider-block-panel">
                 <div>
-                    <b id="freemoney">{{ user.settings.free_money }}</b>
+                    <b id="freemoney">{{ user.settings.free_money|points }}</b>
                     <p style="font-size: 20px">Сумма ваших накоплений</p>
                 </div>
                 <div>
@@ -25,7 +26,7 @@
         <div class="block-panel">
             <div class="slider-block-panel">
                 <div>
-                    <b id="circ" style="color: #ff5c00">{{ money_circulation }}</b>
+                    <b id="circ" style="color: #ff5c00">{{ money_circulation|points }}</b>
                     <p style="font-size: 20px">Деньги в обороте</p>
                 </div>
                 <div>
@@ -38,7 +39,7 @@
         <div class="block-panel">
             <div class="slider-block-panel">
                 <div>
-                    <b id="freecirc">{{ user.settings.free_money|add:money_circulation }}</b>
+                    <b id="freecirc">{{ user.settings.free_money|add:money_circulation|points }}</b>
                     <p style="font-size: 20px">Общая сумма</p>
                 </div>
                 <div>

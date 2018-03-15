@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
             }
         });
 
-        $('body').on('click', '#btn-freemoney', function () {
+        $('#btn-freemoney').on('click', function () {
             NProgress.set(0.4);
             var val = $(this).prev().val();
             if (val) {

@@ -1,9 +1,15 @@
 {% load staticfiles %}
+{% load poll_extras %}
 <div class="row">
     <h3>Архивная статистика</h3>
     <hr>
     <div id="archive-stat">
     </div>
+</div>
+<div class="row">
+    <h3>Визуализация потраченных денег за периоды</h3>
+    <hr>
+    <div id="chart-archive-period" style="height: 270px;"></div>
 </div>
 <div class="row">
     <h3>Архив плана</h3>
@@ -16,12 +22,35 @@
                     <b>{{ item.date_two }}</b>
                 </div>
                 <div style="font-size: 23px">
-                    <span style="color: #ff544b;">Потрачено: {{ item.spent }} </span> <i class="fa fa-rub" aria-hidden="true"></i>
+                    <span style="color: #ff544b;">Потрачено: {{ item.spent|points }} </span> <i class="fa fa-rub" aria-hidden="true"></i>
                     <br>
-                    <span style="color: #00b500;">Сохранено: {{ item.saved }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
+                    <span style="color: #00b500;">Сохранено: {{ item.saved|points }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
+<script>
+    new Morris.Line({
+        element: 'chart-archive-period',
+        data: [
+
+            {% for item in archive %}
+                {name: '{{ item.date_two|date:"Y-m-d" }}', saved: {{ item.income }}, spent: {{ item.spent }}},
+            {% endfor %}
+        ],
+        xkey: 'name',
+        ykeys: ['saved', 'spent'],
+        lineColors: ['#0d09da','#d60400'],
+        labels: ['Количество денег', 'Потрачено'],
+        pointFillColors: ['{{ configuration.color }}', '{{ configuration.color }}'],
+        pointStrokeColors: ['#000', '#000'],
+        ymin: 'auto',
+        lineWidth: '1',
+        postUnits: ' р.',
+        xLabels: 'month',
+        resize: true
+
+    });
+</script>
 <script src="{% static 'js/archive.js' %}"></script>

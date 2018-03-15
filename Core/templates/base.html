@@ -17,6 +17,17 @@
     <link href="https://fonts.googleapis.com/css?family=Alegreya+SC|Encode+Sans+Expanded|Exo+2" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    {#  Решить, надо ли включать эти библиотеки на все страницы  #}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar-thumb {
+            background-color: {% if configuration.color %}{{ configuration.color }}{% else %}#ff923a;{% endif %}
+        }
+    </style>
 </head>
 <header>
     <nav class="navbar navbar-default">
