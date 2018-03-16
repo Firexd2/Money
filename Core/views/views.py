@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 from Core.models import CostCategory, Cost, Tags, Archive
 
 
@@ -41,14 +41,13 @@ class StatTemplatePlanView(BaseTemplatePlanView):
     def get_days_info(self):
         days = []
         income = self.configuration.income
-        day_one = self.configuration.date
+        # Необходимая мера для начальной точки
+        day_one = self.configuration.date - timedelta(days=1)
         day_two = datetime.now().date()
-
         for delta_day in list(range((day_two - day_one).days + 1)):
             day = (day_one + timedelta(days=delta_day))
             days.append((day.strftime('%Y-%m-%d'),
                          income - sum([cost.value for cost in self.list_costs if cost.datetime.date() <= day])))
-
         return days
 
     @property
@@ -105,7 +104,7 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         archives = Archive.objects.filter(configuration=self.configuration)
         archive_costs = Cost.objects.filter(archive__in=
                                             [archive.id for archive in archives]).filter(datetime__lte=
-                                                      date_two + timedelta(days=1), datetime__gte=date_one)[::-1]
+                                                      date_two + timedelta(days=1), datetime__gte=date_one).order_by('-datetime')
 
         # Считаем количество дней между первым и последним днем выбранного периода
         days = (date_two - date_one).days + 1

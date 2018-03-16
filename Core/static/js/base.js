@@ -21,11 +21,10 @@ jQuery(document).ready(function($) {
         } else {
             $('.navbar-default .dropdown').off('mouseover').off('mouseout');
         }
-
     }
 
-$(window).resize(function() {
-    onNavbar();
+    $(window).resize(function() {
+        onNavbar();
     });
     onNavbar();
 });

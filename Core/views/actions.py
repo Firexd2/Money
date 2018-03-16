@@ -131,9 +131,10 @@ class StartNewPeriod(ActionsView):
             cat.max += list_values_add[n]
             cat.save()
 
-        # Записываем сумму трат и сэкономленных
+        # Записываем сумму трат, сыкономленную и общую
         archive.spent = amount_cost
         archive.saved = last_income - amount_cost
+        archive.income = last_income
         archive.save()
 
         # Прикрепляем полученный архив в нашей конфгурации

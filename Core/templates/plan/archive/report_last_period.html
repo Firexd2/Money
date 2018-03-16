@@ -3,7 +3,7 @@
     <h4> Интервал: <b>{{ date_one }} / {{ date_two }}</b> (<b>{{ days }}</b>&nbsp;дн.)</h4>
     <button class="btn btn-default" id="edit-interval" style="font-size: 18px;margin-bottom: 40px;" type="button">Изменить интервал</button>
     <h4>
-        <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i></b> Краткая статистика
+        <b><i class="fa fa-info-circle" style="opacity: 0.8;" aria-hidden="true"></i></b> Краткая статистика
     </h4>
     <p class="info-archive"><i class="fa fa-caret-right" style="color:{{ configuration.color }}" aria-hidden="true"></i> было потрачено <b>{{ spent|points }}</b> р.</p>
     <p class="info-archive"><i class="fa fa-caret-right" style="color:{{ configuration.color }}" aria-hidden="true"></i> средняя трата за день <b>{{ middle_cost|points }}</b> р.</p>
@@ -11,46 +11,54 @@
     <h4 style="margin-top: 50px">
         <b>#</b> Статистика трат по меткам:
     </h4>
-    <table style="margin-bottom: 50px" class="table">
-        <thead>
-        <tr style="font-weight: bold">
-            <td>Метка</td>
-            <td style="text-align: center"><i class="fa fa-rub" aria-hidden="true"></i></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for name, value in dict_tags %}
-            <tr>
-                <td class="tags-view-archive" id="{{ name }}" style="cursor: pointer">
-                    {{ name }}
-                </td>
-                <td class="tags-value" style="width: 80px; border-left: 1px solid #d0d0d0; text-align: center">
-                    {{ value|points }}
-                </td>
+    {% if dict_tags %}
+        <table style="margin-bottom: 50px" class="table">
+            <thead>
+            <tr style="font-weight: bold">
+                <td>Метка</td>
+                <td style="text-align: center"><i class="fa fa-rub" aria-hidden="true"></i></td>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for name, value in dict_tags %}
+                <tr>
+                    <td class="tags-view-archive" id="{{ name }}" style="cursor: pointer">
+                        {{ name }}
+                    </td>
+                    <td class="tags-value" style="width: 80px; border-left: 1px solid #d0d0d0; text-align: center">
+                        {{ value|points }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <b>За этот период трат не нашлось</b>
+    {% endif %}
 </div>
 <div class="col-lg-6">
     <h4>
         <b><i class="fa fa-list-ul" aria-hidden="true"></i></b> Траты, попавшие в выбранный интервал:
     </h4>
     <div class="wrapper-history">
-        <table class="table">
-            <tbody style="font-size: 15px">
-            {% for cost in archive_costs %}
-                <tr>
-                    <td>
-                        <b>{{ cost.datetime }}</b><br>
-                        Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
-                        <br>
-                        Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% if archive_costs %}
+            <table class="table">
+                <tbody style="font-size: 15px">
+                {% for cost in archive_costs %}
+                    <tr>
+                        <td>
+                            <b>{{ cost.datetime }}</b><br>
+                            Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
+                            <br>
+                            Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <b>За этот период трат не нашлось</b>
+        {% endif %}
     </div>
 </div>
 <script>

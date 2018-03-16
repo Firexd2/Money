@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
+from Core.models import Archive
 from Core.views import actions, views
 
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     path('<name_url>/archive/', views.ArchiveTemplatePlanView.as_view(template_name='plan/archive/archive.html')),
     path('<name_url>/archive/<date_one>/<date_two>/', views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
     path('<name_url>/archive/<type_date>/', views.GetDatesInArchive.as_view()),
+    path('archive/detail/<int:pk>/', views.DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
     path('alert/change_date/', views.TemplateView.as_view(template_name='plan/archive/change_date_alert.html')),
     path('category/<id>/', views.CategoryDetailView.as_view(template_name='plan/stat/category_detail.html')),
     path('tag/<name_url>/<name>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),

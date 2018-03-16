@@ -122,7 +122,9 @@
     </div>
     <div class="col-lg-6">
         <h4><i class="fa fa-area-chart" aria-hidden="true"></i> Визуализация остатка по дням</h4>
-        <div style="height: 400px" id="chart-stat-days"></div>
+        <div style="height: 400px" id="chart-stat-days">
+            <date hidden>{{ days_info|first|first }}</date>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -174,7 +176,13 @@
         postUnits: ' р.',
         xLabels: 'day',
         xLabelAngle: 45,
-        resize: true
+        resize: true,
+        xLabelFormat: function (x) {
+            if (x.toLocaleDateString().slice(0,2) !== $('date').text().slice(-2)) {
+                return x.toLocaleDateString()
+            } else {
+                return ''
+            }}
 
     });
 </script>

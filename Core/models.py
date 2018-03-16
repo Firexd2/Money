@@ -39,6 +39,9 @@ class Archive(models.Model):
     saved = models.IntegerField('Сэкономлено', blank=True, null=True)
     income = models.IntegerField('Всего', blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('detail_archive', args=[str(self.pk)])
+
 
 class CostCategory(models.Model):
     """

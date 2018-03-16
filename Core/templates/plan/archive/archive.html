@@ -7,15 +7,12 @@
     </div>
 </div>
 <div class="row">
-    <h3>Визуализация потраченных денег за периоды</h3>
+    <h3>Завершенные периоды и их графическая визуализация</h3>
     <hr>
     <div id="chart-archive-period" style="height: 270px;"></div>
-</div>
-<div class="row">
-    <h3>Архив плана</h3>
-    <hr>
+
     {% for item in archive %}
-        <div onclick="" class="col-lg-4 navigation">
+        <div id="{{ item.id }}" class="col-lg-4 navigation">
             <div style="background: linear-gradient(45deg, #f4d0b2, {{ configuration.color }});" class="block-conf">
                 <div style="font-size: 26px; margin-bottom: 10px">
                     с <b>{{ item.date_one }}</b> по <br>
@@ -36,13 +33,13 @@
         data: [
 
             {% for item in archive %}
-                {name: '{{ item.date_two|date:"Y-m-d" }}', saved: {{ item.income }}, spent: {{ item.spent }}},
+                {name: '{{ item.date_two|date:"Y-m-d" }}', income: {{ item.income }}, spent: {{ item.spent }}},
             {% endfor %}
         ],
         xkey: 'name',
-        ykeys: ['saved', 'spent'],
+        ykeys: ['income', 'spent'],
         lineColors: ['#0d09da','#d60400'],
-        labels: ['Количество денег', 'Потрачено'],
+        labels: ['Общая сумма', 'Потрачено'],
         pointFillColors: ['{{ configuration.color }}', '{{ configuration.color }}'],
         pointStrokeColors: ['#000', '#000'],
         ymin: 'auto',

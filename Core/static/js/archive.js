@@ -37,3 +37,15 @@ function count_procent_table_tags() {
     }
 }
 
+function open_details_archive() {
+    $('.navigation').on('click', function () {
+        var id = $(this).attr('id');
+        $.alert({
+            title: 'Детализация архива',
+            content: 'url: /archive/detail/' + id + '/'
+        })
+    })
+}
+
+open_details_archive();
+

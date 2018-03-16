@@ -1,0 +1,23 @@
+{% load poll_extras %}
+<div style="font-size: 17px; text-align: left">
+    <p><b>Общая сумма: <span style="color:blue">{{ object.income|points }}</span> р.</b></p>
+    <p><b>Потрачено: <span style="color: red">{{ object.spent|points }}</span> р.</b></p>
+    <p><b>Сохранено: <span style="color: green">{{ object.saved|points }}</span> р.</b></p>
+    <p><b>Все траты:</b></p>
+</div>
+<div class="wrapper-history">
+    <table class="table">
+        <tbody style="font-size: 15px">
+        {% for cost in object.archive_costs.all %}
+            <tr>
+                <td style="text-align: left">
+                    <b>{{ cost.datetime }}</b><br>
+                    Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
+                    <br>
+                    Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -537,13 +537,11 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     padding: 20px;
     text-align: center;
     min-height: 200px;
-    transition: 0.3s;
-
 }
 
-.block-conf:hover h2 {
-    color: #4f4f4f;
-    transition: 0.3s;
+.block-conf:hover {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }
 
 .manage-block {
@@ -592,3 +590,4 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     max-height: 700px;
     overflow: auto
 }
+
