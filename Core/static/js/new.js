@@ -912,11 +912,7 @@ jQuery(document).ready(function($) {
                         array.push(val)
                     }
                 }
-                if (names_category.length !== array.length) {
-                    return true
-                } else {
-                    return false
-                }
+                return names_category.length !== array.length;
             }
 
             if ($('#o').text() !== '0' || repeat_category() || valid_name !== -1) {

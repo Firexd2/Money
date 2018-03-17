@@ -182,7 +182,7 @@ jQuery(document).ready(function($) {
             var id = $(this).attr('id');
             var name = $(this).attr('name');
             $.alert({
-                title: name,
+                title: '<span style="font-weight: 100">Траты по категории:</span> ' + name,
                 content: 'url:/category/' + id + '/'
             });
         });
@@ -191,7 +191,7 @@ jQuery(document).ready(function($) {
             var name = $(this).attr('id');
             var plan = location.pathname;
             $.alert({
-                title: 'Траты по тэгу: ' + name,
+                title: '<span style="font-weight: 100">Траты по тэгу:</span> ' + name,
                 content: 'url:/tag' + plan + name + '/'
             });
         })

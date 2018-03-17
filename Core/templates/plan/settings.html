@@ -4,12 +4,12 @@
 <form name="new" method="POST">
     <input hidden name="name" value="{{ configuration.name_url }}" type="text">
     <div class="col-lg-6">
-        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Название вашего плана:</h4>
+        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Название вашего плана:</h4>
         <div class="input-group">
             <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
             <input style="width: 140%" name="name-plan" id="name-input" type="text" class="form-control" value="{{ configuration.name }}" placeholder="Пример: Семья"/>
         </div>
-        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Иконка и цвет:</h4>
+        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Иконка и цвет:</h4>
         <p class="info-text">Выбери иконку в качестве "лого" конфигурации:</p>
         <input name="icon" hidden type="text" value="{{ configuration.icon }}">
         <div id="icons" style="margin-bottom: 10px; max-height: 350px; overflow: auto" class="container-fluid">
@@ -27,12 +27,12 @@
         {#            </select></p>#}
     </div>
     <div class="col-lg-6">
-        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Распределяемая сумма:</h4>
+        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Распределяемая сумма:</h4>
         <div class="input-group">
             <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
             <input value="{{ configuration.income }}" style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
         </div>
-        <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Редактирование категорий:</h4>
+        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Редактирование категорий:</h4>
         <p class="info-text">Редактировать можно только название и значение максимума категории. Добавлять или удалять категории нельзя.</p>
         <table class="table table-hover">
             <thead>
