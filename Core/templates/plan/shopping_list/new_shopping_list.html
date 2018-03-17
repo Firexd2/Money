@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<div class="row">
+    <div class="col-lg-6">
+        <form name="shopping-list" method="POST"><input hidden name="name" value="{{ configuration.name_url }}" type="text">
+            <h3>Создание списка запланированных покупок</h3>
+            <hr>
+            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Название списка:</h4>
+            <p class="info-text">Когда вы произведете все покупки и захотите внести траты в систему, название списка станет 'меткой' ваших трат.</p>
+            <div class="input-group">
+                <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
+                <input style="width: 140%" name="name-list" id="name-input" type="text" class="form-control" placeholder="Пример: Алиэкспресс"/>
+            </div>
+
+            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Список:</h4>
+
+            <div class="item-list">
+                <b>1.</b> <input type="text" placeholder="Название" maxlength="23" name="name-item" class="input-shopping-list">
+                <div class="input-buffer"></div>
+                <i class="fa fa-caret-down show-item-shop" aria-hidden="true"></i>
+                <div hidden class="info-item-shop">
+                    <input style="width: 30px" placeholder="0" name="count" type="number"> <span style="color: gray">шт.</span> <input style="width: 70px" placeholder="0" name="price" type="number"> <span style="color: gray">цена</span>
+                </div>
+            </div>
+
+            <p id="add-item"><i class="fa fa-plus" aria-hidden="true"></i> еще запись</p>
+
+            <button class="btn">Сохранить</button>
+        </form>
+    </div>
+
+</div>
+<style>
+    .input-shopping-list:focus {
+        border: 1px solid {{ configuration.color }};
+    }
+    .pseudocheckbox::before {
+        border: 2px solid {{ configuration.color }};
+        width: 27px;
+        height: 27px;
+        font-size: 30px;
+    }
+</style>
+
+<script src="{% static 'js/shopping_list.js' %}"></script>
+{#<label>#}
+{#    <input class="check-shopping-list" name="check" type="checkbox">#}
+{#    <span class="pseudocheckbox">#}
+{#                    <input type="text" placeholder="Название" maxlength="23" name="" class="input-shopping-list">#}
+{#                    <div class="input-buffer"></div>#}
+{#                </span>#}
+{#</label>#}

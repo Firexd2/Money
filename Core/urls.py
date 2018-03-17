@@ -30,6 +30,8 @@ urlpatterns = [
     path('<name_url>/home/', views.BaseTemplatePlanView.as_view(template_name='plan/home.html')),
     path('<name_url>/cost/', views.CostTemplatePlanView.as_view(template_name='plan/cost.html')),
     path('<name_url>/stat/', views.StatTemplatePlanView.as_view(template_name='plan/stat/stat.html')),
+    path('<name_url>/shopping_list/', views.ShoppingListTemplateView.as_view(template_name='plan/shopping_list/shopping_list.html')),
+    path('<name_url>/shopping_list/new/', views.NewShoppingListTemplateView.as_view(template_name='plan/shopping_list/new_shopping_list.html')),
     path('<name_url>/settings/', views.BaseTemplatePlanView.as_view(template_name='plan/settings.html')),
     path('<name_url>/archive/', views.ArchiveTemplatePlanView.as_view(template_name='plan/archive/archive.html')),
     path('<name_url>/archive/<date_one>/<date_two>/', views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
@@ -48,5 +50,6 @@ urlpatterns = [
     path('ajax/settings_plan/', actions.SettingsPlan.as_view()),
     path('ajax/toggle_category_week_table/', actions.ToggleCategoryWeekTable.as_view()),
     path('ajax/input_cost/', actions.InputCost.as_view()),
-    path('ajax/delete_cost/', actions.DeleteCost.as_view())
+    path('ajax/delete_cost/', actions.DeleteCost.as_view()),
+    path('ajax/new_shopping_list/', actions.CreateNewShoppingList.as_view()),
 ]

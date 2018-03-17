@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, DetailView
-from Core.models import CostCategory, Cost, Tags, Archive
+from Core.models import CostCategory, Cost, Tags, Archive, ShoppingList
 
 
 @method_decorator(login_required, name='dispatch')
@@ -80,6 +80,17 @@ class CostTemplatePlanView(BaseTemplatePlanView):
             .order_by('-datetime')
         context['tags'] = Tags.objects.filter(user=str(self.request.user)).order_by('-datetime')[:10]
         return context
+
+
+class ShoppingListTemplateView(BaseTemplatePlanView):
+    def get_context_data(self, **kwargs):
+        context = super(ShoppingListTemplateView, self).get_context_data(**kwargs)
+        context['shopping_lists'] = ShoppingList.objects.filter(configuration=self.configuration).order_by('-datetime')
+        return context
+
+
+class NewShoppingListTemplateView(BaseTemplatePlanView):
+    pass
 
 
 class ArchiveTemplatePlanView(BaseTemplatePlanView):

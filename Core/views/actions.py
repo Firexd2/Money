@@ -5,7 +5,7 @@ from math import floor
 from django.http import HttpResponse
 from django.views.generic.base import View
 
-from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive
+from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem
 
 
 class ActionsView(View):
@@ -278,5 +278,28 @@ class DeleteCost(ActionsView):
 
         self.action_dispatch(description=self.description_for_action_record % (value, comment),
                              settings=self.request.user.settings, configuration=self.configuration)
+
+        return HttpResponse('ok')
+
+
+class CreateNewShoppingList(ActionsView):
+
+    def post(self, *args, **kwargs):
+
+        shopping_list = ShoppingList(name=self.POST('name-list'))
+        shopping_list.save()
+        self.configuration.shopping_list.add(shopping_list)
+
+        name_item = self.request.POST.getlist('name-item')
+        count_item = self.request.POST.getlist('count')
+        price_item = self.request.POST.getlist('price')
+
+        for i in list(range(len(name_item))):
+            for j in list(range(int(count_item[i]))):
+
+                price = 0 if not price_item[i] else int(price_item[i])
+                shopping_list_item = ShoppingListItem(name=name_item[i], price=price)
+                shopping_list_item.save()
+                shopping_list.item.add(shopping_list_item)
 
         return HttpResponse('ok')

@@ -6,6 +6,12 @@
             <li class="active"><a id="home-button-menu" onclick="load('home/')"><i class="fa fa-home" aria-hidden="true"></i> Главная</a></li>
             <li><a id="input-cost-button-menu" onclick="load('cost/')"><i class="fa fa-plus" aria-hidden="true"></i> Ввод расходов</a></li>
             <li><a onclick="load('stat/')"><i class="fa fa-line-chart" aria-hidden="true"></i> Статистика</a></li>
+            <li class="dropdown">
+                <a onclick="load('shopping_list/')" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list" aria-hidden="true"></i> Список покупок <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a onclick="load('shopping_list/new/')"><i class="fa fa-plus" aria-hidden="true"></i> Новый список</a></li>
+                </ul>
+            </li>
             <li><a onclick="load('settings/')"><i class="fa fa-cog" aria-hidden="true"></i> Настройки</a></li>
             <li><a onclick="load('archive/')"><i class="fa fa-archive" aria-hidden="true"></i> Архив</a></li>
             <li class="dropdown">

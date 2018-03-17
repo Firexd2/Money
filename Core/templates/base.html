@@ -64,8 +64,10 @@
         });
         var li = $('.navbar-nav').children();
         li.removeClass('active');
+
+        var r_url = url.split('/')[0];
         for (var i=0;i<li.length;i++) {
-            if (String(li.eq(i).children().attr('onclick')).indexOf(url) !== -1 ) {
+            if (String(li.eq(i).children().attr('onclick')).indexOf(r_url) !== -1 ) {
                 li.eq(i).addClass('active')
             }
         }

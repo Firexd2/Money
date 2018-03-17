@@ -361,7 +361,7 @@ input[type=checkbox] { display: none; }
     color: #ff3c08;
 }
 
-input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
+input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713";}
 
 .btn-cost {
     display: inline-block;
@@ -522,6 +522,26 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     height: 310px;
 }
 
+.shopping-list {
+    border: solid 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 20px;
+    height: 100px;
+    text-align: center;
+    font-size: 19px;
+}
+
+.add-shopping-list {
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.add-shopping-list:hover {
+    opacity: 1;
+    transition: 0.3s;
+}
+
 .icons-i {
     font-size: 50px;
     padding-bottom: 10px
@@ -591,3 +611,59 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713"; }
     overflow: auto
 }
 
+.input-shopping-list,
+.input-buffer{
+    font-size: 20px;
+    letter-spacing: 0.05em;
+}
+
+.input-shopping-list {
+    width: 110px;
+    min-width: 110px;
+    border: none;
+    border-radius: 0;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+.input-buffer{
+    position: absolute;
+    top: -1000px;
+    left: -1000px;
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+.info-item-shop {
+    font-weight: 100 !important;
+    padding-top: 5px;
+}
+
+.info-item-shop input {
+    padding: 0;
+    border: 0;
+}
+
+.show-item-shop {
+    color: gray;
+    cursor: pointer;
+}
+
+.show-item-shop:hover {
+    color: #ff3c08;
+}
+
+#add-item {
+    color: gray;
+    cursor: pointer;
+    padding-top: 15px;
+}
+
+#add-item:hover {
+    color: black;
+}
+
+.item-list {
+    font-size: 20px;
+    margin-bottom: 30px;
+}

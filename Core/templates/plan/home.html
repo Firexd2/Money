@@ -26,7 +26,7 @@
     <hr>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4 id="manage-block-title-1"><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Новый рассчетный период</h4>
+            <h4 id="manage-block-title-1"><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Новый рассчетный период</h4>
             <div style="margin-bottom: 10px;" class="input-group">
                 <input value="{{ configuration.income }}" class="form-control input-home" type="number">
                 <button id="income" style="height: 50px;font-size: 25px" class="btn btn-default">
@@ -48,7 +48,7 @@
     </div>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Изменение даты</h4>
+            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изменение даты</h4>
             <div style="margin-bottom: 10px;" class="input-group">
                 <input class="form-control input-home" value="{{ configuration.date|date:"Y-m-d" }}" type="date">
                 <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">
@@ -62,7 +62,7 @@
     </div>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class="icon fa fa-chevron-right" aria-hidden="true"></i><i class="icon fa fa-chevron-right" aria-hidden="true"></i> Удаление плана</h4>
+            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Удаление плана</h4>
             <p class="info-text">
                 После удаления неиспользованные средства перейдут на ваш накопительный счет. Восстановить план будет невозможно.
             </p>

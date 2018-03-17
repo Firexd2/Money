@@ -9,6 +9,19 @@ DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye
                 '"': '_', '(': '_', ')': '_', '№': '_'}
 
 
+class ShoppingListItem(models.Model):
+    flag = models.BooleanField('Куплено, или нет', default=False)
+    name = models.CharField('Название продукта', max_length=100)
+    price = models.IntegerField('Цена продукта')
+    count = models.IntegerField('Количество', default=1)
+    datetime = models.DateTimeField(auto_now_add=True)
+
+
+class ShoppingList(models.Model):
+    name = models.CharField('Название шоп-листа', max_length=100)
+    item = models.ManyToManyField(ShoppingListItem, verbose_name='Итемы шоп-листа', blank=True)
+
+
 class Tags(models.Model):
 
     name = models.CharField('Название метки', max_length=100)
@@ -34,7 +47,7 @@ class Cost(models.Model):
 class Archive(models.Model):
     date_one = models.DateField()
     date_two = models.DateField('Дата ввода', default=datetime.now)
-    archive_costs = models.ManyToManyField(Cost, verbose_name='Траты')
+    archive_costs = models.ManyToManyField(Cost, verbose_name='Траты', blank=True)
     spent = models.IntegerField('Потрачено', blank=True, null=True)
     saved = models.IntegerField('Сэкономлено', blank=True, null=True)
     income = models.IntegerField('Всего', blank=True, null=True)
@@ -66,6 +79,7 @@ class Configuration(models.Model):
     color = models.CharField('Цвет иконки', max_length=20)
     history = models.ManyToManyField(History, related_name='plan_history', blank=True)
     archive = models.ManyToManyField(Archive, blank=True)
+    shopping_list = models.ManyToManyField(ShoppingList, verbose_name='Списки покупок', blank=True)
     date = models.DateField('Дата ввода', default=datetime.now)
 
     def save(self, *args, **kwargs):
