@@ -85,12 +85,16 @@ class CostTemplatePlanView(BaseTemplatePlanView):
 class ShoppingListTemplateView(BaseTemplatePlanView):
     def get_context_data(self, **kwargs):
         context = super(ShoppingListTemplateView, self).get_context_data(**kwargs)
-        context['shopping_lists'] = ShoppingList.objects.filter(configuration=self.configuration).order_by('-datetime')
+        context['shopping_lists'] = ShoppingList.objects.filter(configuration=self.configuration)
         return context
 
 
-class NewShoppingListTemplateView(BaseTemplatePlanView):
-    pass
+class DetailShoppingListTemplateView(BaseTemplatePlanView):
+    def get_context_data(self, **kwargs):
+        context = super(DetailShoppingListTemplateView, self).get_context_data(**kwargs)
+        if int(kwargs['id']):
+            context['list'] = ShoppingList.objects.get(id=int(kwargs['id']))
+        return context
 
 
 class ArchiveTemplatePlanView(BaseTemplatePlanView):

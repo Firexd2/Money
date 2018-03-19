@@ -12,8 +12,9 @@ DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'ye
 class ShoppingListItem(models.Model):
     flag = models.BooleanField('Куплено, или нет', default=False)
     name = models.CharField('Название продукта', max_length=100)
-    price = models.IntegerField('Цена продукта')
+    price = models.IntegerField('Цена продукта', blank=True, null=True)
     count = models.IntegerField('Количество', default=1)
+    category = models.ForeignKey('CostCategory', verbose_name='Категория', on_delete=models.CASCADE, blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
 
 

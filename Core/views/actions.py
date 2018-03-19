@@ -282,24 +282,50 @@ class DeleteCost(ActionsView):
         return HttpResponse('ok')
 
 
-class CreateNewShoppingList(ActionsView):
+class CreateShoppingList(ActionsView):
 
     def post(self, *args, **kwargs):
 
-        shopping_list = ShoppingList(name=self.POST('name-list'))
-        shopping_list.save()
-        self.configuration.shopping_list.add(shopping_list)
+        # Либо существующий список, либо созданный
+        if self.request.POST.get('id'):
+            shopping_list = ShoppingList.objects.get(id=self.POST('id'))
+        else:
+            shopping_list = ShoppingList()
+            shopping_list.save()
 
-        name_item = self.request.POST.getlist('name-item')
-        count_item = self.request.POST.getlist('count')
-        price_item = self.request.POST.getlist('price')
+        # Добавляем новый элемент, или обрабатываем существующие
+        if self.request.POST.getlist('new-item'):
+            shopping_list_item = ShoppingListItem(name='', count=1, price=0)
+            shopping_list_item.save()
+            shopping_list.item.add(shopping_list_item)
+        else:
+            shopping_list.name = self.POST('name-list')
+            shopping_list.save()
+            self.configuration.shopping_list.add(shopping_list)
 
-        for i in list(range(len(name_item))):
-            for j in list(range(int(count_item[i]))):
+            if self.request.POST.get('id-item'):
+                ids_items = self.request.POST.getlist('id-item')
+                name_item = self.request.POST.getlist('name-item')
+                count_item = self.request.POST.getlist('count')
+                price_item = self.request.POST.getlist('price')
+                category_item = self.request.POST.getlist('item-category')
+                flag_item = self.request.POST.getlist('flag')
+                for n, id in enumerate(ids_items):
+                    item = ShoppingListItem.objects.get(id=id)
+                    item.name = name_item[n]
+                    item.count = count_item[n]
+                    if category_item[n]:
+                        item.category_id = int(category_item[n])
+                    if price_item[n]:
+                        item.price = price_item[n]
+                    item.flag = bool(int(flag_item[n]))
+                    item.save()
 
-                price = 0 if not price_item[i] else int(price_item[i])
-                shopping_list_item = ShoppingListItem(name=name_item[i], price=price)
-                shopping_list_item.save()
-                shopping_list.item.add(shopping_list_item)
+        return HttpResponse(json.dumps({'id': shopping_list.id}), content_type='application/json')
 
+
+class DeleteItemShoppingList(ActionsView):
+    def post(self, *args, **kwargs):
+        ShoppingListItem.objects.get(id=kwargs['id']).delete()
         return HttpResponse('ok')
+
