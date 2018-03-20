@@ -1,5 +1,7 @@
 jQuery(document).ready(function($) {
 
+    var name_plan = location.pathname.slice(1,-1);
+
     var elem = $('.input-shopping-list');
     for (var i=0;i<elem.length;i++) {
         var buffer = elem.eq(i).next();
@@ -22,17 +24,19 @@ jQuery(document).ready(function($) {
             $(this).prev().val('0');
             $(this).parent().next().css({'text-decoration': 'none'})
         }
-        $(this).submit()
+        $(this).submit();
+        show_button_input_cost()
     });
 
     $('form[name=shopping-list]').on('submit', function (e) {
+        NProgress.set(0.4);
         e.preventDefault();
         var data = $(this).serializeArray();
         $.ajax({
             type: "POST",
             url: '/ajax/new_shopping_list/',
             data: data,
-            success: function(data) {}
+            success: function(data) {NProgress.done()}
         });
     });
 
@@ -98,62 +102,76 @@ jQuery(document).ready(function($) {
     });
 
     $('#input-cost').on('click', function () {
-        var data = $('form[name=shopping-list]').serializeArray();
+        var id = $('#name-list').val();
+        var name = $('input[name=name-list]').val();
 
-        var tag = data[2].value;
-        var validate = 1;
+        var flags = $('input[name=flag]');
+        var elems_price = $('input[name=price]');
+        var select = $('select');
+        var validate = elems_price.length > 0;
 
-        var processed_data = {item: ''};
-        var content = '<table class="table">' +
-            '<thead>' +
-            '<tr>' +
-            '<td>Товар</td>' +
-            '<td>Кол-во</td>' +
-            '<td>Цена</td>' +
-            '<td>Категория</td>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>';
-
-        for (var i=3;i<data.length;i++) {
-
-            if (data[i].name === 'id-item' && data[i+1].value === '1') {
-                processed_data.item += data[i].value + ','
-            }
-
-            if (data[i].name === 'checkbox') {
-                content += '<tr>' +
-                    '<td>' + data[i+1].value + '</td>' +
-                    '<td>' + data[i+2].value + '</td>' +
-                    '<td>' + data[i+3].value + '</td>' +
-                    '<td>' + data[i+4].value + '</td>' +
-                    '</tr>';
-                if (!((data[i+1].value !== '') && (data[i+2].value !== '') && (data[i+3].value !== '') && (data[i+4].value !== ''))) {
-                    console.log((data[i+1].value, data[i+2].value, data[i+3].value, data[i+4].value));
-                    validate = 0
+        for (var i=0;i<elems_price.length;i++) {
+            if (flags.eq(i).val() === '1') {
+                if ((!(elems_price.eq(i).val())) || (!(select.eq(i).val()))) {
+                    validate = false
                 }
             }
         }
 
-        content += '</tbody></table>';
         if (validate) {
-            $.alert({
-                content: content
+            $.confirm({
+                title: '<span style="font-weight: 100">Внесение трат по списку: </span> ' + name,
+                content: 'url: /table_input/' + id + '/',
+                buttons: {
+                    Ok: {
+                        text: 'Ок',
+                        btnClass: 'btn',
+                        action: function () {
+                            NProgress.set(0.4);
+                            $.post('/ajax/input_cost_shopping_list/' + id + '/', {name: name_plan} , function () {
+                                NProgress.done();
+                                $.alert({
+                                    title: 'Операция прошла успешно',
+                                    type: 'green',
+                                    icon: 'fa fa-check',
+                                    content: 'Траты успешно внесены!'
+                                })
+                            })
+                        }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+
+                        }
+                    }
+                }
             })
         } else {
             $.alert({
                 type: 'red',
-                icon: 'fa fa-exclamation-triangle',
                 title: 'Операция отменена',
-                content: 'Пожалуйста, внесите все данные в отмеченные продукты.'
+                icon: 'fa fa-exclamation-triangle',
+                content: 'Чтобы внести список в траты, необходимо у всех отмеченных записей вписать цену и выбрать категорию.'
             })
         }
 
 
-        for (var i=0;i<data.length;i++) {
-            console.log(data[i])
-        }
-    })
+    });
 
+    function show_button_input_cost() {
+        if ($('input[type=checkbox]:checked').length) {
+            $('#input-cost').show()
+        } else {
+            $('#input-cost').hide()
+        }
+    }
+    show_button_input_cost();
+
+    $('#delete').on('click', function () {
+        $.post('/ajax/delete_shopping_list/' + $('#name-list').val() + '/', function () {
+            load('shopping_list/')
+        })
+    })
 
 });

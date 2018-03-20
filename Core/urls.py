@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from Core.models import Archive
+from Core.models import Archive, ShoppingListItem, ShoppingList
 from Core.views import actions, views
 
 urlpatterns = [
@@ -39,6 +39,7 @@ urlpatterns = [
     path('archive/detail/<int:pk>/', views.DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
     path('alert/change_date/', views.TemplateView.as_view(template_name='plan/archive/change_date_alert.html')),
     path('category/<id>/', views.CategoryDetailView.as_view(template_name='plan/stat/category_detail.html')),
+    path('table_input/<id>/', views.TableInputCostShoppingList.as_view(template_name='plan/shopping_list/table_input.html')),
     path('tag/<name_url>/<name>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),
     path('auth/', include('Auth.urls')),
 
@@ -52,5 +53,7 @@ urlpatterns = [
     path('ajax/input_cost/', actions.InputCost.as_view()),
     path('ajax/delete_cost/', actions.DeleteCost.as_view()),
     path('ajax/new_shopping_list/', actions.CreateShoppingList.as_view()),
-    path('ajax/delete_item_shopping_list/<id>/', actions.DeleteItemShoppingList.as_view()),
+    path('ajax/delete_item_shopping_list/<id>/', actions.DeleteItem.as_view(model=ShoppingListItem)),
+    path('ajax/delete_shopping_list/<id>/', actions.DeleteItem.as_view(model=ShoppingList)),
+    path('ajax/input_cost_shopping_list/<id>/', actions.InputCostShoppingList.as_view()),
 ]

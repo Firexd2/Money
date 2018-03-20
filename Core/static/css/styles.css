@@ -523,13 +523,15 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713";}
 }
 
 .shopping-list {
-    border: solid 3px;
     cursor: pointer;
-    border-radius: 5px;
     padding: 20px;
     height: 100px;
     text-align: center;
     font-size: 19px;
+    background: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .add-shopping-list {
@@ -553,15 +555,9 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713";}
 
 .block-conf {
     cursor: pointer;
-    border-radius: 5px;
     padding: 20px;
     text-align: center;
     min-height: 200px;
-}
-
-.block-conf:hover {
-    border-left: 2px solid black;
-    border-right: 2px solid black;
 }
 
 .manage-block {
@@ -686,4 +682,9 @@ input[name=price], input[name=new-price], input[name=count], input[name=new-coun
 
 .delete-item:hover {
     color: red;
+}
+
+.block-conf:hover, .shopping-list:hover {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
 }

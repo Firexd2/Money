@@ -313,7 +313,8 @@ class CreateShoppingList(ActionsView):
                 for n, id in enumerate(ids_items):
                     item = ShoppingListItem.objects.get(id=id)
                     item.name = name_item[n]
-                    item.count = count_item[n]
+                    if count_item[n]:
+                        item.count = count_item[n]
                     if category_item[n]:
                         item.category_id = int(category_item[n])
                     if price_item[n]:
@@ -324,8 +325,44 @@ class CreateShoppingList(ActionsView):
         return HttpResponse(json.dumps({'id': shopping_list.id}), content_type='application/json')
 
 
-class DeleteItemShoppingList(ActionsView):
+class InputCostShoppingList(ActionsView):
+
+    description_for_action_record = 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
+
     def post(self, *args, **kwargs):
-        ShoppingListItem.objects.get(id=kwargs['id']).delete()
+        # Счетчик суммы всех трат для записи в action_record
+        n = 0
+        # Получаемый требуемый шоп-лист
+        shopping_list = ShoppingList.objects.get(id=kwargs['id'])
+        # Начинаем перебирать весь список
+        for item in shopping_list.item.all():
+            # Если позиция отмечена
+            if item.flag:
+                # Получаем нужную категорию траты
+                category = item.category
+                # Добавляем столько трат, сколько указано количество товара
+                for i in list(range(item.count)):
+                    # Считаем сумму
+                    n += item.price
+                    # Создаем трату
+                    cost = Cost(value=item.price, detailed_comment=item.name)
+                    cost.save()
+                    # Получаем нужную метку
+                    tag_obj, b = Tags.objects.update_or_create(user=str(self.request.user), name=shopping_list.name)
+                    # Добавляем к трате метку
+                    cost.tags.add(tag_obj)
+                    # Записываем трату в категорию
+                    category.cost.add(cost)
+
+        self.action_dispatch(description=self.description_for_action_record % n,
+                             settings=self.request.user.settings, configuration=self.configuration)
+
         return HttpResponse('ok')
 
+
+class DeleteItem(ActionsView):
+    model = None
+
+    def post(self, *args, **kwargs):
+        self.model.objects.get(id=kwargs['id']).delete()
+        return HttpResponse('ok')

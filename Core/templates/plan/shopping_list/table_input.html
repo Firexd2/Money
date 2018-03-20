@@ -1,0 +1,13 @@
+<table style="text-align: left" class="table">
+    <tbody>
+    {% for item in shop_list.item.all %}
+        {% if item.flag %}
+            <tr>
+                <td><b>{{ item.name }}</b> {{ item.count }} шт.<br>
+                Цена за шт. {{ item.price }} р. <br>
+                Трата категории <b>{{ item.category.name }}</b></td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

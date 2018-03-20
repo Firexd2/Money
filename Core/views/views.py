@@ -85,7 +85,7 @@ class CostTemplatePlanView(BaseTemplatePlanView):
 class ShoppingListTemplateView(BaseTemplatePlanView):
     def get_context_data(self, **kwargs):
         context = super(ShoppingListTemplateView, self).get_context_data(**kwargs)
-        context['shopping_lists'] = ShoppingList.objects.filter(configuration=self.configuration)
+        context['shopping_lists'] = ShoppingList.objects.filter(configuration=self.configuration)[::-1]
         return context
 
 
@@ -194,4 +194,11 @@ class CategoryDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['category'] = CostCategory.objects.get(id=kwargs['id'])
+        return context
+
+
+class TableInputCostShoppingList(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super(TableInputCostShoppingList, self).get_context_data(**kwargs)
+        context['shop_list'] = ShoppingList.objects.get(id=kwargs['id'])
         return context

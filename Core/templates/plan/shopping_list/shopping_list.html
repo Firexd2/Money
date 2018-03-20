@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<h3>Запланированные покупки</h3>
+<h3>Списки запланированных покупок</h3>
 <hr>
 <div class="row">
     <div onclick="load('shopping_list/0/')" class="col-lg-4 add-shopping-list">
@@ -9,10 +9,9 @@
     </div>
     {% for list in shopping_lists %}
         <div onclick="load('shopping_list/{{ list.id }}/')" class="col-lg-4">
-            <div class="shopping-list" style="border: solid 3px;">
-                <p>{{ list.name }}</p>
+            <div class="shopping-list" style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);">
+                <div style="font-size: 23px;display: inline-block;vertical-align: middle;">{{ list.name }}</div>
             </div>
         </div>
     {% endfor %}
-
 </div>

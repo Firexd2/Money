@@ -27,4 +27,5 @@ jQuery(document).ready(function($) {
         onNavbar();
     });
     onNavbar();
+
 });
