@@ -240,7 +240,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#submit-cost').on('click', function () {
-            NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
             if ($('.value-cost').length && $('input[name=tags]').length) {
 
                 $.confirm({
@@ -287,7 +287,12 @@ jQuery(document).ready(function($) {
                                     data: data,
                                     success: function () {
                                         $('#input-cost-button-menu').click();
-                                        NProgress.done();
+                                        $.alert({
+                                            icon: 'fa fa-check',
+                                            type: 'green',
+                                            title: '<b>Операция выполнена!</b>',
+                                            content: 'Траты успешно внесены'
+                                        })
                                     }
                                 })
                             }
@@ -295,7 +300,6 @@ jQuery(document).ready(function($) {
                         Cancel: {
                             text: 'Отмена',
                             action: function () {
-                                NProgress.done();
                             }
                         }
                     }
@@ -313,7 +317,6 @@ jQuery(document).ready(function($) {
                     icon: 'fa fa-exclamation-triangle',
                     content: content
                 });
-                NProgress.done();
             }
         })
     }

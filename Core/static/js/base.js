@@ -6,6 +6,13 @@ jQuery(document).ready(function($) {
         closeIconClass: 'fa fa-close'
     };
 
+    // $(function(){
+    //     var navMain = $(".navbar-collapse");
+    //     navMain.on("click", "a:not([data-toggle])", null, function () {
+    //         navMain.collapse('hide');
+    //     });
+    // });
+
     function onNavbar() {
         if (window.innerWidth >= 768) {
             $('.navbar-default .dropdown').on('mouseover', function(){

@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
         var name = location.pathname.slice(1,-1);
 
         $('#income').on('click', function () {
-            NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
             var message;
             $.confirm({
                 title: 'Подтверждение начала нового расчётного периода',
@@ -27,7 +27,6 @@ jQuery(document).ready(function($) {
                                         content: message
                                     });
                                     $('#home-button-menu').click();
-                                    NProgress.done();
                                 }
                             })
                         }
@@ -35,7 +34,6 @@ jQuery(document).ready(function($) {
                     Cancel: {
                         text: 'Отмена',
                         action: function () {
-                            NProgress.done();
                         }
                     }
                 }
@@ -43,7 +41,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#date').on('click', function () {
-            NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
             var message;
             $.confirm({
                 title: 'Подтверждение изменения траты',
@@ -74,14 +72,12 @@ jQuery(document).ready(function($) {
                                     });
                                 }
                                 $('#home-button-menu').click();
-                                NProgress.done();
                             })
                         }
                     },
                     Cancel: {
                         text: 'Отмена',
                         action : function () {
-                            NProgress.done();
                         }
                     }
                 }
@@ -89,7 +85,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#delete').on('click', function () {
-            NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
             $.confirm({
                 title: 'Подтверждение удаления плана',
                 icon: 'fa fa-exclamation-triangle',
@@ -105,13 +101,11 @@ jQuery(document).ready(function($) {
                                     location.href = '/panel/';
                                 }
                             });
-                            NProgress.done();
                         }
                     },
                     Cancel: {
                         text: 'Отмена',
                         action: function () {
-                            NProgress.done();
                         }
                     }
                 }

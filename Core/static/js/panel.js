@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
         });
 
         $('#btn-freemoney').on('click', function () {
-            NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
             var val = $(this).prev().val();
             if (val) {
                 $.post('/ajax/correct_free_money/', {value: val}, function (data) {
@@ -30,7 +30,6 @@ jQuery(document).ready(function($) {
                 });
 
             }
-            NProgress.done();
         })
     }
     panel();

@@ -4,12 +4,15 @@
     <h3>Архивная статистика</h3>
     <hr>
     <div id="archive-stat">
+        <div class="inner">
+            <i style="font-size: 100px; color: {{ configuration.color }}" class="fa fa-spinner fa-spin fa-3x fa-fw fa-5x"></i>
+        </div>
     </div>
 </div>
 <div class="row">
     <h3>Завершенные периоды и их графическая визуализация</h3>
     <hr>
-    <div id="chart-archive-period" style="height: 270px;"></div>
+    <div id="chart-archive-period" style="min-height: 270px;"></div>
 
     {% for item in archive %}
         <div id="{{ item.id }}" class="col-lg-4 navigation">

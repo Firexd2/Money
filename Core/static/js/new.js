@@ -930,7 +930,7 @@ jQuery(document).ready(function($) {
                     $('#error-form').text(' Вы превысили лимит вашей суммы')
                 }
             } else {
-                NProgress.set(0.4);
+            $(document).ajaxStart(function() { Pace.restart(); });
                 var data = $(this).serializeArray();
                 var url = location.pathname.split('/').indexOf('panel') !== -1 ? '/ajax/create_new_plan/' : '/ajax/settings_plan/';
                 var redirect = location.pathname.split('/').indexOf('panel') !== -1 ? '/panel/' : '';
@@ -943,7 +943,6 @@ jQuery(document).ready(function($) {
                             location.href = redirect
                         } else {
                             location.href='/panel/';
-                            NProgress.done();
                         }
                     }
                 });

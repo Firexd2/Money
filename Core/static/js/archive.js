@@ -3,7 +3,6 @@ function load_report(date_one, date_two) {
 
     $('#archive-stat').load(plan + 'archive/' + date_one + '/' + date_two + '/', function () {
         count_procent_table_tags();
-        NProgress.done();
     });
 }
 

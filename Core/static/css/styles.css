@@ -1,3 +1,6 @@
+html{ height: 100%; }
+body{ display: flex; flex-direction: column; height: 100%; }
+
 body {
     font-family: 'Exo 2', sans-serif;
     font-size: 16px;
@@ -83,19 +86,19 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
-#nprogress .bar {
-    background: #ff923a;
-    height: 3px;
-}
+/*#nprogress .bar {*/
+    /*background: #ff923a;*/
+    /*height: 3px;*/
+/*}*/
 
-#nprogress .spinner-icon {
-  border-top-color: #ff923a;
-  border-left-color: #ff923a;
-}
+/*#nprogress .spinner-icon {*/
+  /*border-top-color: #ff923a;*/
+  /*border-left-color: #ff923a;*/
+/*}*/
 
-#nprogress .peg {
-    box-shadow: 0 0 10px #29d, 0 0 5px #ff923a;
-}
+/*#nprogress .peg {*/
+    /*box-shadow: 0 0 10px #29d, 0 0 5px #ff923a;*/
+/*}*/
 
 .auth-logo {
     text-align: center;
@@ -534,6 +537,13 @@ input[type=checkbox]:checked + .pseudocheckbox::before { content: "\2713";}
     align-items: center;
 }
 
+#archive-stat .inner {
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .add-shopping-list {
     opacity: 0.6;
     transition: 0.3s;
@@ -687,4 +697,10 @@ input[name=price], input[name=new-price], input[name=count], input[name=new-coun
 .block-conf:hover, .shopping-list:hover {
     border-left: 2px solid black;
     border-right: 2px solid black;
+}
+
+.footer {
+    margin-top: 80px;
+    height: 200px;
+    background: #bbbbbb;
 }

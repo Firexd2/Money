@@ -1,5 +1,7 @@
 jQuery(document).ready(function($) {
 
+    var block_action = 1;
+
     var name_plan = location.pathname.slice(1,-1);
 
     var elem = $('.input-shopping-list');
@@ -16,32 +18,40 @@ jQuery(document).ready(function($) {
         })
     });
 
-    $('form').on('click', 'input[name=checkbox]', function () {
-        if ($(this).is(':checked')) {
-            $(this).prev().val('1');
-            $(this).parent().next().css({'text-decoration': 'line-through'})
+    $('form').on('click', 'input[name=checkbox]', function (e) {
+        if (block_action) {
+            block_action = 0;
+            if ($(this).is(':checked')) {
+                $(this).prev().val('1');
+                $(this).parent().next().css({'text-decoration': 'line-through'})
+            } else {
+                $(this).prev().val('0');
+                $(this).parent().next().css({'text-decoration': 'none'})
+            }
+            $(this).submit();
+            show_button_input_cost()
         } else {
-            $(this).prev().val('0');
-            $(this).parent().next().css({'text-decoration': 'none'})
+            e.preventDefault()
         }
-        $(this).submit();
-        show_button_input_cost()
     });
 
     $('form[name=shopping-list]').on('submit', function (e) {
-        NProgress.set(0.4);
+        $(document).ajaxStart(function() { Pace.restart(); });
         e.preventDefault();
         var data = $(this).serializeArray();
         $.ajax({
             type: "POST",
             url: '/ajax/new_shopping_list/',
             data: data,
-            success: function(data) {NProgress.done()}
+            success: function(data) {block_action = 1}
         });
     });
 
-    $('input[name=price], input[name=count], input[name=name-item]').on('blur', function() {
-        $('form').submit()
+    $('input[name=price], input[name=count], input[name=name-item]').on('blur', function(e) {
+        if (block_action) {
+            block_action = 0;
+            $('form').submit()
+        }
     });
 
     $('input[name=name-list]').on('blur', function() {
@@ -127,9 +137,8 @@ jQuery(document).ready(function($) {
                         text: 'Ок',
                         btnClass: 'btn',
                         action: function () {
-                            NProgress.set(0.4);
+                            $(document).ajaxStart(function() { Pace.restart(); });
                             $.post('/ajax/input_cost_shopping_list/' + id + '/', {name: name_plan} , function () {
-                                NProgress.done();
                                 $.alert({
                                     title: 'Операция прошла успешно',
                                     type: 'green',

@@ -5,14 +5,16 @@
     <meta charset="UTF-8">
     {#    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
     {#    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    <script data-pace-options='{"ajax":"trackMethods":["GET","POST"]}' src="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/orange/pace-theme-center-circle.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css" rel="stylesheet">
+    {#    <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css" rel="stylesheet">#}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="{% static 'js/bootstrap/bootstrap.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.js"></script>
+    {#    <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.js"></script>#}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Alegreya+SC|Encode+Sans+Expanded|Exo+2" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
@@ -29,7 +31,8 @@
         }
     </style>
 </head>
-<header>
+<body>
+<header style="flex: 0 0 auto;">
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -47,8 +50,7 @@
         </div>
     </nav>
 </header>
-<body>
-<div class="container">
+<div style="flex: 1 0 auto;" class="container">
     <div class="row">
         <div id="content">
             {% block content %}
@@ -58,9 +60,10 @@
 </div>
 <script>
     function load(url) {
-        NProgress.set(0.4);
+        {#NProgress.set(0.4);#}
+        $(document).ajaxStart(function() { Pace.restart(); });
         $('#content').load(url, function () {
-            NProgress.done();
+            {#NProgress.done();#}
         });
         var li = $('.navbar-nav').children();
         li.removeClass('active');
@@ -73,5 +76,11 @@
         }
     }
 </script>
+<footer style="flex: 0 0 auto;">
+    <div class="footer">
+
+    </div>
+</footer>
 </body>
+
 </html>

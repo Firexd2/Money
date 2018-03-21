@@ -63,7 +63,7 @@
 </div>
 <script>
     $('#edit-interval').on('click', function () {
-        NProgress.set(0.4);
+        $(document).ajaxStart(function() { Pace.restart(); });
         $.confirm({
             title: 'Выбрать период',
             content: 'url:/alert/change_date/',
@@ -85,14 +85,12 @@
                                         icon: 'fa fa-exclamation-triangle',
                                         content: 'Вы должны ввести две даты, причем вторая дата должна быть не раньше первой.'
                                     });
-                                    NProgress.done();
                                 }
                             }
                     },
                     Cancel: {
                         text: 'Отмена',
                         action: function () {
-                            NProgress.done();
                         }
                     }
                 }

@@ -10,7 +10,7 @@
     {% for list in shopping_lists %}
         <div onclick="load('shopping_list/{{ list.id }}/')" class="col-lg-4">
             <div class="shopping-list" style="background: linear-gradient(45deg, {{ configuration.color }}, #f4d0b2);">
-                <div style="font-size: 23px;display: inline-block;vertical-align: middle;">{{ list.name }}</div>
+                <div style="font-size: 23px;display: inline-block;">{{ list.name }}</div>
             </div>
         </div>
     {% endfor %}
