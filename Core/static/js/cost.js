@@ -1,24 +1,26 @@
-var arrayTags = [""];
-var index = 0;
+function cost() {
 
-function removeByValue(arr, val) {
-    for(var i=0; i<arr.length; i++) {
-        if(arr[i] === val) {
-            arr.splice(i, 1);
-            break;
+    var arrayTags = [""];
+    var index = 0;
+
+
+    function removeByValue(arr, val) {
+        for(var i=0; i<arr.length; i++) {
+            if(arr[i] === val) {
+                arr.splice(i, 1);
+                break;
+            }
         }
+        index--;
     }
-    index--;
-}
 
-function removeTag(el) {
-    tag = $(el).prev().html();
-    $(el).parent().remove();
-    removeByValue(arrayTags, tag);
-    $("#inputTag").focus();
-}
+    function removeTag(el) {
+        tag = $(el).prev().html();
+        $(el).parent().remove();
+        removeByValue(arrayTags, tag);
+        $("#inputTag").focus();
+    }
 
-jQuery(document).ready(function($) {
 
     function input_cost() {
 
@@ -321,4 +323,6 @@ jQuery(document).ready(function($) {
         })
     }
     input_cost()
-});
+}
+
+window.scriptsContent = cost();

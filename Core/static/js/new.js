@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+function new_page() {
 
     function icons() {
         var icons = ['fa fa-500px',
@@ -958,4 +958,6 @@ jQuery(document).ready(function($) {
     }
     New();
 
-});
+}
+
+window.scriptsContent = new_page();

@@ -147,24 +147,24 @@ class StartNewPeriod(ActionsView):
         return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-class EditDate(ActionsView):
-
-    description_for_action_record = 'Изменена дата на %s.'
-
-    def post(self, *args, **kwargs):
-        date = datetime.strptime(self.POST('date'), '%Y-%m-%d').date()
-        status = 0
-        if datetime.now().date() >= date:
-            configuration = self.configuration
-            configuration.date = date
-            configuration.save()
-            status = 1
-        response = {'status': status}
-
-        self.action_dispatch(description=self.description_for_action_record % str(date),
-                             settings=self.request.user.settings, configuration=self.configuration)
-
-        return HttpResponse(json.dumps(response), content_type='application/json')
+# class EditDate(ActionsView):
+#
+#     description_for_action_record = 'Изменена дата на %s.'
+#
+#     def post(self, *args, **kwargs):
+#         date = datetime.strptime(self.POST('date'), '%Y-%m-%d').date()
+#         status = 0
+#         if datetime.now().date() >= date:
+#             configuration = self.configuration
+#             configuration.date = date
+#             configuration.save()
+#             status = 1
+#         response = {'status': status}
+#
+#         self.action_dispatch(description=self.description_for_action_record % str(date),
+#                              settings=self.request.user.settings, configuration=self.configuration)
+#
+#         return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 class DeletePlan(ActionsView):

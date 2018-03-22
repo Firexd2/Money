@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+function panel_page() {
 
     function panel() {
         $('.slider-block-panel').on('click', function (event) {
@@ -13,7 +13,9 @@ jQuery(document).ready(function($) {
         });
 
         $('#btn-freemoney').on('click', function () {
-            $(document).ajaxStart(function() { Pace.restart(); });
+            $(document).ajaxStart(function () {
+                Pace.restart();
+            });
             var val = $(this).prev().val();
             if (val) {
                 $.post('/ajax/correct_free_money/', {value: val}, function (data) {
@@ -32,6 +34,9 @@ jQuery(document).ready(function($) {
             }
         })
     }
+
     panel();
 
-});
+}
+
+window.scriptsContent = panel_page();

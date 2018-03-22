@@ -26,7 +26,7 @@
     <hr>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4 id="manage-block-title-1"><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Новый рассчетный период</h4>
+            <h4 id="manage-block-title-1"><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Новый рассчетный период</h4>
             <div style="margin-bottom: 10px;" class="input-group">
                 <input value="{{ configuration.income }}" class="form-control input-home" type="number">
                 <button id="income" style="height: 50px;font-size: 25px" class="btn btn-default">
@@ -46,23 +46,34 @@
             </p>
         </div>
     </div>
+{#    <div class="col-lg-4">#}
+{#        <div class="manage-block">#}
+{#            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изменение даты</h4>#}
+{#            <div style="margin-bottom: 10px;" class="input-group">#}
+{#                <input class="form-control input-home" value="{{ configuration.date|date:"Y-m-d" }}" type="date">#}
+{#                <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">#}
+{#                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>#}
+{#                </button>#}
+{#            </div>#}
+{#            <p class="info-text">#}
+{#                Если после ввода дохода вы ошиблись днем, вы можете поменять текущую дату не создавая новый план. По умолчанию стоит текущая дата вашего плана распределения бюджета.#}
+{#            </p>#}
+{#        </div>#}
+    {#    </div>#}
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изменение даты</h4>
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Добавление дохода</h4>
             <div style="margin-bottom: 10px;" class="input-group">
-                <input class="form-control input-home" value="{{ configuration.date|date:"Y-m-d" }}" type="date">
-                <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">
+                <input class="form-control input-home" type="number">
+                <button id="middle-income" style="height: 50px;font-size: 25px" class="btn btn-default">
                     <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                 </button>
             </div>
-            <p class="info-text">
-                Если после ввода дохода вы ошиблись днем, вы можете поменять текущую дату не создавая новый план. По умолчанию стоит текущая дата вашего плана распределения бюджета.
-            </p>
         </div>
     </div>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Удаление плана</h4>
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Удаление плана</h4>
             <p class="info-text">
                 После удаления неиспользованные средства перейдут на ваш накопительный счет. Восстановить план будет невозможно.
             </p>

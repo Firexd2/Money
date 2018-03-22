@@ -1,11 +1,11 @@
-jQuery(document).ready(function($) {
+function shopping_list() {
 
     var block_action = 1;
 
-    var name_plan = location.pathname.slice(1,-1);
+    var name_plan = location.pathname.slice(1, -1);
 
     var elem = $('.input-shopping-list');
-    for (var i=0;i<elem.length;i++) {
+    for (var i = 0; i < elem.length; i++) {
         var buffer = elem.eq(i).next();
         buffer.text(elem.eq(i).val());
         elem.eq(i).width(buffer.width());
@@ -36,31 +36,35 @@ jQuery(document).ready(function($) {
     });
 
     $('form[name=shopping-list]').on('submit', function (e) {
-        $(document).ajaxStart(function() { Pace.restart(); });
+        $(document).ajaxStart(function () {
+            Pace.restart();
+        });
         e.preventDefault();
         var data = $(this).serializeArray();
         $.ajax({
             type: "POST",
             url: '/ajax/new_shopping_list/',
             data: data,
-            success: function(data) {block_action = 1}
+            success: function (data) {
+                block_action = 1
+            }
         });
     });
 
-    $('input[name=price], input[name=count], input[name=name-item]').on('blur', function(e) {
+    $('input[name=price], input[name=count], input[name=name-item]').on('blur', function (e) {
         if (block_action) {
             block_action = 0;
             $('form').submit()
         }
     });
 
-    $('input[name=name-list]').on('blur', function() {
+    $('input[name=name-list]').on('blur', function () {
         var data = $('form[name=shopping-list]').serializeArray();
         $.ajax({
             type: "POST",
             url: '/ajax/new_shopping_list/',
             data: data,
-            success: function(data) {
+            success: function (data) {
                 load('shopping_list/' + data.id + '/')
             }
         });
@@ -79,7 +83,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    $('body').on('input', '.input-shopping-list', function() {
+    $('body').on('input', '.input-shopping-list', function () {
         var buffer = $(this).next();
         buffer.text($(this).val());
         $(this).width(buffer.width());
@@ -91,14 +95,16 @@ jQuery(document).ready(function($) {
             type: "POST",
             url: '/ajax/new_shopping_list/',
             data: {'new-item': '', 'id': id},
-            success: function(data) {load('shopping_list/' + data.id + '/')}
+            success: function (data) {
+                load('shopping_list/' + data.id + '/')
+            }
         });
     });
 
-    $('select').on('change', function() {
+    $('select').on('change', function () {
         $(this).prev().val($(this).val());
         $('form').submit()
-        
+
         // или как передать название категории
         //         var data = $('form[name=shopping-list]').serializeArray();
         // $.ajax({
@@ -120,7 +126,7 @@ jQuery(document).ready(function($) {
         var select = $('select');
         var validate = elems_price.length > 0;
 
-        for (var i=0;i<elems_price.length;i++) {
+        for (var i = 0; i < elems_price.length; i++) {
             if (flags.eq(i).val() === '1') {
                 if ((!(elems_price.eq(i).val())) || (!(select.eq(i).val()))) {
                     validate = false
@@ -137,8 +143,10 @@ jQuery(document).ready(function($) {
                         text: 'Ок',
                         btnClass: 'btn',
                         action: function () {
-                            $(document).ajaxStart(function() { Pace.restart(); });
-                            $.post('/ajax/input_cost_shopping_list/' + id + '/', {name: name_plan} , function () {
+                            $(document).ajaxStart(function () {
+                                Pace.restart();
+                            });
+                            $.post('/ajax/input_cost_shopping_list/' + id + '/', {name: name_plan}, function () {
                                 $.alert({
                                     title: 'Операция прошла успешно',
                                     type: 'green',
@@ -175,6 +183,7 @@ jQuery(document).ready(function($) {
             $('#input-cost').hide()
         }
     }
+
     show_button_input_cost();
 
     $('#delete').on('click', function () {
@@ -183,4 +192,6 @@ jQuery(document).ready(function($) {
         })
     })
 
-});
+}
+
+window.scriptsContent = shopping_list();

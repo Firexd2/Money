@@ -46,7 +46,7 @@ urlpatterns = [
     path('ajax/correct_free_money/', actions.CorrectFreeMoney.as_view()),
     path('ajax/create_new_plan/', actions.CreateNewPlan.as_view()),
     path('ajax/start_new_period/', actions.StartNewPeriod.as_view()),
-    path('ajax/edit_date/', actions.EditDate.as_view()),
+    # path('ajax/edit_date/', actions.EditDate.as_view()),
     path('ajax/delete_plan/', actions.DeletePlan.as_view()),
     path('ajax/settings_plan/', actions.SettingsPlan.as_view()),
     path('ajax/toggle_category_week_table/', actions.ToggleCategoryWeekTable.as_view()),

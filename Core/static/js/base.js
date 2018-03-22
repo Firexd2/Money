@@ -36,3 +36,6 @@ jQuery(document).ready(function($) {
     onNavbar();
 
 });
+
+var scriptsContent;
+

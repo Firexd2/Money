@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+function stat_page() {
 
     function stat() {
         var item_cost = $('.cost-table');
@@ -200,4 +200,6 @@ jQuery(document).ready(function($) {
 
     stat();
 
-});
+}
+
+window.scriptsContent = stat_page();
