@@ -18,19 +18,36 @@ function panel_page() {
             });
             var val = $(this).prev().val();
             if (val) {
-                $.post('/ajax/correct_free_money/', {value: val}, function (data) {
-                    if (data.status) {
-                        location.reload()
-                    } else {
-                        $.alert({
-                            type: 'red',
-                            icon: 'fa fa-exclamation-triangle',
-                            title: 'Операция отменена!',
-                            content: 'Для успешного изменения суммы ваших накоплений вам нужно ввести число и/или использовать +/- перед числом для манипуляций с текущей суммой.'
-                        })
-                    }
-                });
 
+                $.confirm({
+                    title: 'Подтвердите действие',
+                    icon: 'fa fa-question',
+                    type: 'orange',
+                    content: 'Вы подтверждаете изменение суммы ваших накоплений? Советуем поменять её один раз в начале пользования системой.',
+                    buttons: {
+                        Ok: {
+                            text: 'Да',
+                            action: function () {
+                                $.post('/ajax/correct_free_money/', {value: val}, function (data) {
+                                    if (data.status) {
+                                        location.reload()
+                                    } else {
+                                        $.alert({
+                                            type: 'red',
+                                            icon: 'fa fa-exclamation-triangle',
+                                            title: 'Операция отменена!',
+                                            content: 'Для успешного изменения суммы ваших накоплений вам нужно ввести число больше 0 или 0.'
+                                        })
+                                    }
+                                });
+                            }
+                        },
+                        Cancel: {
+                            text: 'Отмена',
+                            action: function () {}
+                        }
+                    }
+                })
             }
         })
     }

@@ -955,6 +955,15 @@ function new_page() {
             $('.icons').removeClass('active-icons');
             $(this).addClass('active-icons');
         });
+
+        $('#readonly-income').on('click', function () {
+            $.alert({
+                type: 'orange',
+                icon: 'fa fa-exclamation-triangle',
+                title: 'Операция отменена',
+                content: 'Напрямую изменить общую сумму в вашем плане нельзя. Если вы хотите добавить и распределить дополнительный доход, используйте поле во вкладке <b>"Главная"</b>'
+            })
+        })
     }
     New();
 

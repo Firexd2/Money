@@ -40,17 +40,11 @@ class CorrectFreeMoney(ActionsView):
     description_for_action_record = 'Изменена сумма накоплений на <b>%s</b> р.'
 
     def post(self, *args, **kwargs):
-        settings = self.request.user.settings
-        value = str(self.POST('value'))
         status = 0
-
-        if re.fullmatch(r'(\+|\-)?\d+', value):
-            if self.POST('value').isdigit():
-                settings.free_money = int(value)
-            elif self.POST('value')[0] == '+':
-                settings.free_money += int(value)
-            else:
-                settings.free_money -= int(value)
+        settings = self.request.user.settings
+        value = int(self.POST('value'))
+        if value >= 0:
+            settings.free_money = int(value)
             status = 1
             settings.save()
             self.action_dispatch(description=self.description_for_action_record % value, settings=settings)
@@ -86,64 +80,79 @@ class StartNewPeriod(ActionsView):
 
     description_for_action_record = 'Начало нового рассчетного периода. На накопительный счет было зачислено <b>%s</b> р. остатка с предыдущего месяца. Все траты перемещены в архив.'
 
-    def post(self, *args, **kwargs):
-        # Наша конфигурация
-        configuration = self.configuration
-        # Значения configuration перед обновлением
-        last_income = configuration.income
-        last_date = configuration.date
-        # Рассчитываем непотраченный остаток с предыдущего месяца
-        balance = last_income - sum(
-            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
-        # Вносим новые правки в план
-        configuration.income = int(self.POST('income'))
-        configuration.date = datetime.now().date()
-        configuration.save()
-        # Непотраченный остаток присваиваем к общему счету
-        settings = configuration.settings_set.all()[0]
-        settings.free_money += balance
-        settings.save()
-        # Удаляем траты и производим перерасчет максимумов в категориях на основе введенных данных
-        count_category = configuration.category.all().count()
-        distribution = (int(self.POST('income')) - last_income) / count_category
+    def counting_additional_list(self, diff):
+        count_category = self.configuration.category.all().count()
+        distribution = diff / count_category
         if distribution == int(distribution):
             list_values_add = [distribution] * count_category
         else:
             list_values_add = [floor(distribution)] * count_category
-            list_values_add[-1] += int(self.POST('income')) - last_income - (floor(distribution) * count_category)
+            list_values_add[-1] += diff - (floor(distribution) * count_category)
+        return list_values_add
 
-        # Создаем таблицу архива
-        archive = Archive(date_one=last_date)
-        archive.save()
+    def post(self, *args, **kwargs):
 
-        # Переменная суммы трат
-        amount_cost = 0
+        status = balance = 0
 
-        for n, category in enumerate(configuration.category.all()):
-            costs = category.cost.all()
-            # Перемещаем данные в архив
-            archive.archive_costs.add(*[cost for cost in costs])
-            # Считаем сумму трат
-            amount_cost += sum([cost.value for cost in costs])
-            category.cost.clear()
-            cat = category
-            # Корректируем лимиты категорий
-            cat.max += list_values_add[n]
-            cat.save()
+        # Наша конфигурация
+        configuration = self.configuration
 
-        # Записываем сумму трат, сыкономленную и общую
-        archive.spent = amount_cost
-        archive.saved = last_income - amount_cost
-        archive.income = last_income
-        archive.save()
+        # Проверочные данные для избежания ошибок
+        categoryes = configuration.category.all()
+        input_income = int(self.POST('income'))
 
-        # Прикрепляем полученный архив в нашей конфгурации
-        configuration.archive.add(archive)
+        if input_income >= len(categoryes):
 
-        self.action_dispatch(description=self.description_for_action_record % balance,
-                             settings=self.request.user.settings, configuration=configuration)
+            # Значения configuration перед обновлением
+            last_income = configuration.income
+            last_date = configuration.date
+            # Рассчитываем непотраченный остаток с предыдущего месяца
+            balance = last_income - sum(
+                list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
+            # Вносим новые правки в план
+            configuration.income = input_income
+            configuration.date = datetime.now().date()
+            configuration.save()
+            # Непотраченный остаток присваиваем к общему счету
+            settings = configuration.settings_set.all()[0]
+            settings.free_money += balance
+            settings.save()
+            # Получаем добавочный список
+            list_values_add = self.counting_additional_list((int(self.POST('income')) - last_income))
+            # Создаем таблицу архива
+            archive = Archive(date_one=last_date)
+            archive.save()
 
-        response = {'status': 1, 'balance': balance}
+            # Переменная суммы трат
+            amount_cost = 0
+
+            for n, category in enumerate(categoryes):
+                costs = category.cost.all()
+                # Перемещаем данные в архив
+                archive.archive_costs.add(*[cost for cost in costs])
+                # Считаем сумму трат
+                amount_cost += sum([cost.value for cost in costs])
+                category.cost.clear()
+                cat = category
+                # Корректируем лимиты категорий
+                cat.max += list_values_add[n]
+                cat.save()
+
+            # Записываем сумму трат, сыкономленную и общую
+            archive.spent = amount_cost
+            archive.saved = last_income - amount_cost
+            archive.income = last_income
+            archive.save()
+
+            # Прикрепляем полученный архив в нашей конфгурации
+            configuration.archive.add(archive)
+
+            self.action_dispatch(description=self.description_for_action_record % balance,
+                                 settings=self.request.user.settings, configuration=configuration)
+
+            status = 1
+
+        response = {'status': status, 'balance': balance}
         return HttpResponse(json.dumps(response), content_type='application/json')
 
 
@@ -165,6 +174,35 @@ class StartNewPeriod(ActionsView):
 #                              settings=self.request.user.settings, configuration=self.configuration)
 #
 #         return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+class InputMiddleIncomePlan(StartNewPeriod):
+
+    description_for_action_record = 'Добавлен доход на сумму <b>%s</b> р.'
+
+    def post(self, *args, **kwargs):
+        status = 0
+        middle_income = int(self.POST('middle_income'))
+        configuration = self.configuration
+        categoryes = configuration.category.all()
+        if middle_income >= len(categoryes):
+
+            configuration.income += middle_income
+            configuration.save()
+
+            list_values_add = self.counting_additional_list(middle_income)
+
+            for n, category in enumerate(categoryes):
+                _category = category
+                _category.max += list_values_add[n]
+                _category.save()
+
+            status = 1
+
+            self.action_dispatch(description=self.description_for_action_record % str(middle_income),
+                                 settings=self.request.user.settings, configuration=self.configuration)
+
+        return HttpResponse(json.dumps({'status': status}), content_type='application/json')
 
 
 class DeletePlan(ActionsView):

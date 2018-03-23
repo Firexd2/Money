@@ -2,41 +2,102 @@ function home() {
     var name = location.pathname.slice(1,-1);
 
     $('#income').on('click', function () {
-        $(document).ajaxStart(function() { Pace.restart(); });
-        var message;
-        $.confirm({
-            title: 'Подтверждение начала нового расчётного периода',
-            icon: 'fa fa-question',
-            type: 'orange',
-            content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
-            buttons: {
-                Ok: {
-                    text: 'Да',
-                    btnClass: 'btn',
-                    action: function () {
-                        $.post('/ajax/start_new_period/', {income: $('#income').prev().val(), name: name}, function (data) {
-                            if (data.status === 1) {
-                                message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
-                                    'обнулены все траты, ' +
-                                    'история трат перемещена в архив.';
-                                $.alert({
-                                    icon: 'fa fa-check',
-                                    type: 'green',
-                                    title: '<b>Операция выполнена!</b>',
-                                    content: message
-                                });
-                                $('#home-button-menu').click();
-                            }
-                        })
-                    }
-                },
-                Cancel: {
-                    text: 'Отмена',
-                    action: function () {
+        var value = $('#income').prev().val();
+        if (value) {
+            $(document).ajaxStart(function () {
+                Pace.restart();
+            });
+            var message;
+            $.confirm({
+                title: 'Подтверждение начала нового расчётного периода',
+                icon: 'fa fa-question',
+                type: 'orange',
+                content: 'Вы точно хотите ввести месячный доход и начать новый месяц?',
+                buttons: {
+                    Ok: {
+                        text: 'Да',
+                        btnClass: 'btn',
+                        action: function () {
+                            $.post('/ajax/start_new_period/', {income: value, name: name}, function (data) {
+                                if (data.status === 1) {
+                                    message = '<b>Операция прошла успешно!</b><br> На накопительный счет зачислено <b>' + data.balance + ' р.</b> остатка за предыдущий месяц, ' +
+                                        'обнулены все траты, ' +
+                                        'история трат перемещена в архив.';
+                                    $.alert({
+                                        icon: 'fa fa-check',
+                                        type: 'green',
+                                        title: '<b>Операция выполнена!</b>',
+                                        content: message
+                                    });
+                                    $('#home-button-menu').click();
+                                } else {
+                                    $.alert({
+                                        icon: 'fa fa-exclamation-triangle',
+                                        type: 'red',
+                                        title: 'Операция отменена!',
+                                        content: 'Критическая ошибка. Попробуйте еще раз!'
+                                    })
+                                }
+                            })
+                        }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+    });
+
+    $('#middle-income').on('click', function () {
+        var value = $('#middle-income').prev().val();
+        if (value) {
+            $(document).ajaxStart(function () {
+                Pace.restart();
+            });
+            $.confirm({
+                title: 'Подтвердите действие',
+                icon: 'fa fa-question',
+                type: 'orange',
+                content: 'Вы подтверждаете введение промежуточного дохода в текущий период?',
+                buttons: {
+                    Ok: {
+                        text: 'Да',
+                        btnClass: 'btn',
+                        action: function () {
+                            $.post('/ajax/middle_icone_plan/', {
+                                name: name,
+                                middle_income: value
+                            }, function (data) {
+                                if (data.status === 1) {
+                                    $.alert({
+                                        title: 'Операция выполнена!',
+                                        icon: 'fa fa-check',
+                                        type: 'green',
+                                        content: 'Доход успешно добавлен и пропорционально распределён'
+                                    });
+                                    $('#home-button-menu').click();
+                                } else {
+                                    $.alert({
+                                        icon: 'fa fa-exclamation-triangle',
+                                        type: 'red',
+                                        title: 'Операция отменена!',
+                                        content: 'Критическая ошибка. Попробуйте еще раз!'
+                                    })
+                                }
+                            })
+                        }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
+                    }
+                }
+            })
+        }
     });
 
     // $('#date').on('click', function () {

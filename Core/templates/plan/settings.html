@@ -27,12 +27,12 @@
         {#            </select></p>#}
     </div>
     <div class="col-lg-6">
-        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Распределяемая сумма:</h4>
+        <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Распределяемая сумма:</h4>
         <div class="input-group">
             <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
-            <input value="{{ configuration.income }}" style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
+            <input id="readonly-income" readonly value="{{ configuration.income }}" style="width: 140%" name="income" type="number" class="form-control" placeholder="Пример: 100000"/>
         </div>
-        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Редактирование категорий:</h4>
+        <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Редактирование категорий:</h4>
         <p class="info-text">Редактировать можно только название и значение максимума категории. Добавлять или удалять категории нельзя.</p>
         <table class="table table-hover">
             <thead>

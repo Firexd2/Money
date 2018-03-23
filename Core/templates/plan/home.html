@@ -42,7 +42,7 @@
                 По умолчанию стоит ранее введеная вами сумма. <br>
             </p>
             <p class="info-text" style="color: rgba(191,101,84,0.99);">
-                ВНИМАНИЕ! После ввода дохода, возвратиться к прежнему состоянию плана будет невозможно.
+                ВНИМАНИЕ! После начала нового рассчетного периода, возвратиться к прежнему состоянию плана будет невозможно.
             </p>
         </div>
     </div>
@@ -62,13 +62,16 @@
     {#    </div>#}
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Добавление дохода</h4>
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Ввод промежуточного дохода</h4>
             <div style="margin-bottom: 10px;" class="input-group">
-                <input class="form-control input-home" type="number">
+                <input placeholder="Доход" class="form-control input-home" type="number">
                 <button id="middle-income" style="height: 50px;font-size: 25px" class="btn btn-default">
                     <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                 </button>
             </div>
+            <p class="info-text">
+                Введенная вами сумма пропорционально добавится ко всем категориям плана. Вы всегда можете откорректировать лимиты категорий в настройках.
+            </p>
         </div>
     </div>
     <div class="col-lg-4">

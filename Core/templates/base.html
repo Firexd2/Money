@@ -98,5 +98,13 @@
         box-shadow: inset 0 0 0 2px gray, inset 0 0 0 7px #FFF;
         border-radius: 0;
     }
+    .form-control:focus {
+    {% if configuration.color %}
+        border-color: {{ configuration.color }};
+    {% else %}
+        border-color: #ff923a;
+    {% endif %}
+        border: 2px solid {{ configuration.color }};
+    }
 </style>
 </html>
