@@ -43,10 +43,8 @@ urlpatterns = [
     path('tag/<name_url>/<name>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),
     path('auth/', include('Auth.urls')),
 
-    path('ajax/correct_free_money/', actions.CorrectFreeMoney.as_view()),
     path('ajax/create_new_plan/', actions.CreateNewPlan.as_view()),
     path('ajax/start_new_period/', actions.StartNewPeriod.as_view()),
-    # path('ajax/edit_date/', actions.EditDate.as_view()),
     path('ajax/middle_icone_plan/', actions.InputMiddleIncomePlan.as_view()),
     path('ajax/delete_plan/', actions.DeletePlan.as_view()),
     path('ajax/settings_plan/', actions.SettingsPlan.as_view()),
@@ -57,4 +55,6 @@ urlpatterns = [
     path('ajax/delete_item_shopping_list/<id>/', actions.DeleteItem.as_view(model=ShoppingListItem)),
     path('ajax/delete_shopping_list/<id>/', actions.DeleteItem.as_view(model=ShoppingList)),
     path('ajax/input_cost_shopping_list/<id>/', actions.InputCostShoppingList.as_view()),
+    path('ajax/add_money/', actions.AddIncome.as_view()),
+    path('ajax/take_money/', actions.TakeIncome.as_view())
 ]

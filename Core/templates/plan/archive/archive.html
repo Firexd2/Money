@@ -1,35 +1,35 @@
 {% load staticfiles %}
 {% load poll_extras %}
-<div class="row">
-    <h3>Архивная статистика</h3>
-    <hr>
-    <div id="archive-stat">
-        <div class="inner">
-            <i style="font-size: 100px; color: {{ configuration.color }}" class="fa fa-spinner fa-spin fa-3x fa-fw fa-5x"></i>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <h3>Завершенные периоды и их графическая визуализация</h3>
-    <hr>
-    <div id="chart-archive-period" style="min-height: 270px;"></div>
-
-    {% for item in archive %}
-        <div id="{{ item.id }}" class="col-lg-4 navigation">
-            <div style="background: linear-gradient(45deg, #f4d0b2, {{ configuration.color }});" class="block-conf">
-                <div style="font-size: 26px; margin-bottom: 10px">
-                    с <b>{{ item.date_one }}</b> по <br>
-                    <b>{{ item.date_two }}</b>
-                </div>
-                <div style="font-size: 23px">
-                    <span style="color: #ff544b;">Потрачено: {{ item.spent|points }} </span> <i class="fa fa-rub" aria-hidden="true"></i>
-                    <br>
-                    <span style="color: #00b500;">Сохранено: {{ item.saved|points }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
-                </div>
+    <div class="row">
+        <h3>Архивная статистика</h3>
+        <hr>
+        <div id="archive-stat">
+            <div class="inner">
+                <i style="font-size: 100px; color: {{ configuration.color }}" class="fa fa-spinner fa-spin fa-3x fa-fw fa-5x"></i>
             </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+    <div class="row">
+        <h3>Завершенные периоды и их графическая визуализация</h3>
+        <hr>
+        <div id="chart-archive-period" style="min-height: 270px;"></div>
+
+        {% for item in archive %}
+            <div id="{{ item.id }}" class="col-lg-4 navigation">
+                <div style="background: linear-gradient(45deg, #f4d0b2, {{ configuration.color }});" class="block-conf">
+                    <div style="font-size: 26px; margin-bottom: 10px">
+                        с <b>{{ item.date_one }}</b> по <br>
+                        <b>{{ item.date_two }}</b>
+                    </div>
+                    <div style="font-size: 23px">
+                        <span style="color: #ff544b;">Потрачено: {{ item.spent|points }} </span> <i class="fa fa-rub" aria-hidden="true"></i>
+                        <br>
+                        <span style="color: #00b500;">Сохранено: {{ item.saved|points }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 <script>
     new Morris.Line({
         element: 'chart-archive-period',

@@ -1,13 +1,20 @@
 <p><b>Первая дата:</b></p>
 <input style="max-width: 200px;display: inline-block" name="name-plan" id="date-one" type="date" class="form-control"/>
 <p style="padding-top: 5px"><b>Вторая дата:</b></p>
-        <input style="max-width: 200px;display: inline-block" name="name-plan" id="date-two" type="date" class="form-control"/>
-    <div class="help-dates" style="margin-bottom: 15px">
-        <span id="time-all">за все время</span> <span id="time-1">за 1 месяц</span> <span id="time-3">за 3 месяца</span> <span id="time-6">за полгода</span> <span id="time-12">за год</span> <br>
-        <span id="period-1">последний период</span> <span id="period-2">за 2 последних периода</span> <span id="period-3">за 3 последних периода</span>
-    </div>
+<input style="max-width: 200px;display: inline-block" name="name-plan" id="date-two" type="date" class="form-control"/>
+<div class="help-dates" style="margin-bottom: 15px">
+    <span id="time-all">за все время</span> <span id="time-1">за 1 месяц</span> <span id="time-3">за 3 месяца</span> <span id="time-6">за полгода</span> <span id="time-12">за год</span> <br>
+    <span id="period-1">последний период</span> <span id="period-2">за 2 последних периода</span> <span id="period-3">за 3 последних периода</span>
+</div>
 
 <script>
+    function get_and_change_dates(id) {
+        var plan = location.pathname;
+        $.post(plan + 'archive/' + id + '/', function (data) {
+            $('#date-one').val(data.date_one);
+            $('#date-two').val(data.date_two);
+        })
+    }
     $('.help-dates').on('click', function (e) {
         var id = e.target.id;
         get_and_change_dates(id)

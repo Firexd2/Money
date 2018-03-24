@@ -1,82 +1,83 @@
 {% load staticfiles %}
-<div class="row">
-    <div class="col-lg-6">
-        <form name="shopping-list" method="POST"><input hidden name="name" value="{{ configuration.name_url }}" type="text">
-            <h3>Список запланированных покупок</h3>
-            <hr>
-            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Название списка:</h4>
-            <p class="info-text">После ввода кликните вне поля, чтобы начать создавать список.</p>
-            <div class="input-group">
-                <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
-                {% if list %} <input hidden type="text" id="name-list" name="id" value="{{ list.id }}"> {% endif %}
-                <input style="width: 140%" name="name-list" id="name-input" value="{{ list.name }}" type="text" class="form-control" placeholder="Пример: Алиэкспресс"/>
-            </div>
-            {% if list %}
-                <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Список:</h4>
-                <p class="info-text">Чтобы удалить запись, нажми на крестик в раскрывающимся списке.</p>
-                {% for item in list.item.all %}
-                    <div id="{{ item.id }}" class="item-list">
-                        <input hidden name="id-item" value="{{ item.id }}" type="text">
-                        <label>
-                            <input type="hidden" name="flag" value="{% if item.flag %}1{% else %}0{% endif %}">
-                            <input class="check-shopping-list" {% if item.flag %}checked{% endif %} name="checkbox" type="checkbox">
-                            <span class="pseudocheckbox"></span>
-                        </label>
-                        <input type="text" value="{{ item.name }}" style="{% if item.flag %}text-decoration: line-through{% endif %}" maxlength="45" name="name-item" class="input-shopping-list">
-                        <div class="input-buffer"></div>
-                        <i class="fa fa-caret-down show-item-shop" aria-hidden="true"></i>
+    <div class="row">
+        <div class="col-lg-6">
+            <form name="shopping-list" method="POST"><input hidden name="name" value="{{ configuration.name_url }}" type="text">
+                <h3>Список запланированных покупок</h3>
+                <hr>
+                <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Название списка:</h4>
+                <p class="info-text">После ввода кликните вне поля, чтобы начать создавать список.</p>
+                <div class="input-group">
+                    <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
+                    {% if list %} <input hidden type="text" id="name-list" name="id" value="{{ list.id }}"> {% endif %}
+                    <input style="width: 140%" name="name-list" id="name-input" value="{{ list.name }}" type="text" class="form-control" placeholder="Пример: Алиэкспресс"/>
+                </div>
+                {% if list %}
+                    <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Список:</h4>
+                    <p class="info-text">Чтобы удалить запись, нажми на крестик в раскрывающимся списке.</p>
+                    {% for item in list.item.all %}
+                        <div id="{{ item.id }}" class="item-list">
+                            <input hidden name="id-item" value="{{ item.id }}" type="text">
+                            <label>
+                                <input type="hidden" name="flag" value="{% if item.flag %}1{% else %}0{% endif %}">
+                                <input class="check-shopping-list" {% if item.flag %}checked{% endif %} name="checkbox" type="checkbox">
+                                <span class="pseudocheckbox"></span>
+                            </label>
+                            <input type="text" value="{{ item.name }}" style="{% if item.flag %}text-decoration: line-through{% endif %}" maxlength="45" name="name-item" class="input-shopping-list">
+                            <div class="input-buffer"></div>
+                            <i class="fa fa-caret-down show-item-shop" aria-hidden="true"></i>
 
-                        <div hidden class="info-item-shop">
-                            <table>
-                                <thead>
-                                <tr style="color:gray; font-size: 14px">
-                                    <td>Кол-во</td>
-                                    <td>Цена</td>
-                                    <td>Категория</td>
-                                    <td></td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <input style="width: 30px" name="count" value="{{ item.count }}" type="number">
-                                    </td>
-                                    <td>
-                                        <input style="width: 70px;" {% if item.price %}value="{{ item.price }}"{% endif %} name="price" type="text">
-                                        <input hidden name="category" value="{{ item.category.name }}" type="text">
-                                    </td>
-                                    <td>
-                                        <input hidden value="{{ item.category.id }}" type="text" name="item-category">
-                                        <select>
-                                            <option selected disabled>Категория</option>
-                                            {% for category in configuration.category.all %}
-                                                <option {% if item.category.id == category.id %}selected{% endif %} value="{{ category.id }}">{{ category.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-times delete-item" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <div hidden class="info-item-shop">
+                                <table>
+                                    <thead>
+                                    <tr style="color:gray; font-size: 14px">
+                                        <td>Кол-во</td>
+                                        <td>Цена</td>
+                                        <td>Категория</td>
+                                        <td></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <input style="width: 30px" name="count" value="{{ item.count }}" type="number">
+                                        </td>
+                                        <td>
+                                            <input style="width: 70px;" {% if item.price %}value="{{ item.price }}"{% endif %} name="price" type="text">
+                                            <input hidden name="category" value="{{ item.category.name }}" type="text">
+                                        </td>
+                                        <td>
+                                            <input hidden value="{{ item.category.id }}" type="text" name="item-category">
+                                            <select>
+                                                <option selected disabled>Категория</option>
+                                                {% for category in configuration.category.all %}
+                                                    <option {% if item.category.id == category.id %}selected{% endif %} value="{{ category.id }}">{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-times delete-item" aria-hidden="true"></i>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <span id="add-item"><i class="fa fa-plus" aria-hidden="true"></i> запись</span>
+                    <div style="margin-top: 40px">
+                        <button style="display: none" class="btn" id="input-cost" type="button">Внести купленные товары в траты</button>
+                    </div>
+
+                    <div style="margin-top: 50px">
+                        <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Управление списком:</h4>
+                        <div class="buttons">
+                            <button style="opacity: 0.5" class="btn btn-r" id="delete" type="button">Удалить список</button>
                         </div>
                     </div>
-                {% endfor %}
-                <span id="add-item"><i class="fa fa-plus" aria-hidden="true"></i> запись</span>
-                <div style="margin-top: 40px">
-                    <button style="display: none" class="btn" id="input-cost" type="button">Внести купленные товары в траты</button>
-                </div>
-            {% endif %}
-        </form>
-        <div style="margin-top: 50px">
-            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Управление списком:</h4>
-            <div class="buttons">
-                <button style="opacity: 0.5" class="btn btn-r" id="delete" type="button">Удалить список</button>
-            </div>
+                {% endif %}
+            </form>
         </div>
     </div>
-</div>
 <style>
     .input-shopping-list:focus, input[name=price]:focus, input[name=count]:focus, select[name=item-category]:focus {
         border: 2px solid {{ configuration.color }};

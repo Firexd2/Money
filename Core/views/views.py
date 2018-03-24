@@ -183,9 +183,17 @@ class TagDetailView(BaseTemplatePlanView):
 
 @method_decorator(login_required, name='dispatch')
 class BaseTemplateView(TemplateView):
+
+    @property
+    def get_money_circulation(self):
+        # Идет подсчет всех непотраченных денег во всех планах
+        return sum([conf.income - sum([sum([cost.value for cost in cat.cost.all()]) for cat in conf.category.all()])
+                    for conf in self.request.user.settings.configurations.all()])
+
     def get_context_data(self, **kwargs):
         context = super(BaseTemplateView, self).get_context_data(**kwargs)
-        context['money_circulation'] = sum([conf.income for conf in self.request.user.settings.configurations.all()])
+
+        context['money_circulation'] = self.get_money_circulation
         context['history'] = self.request.user.settings.history.all()[::-1]
         return context
 

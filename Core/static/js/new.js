@@ -888,8 +888,8 @@ function new_page() {
             }
             tr.eq(tr.length-4).after('<tr>\n' +
                 '<td><b>' + (tr.length-3) + '</b></td>\n' +
-                '<td><input ' + disabled +  ' name="name-cat' + (tr.length-3) + '" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>\n' +
-                '<td><input ' + disabled +  ' name="income' + (tr.length-3) + '" type="number" class="form-control cat"/></td>\n' +
+                '<td><input required ' + disabled +  ' name="name-cat' + (tr.length-3) + '" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>\n' +
+                '<td><input required ' + disabled +  ' name="income' + (tr.length-3) + '" type="number" class="form-control cat"/></td>\n' +
                 '<td style="text-align: center"><span>' + proc + '</span>%</td>\n' +
                 '</tr>');
         });
@@ -904,15 +904,19 @@ function new_page() {
             var valid_name = $('list').text().indexOf($('input[name=name-plan]').val());
             function repeat_category() {
                 var names_category = $('.ca');
+                var count_names = 0;
                 var array = [];
                 var val;
                 for (var i=0;i<names_category.length;i++) {
                     val = names_category.eq(i).val();
-                    if (array.indexOf(val) === -1) {
-                        array.push(val)
+                    if (val) {
+                        count_names += 1;
+                        if (array.indexOf(val) === -1) {
+                            array.push(val)
+                        }
                     }
                 }
-                return names_category.length !== array.length;
+                return  count_names !== array.length;
             }
 
             if ($('#o').text() !== '0' || repeat_category() || valid_name !== -1) {
@@ -961,7 +965,7 @@ function new_page() {
                 type: 'orange',
                 icon: 'fa fa-exclamation-triangle',
                 title: 'Операция отменена',
-                content: 'Напрямую изменить общую сумму в вашем плане нельзя. Если вы хотите добавить и распределить дополнительный доход, используйте поле во вкладке <b>"Главная"</b>'
+                content: 'Напрямую изменить общую сумму в плане нельзя. Если вы хотите добавить и распределить дополнительный доход, используйте соответствующую форму во вкладке <b>"Главная"</b>'
             })
         })
     }

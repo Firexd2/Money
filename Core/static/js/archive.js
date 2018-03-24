@@ -17,13 +17,7 @@ function archive() {
 
     default_dates();
 
-    function get_and_change_dates(id) {
-        var plan = location.pathname;
-        $.post(plan + 'archive/' + id + '/', function (data) {
-            $('#date-one').val(data.date_one);
-            $('#date-two').val(data.date_two);
-        })
-    }
+
 
     function count_procent_table_tags() {
         var values =  $('.tags-value');

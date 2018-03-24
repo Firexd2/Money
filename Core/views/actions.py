@@ -1,14 +1,22 @@
 import json
-import re
 from datetime import datetime
 from math import floor
 from django.http import HttpResponse
 from django.views.generic.base import View
-
 from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem
 
 
 class ActionsView(View):
+
+    def take_money(self, value):
+        settings = self.request.user.settings
+        settings.free_money -= int(value)
+        settings.save()
+
+    def add_money(self, value):
+        settings = self.request.user.settings
+        settings.free_money += int(value)
+        settings.save()
 
     def POST(self, data):
         return self.request.POST[data]
@@ -35,22 +43,26 @@ class ActionsView(View):
             kwargs['settings'].history.add(history)
 
 
-class CorrectFreeMoney(ActionsView):
+class AddIncome(ActionsView):
 
-    description_for_action_record = 'Изменена сумма накоплений на <b>%s</b> р.'
+    description_for_action_record = 'Добавлен доход на сумму <b>%s</b> р. Комментарий: <b>%s</b>'
 
     def post(self, *args, **kwargs):
-        status = 0
-        settings = self.request.user.settings
-        value = int(self.POST('value'))
-        if value >= 0:
-            settings.free_money = int(value)
-            status = 1
-            settings.save()
-            self.action_dispatch(description=self.description_for_action_record % value, settings=settings)
+        self.add_money(self.POST('number'))
+        self.action_dispatch(description=self.description_for_action_record % (self.POST('number'), self.POST('comment')),
+                             settings=self.request.user.settings)
+        return HttpResponse('ok')
 
-        response = {'status': status}
-        return HttpResponse(json.dumps(response), content_type='application/json')
+
+class TakeIncome(ActionsView):
+
+    description_for_action_record = 'Со счета неиспользованных денег было изъято <b>%s</b> р. Комментарий: <b>%s</b>'
+
+    def post(self, *args, **kwargs):
+        self.take_money(self.POST('number'))
+        self.action_dispatch(description=self.description_for_action_record % (self.POST('number'), self.POST('comment')),
+                             settings=self.request.user.settings)
+        return HttpResponse('ok')
 
 
 class CreateNewPlan(ActionsView):
@@ -58,6 +70,8 @@ class CreateNewPlan(ActionsView):
     description_for_action_record = 'Создан новый план распределения бюджета <b style="color:%s"><i class="%s" aria-hidden="true"></i> %s</b>.'
 
     def post(self, *args, **kwargs):
+
+        self.take_money(int(self.POST('income')))
 
         configuration = Configuration(name=self.POST('name-plan'), income=self.POST('income'),
                                       icon=self.POST('icon'), color=self.POST('color'))
@@ -78,17 +92,38 @@ class CreateNewPlan(ActionsView):
 
 class StartNewPeriod(ActionsView):
 
-    description_for_action_record = 'Начало нового рассчетного периода. На накопительный счет было зачислено <b>%s</b> р. остатка с предыдущего месяца. Все траты перемещены в архив.'
+    description_for_action_record = 'Начало нового рассчетного периода. На счет неиспользованных денег было зачислено <b>%s</b> р. остатка с предыдущего месяца. Все траты перемещены в архив. %s'
 
     def counting_additional_list(self, diff):
-        count_category = self.configuration.category.all().count()
+
+        danger_info = False
+
+        categories = self.configuration.category.all()
+        count_category = categories.count()
         distribution = diff / count_category
         if distribution == int(distribution):
             list_values_add = [distribution] * count_category
         else:
             list_values_add = [floor(distribution)] * count_category
             list_values_add[-1] += diff - (floor(distribution) * count_category)
-        return list_values_add
+
+        # Проверка на отрицательное значение в лимите категорий
+        for n, cat in enumerate(categories):
+            if cat.max + list_values_add[n] <= 0:
+                danger_info = True
+
+                # Так как при перерасчете лимитов у нас вышло отрицательное число, рассчитываем лимиты по ровну и
+                # предупреждаем об этом пользователя
+                income = self.configuration.income
+                distribution = income / count_category
+                if distribution == int(distribution):
+                    list_values_add = [distribution] * count_category
+                else:
+                    list_values_add = [floor(distribution)] * count_category
+                    list_values_add[-1] += diff - (floor(distribution) * count_category)
+                break
+
+        return list_values_add, danger_info
 
     def post(self, *args, **kwargs):
 
@@ -99,7 +134,10 @@ class StartNewPeriod(ActionsView):
 
         # Проверочные данные для избежания ошибок
         categoryes = configuration.category.all()
-        input_income = int(self.POST('income'))
+        input_income = int(self.POST('number'))
+
+        # Берем деньги с общего счета
+        self.take_money(input_income)
 
         if input_income >= len(categoryes):
 
@@ -114,11 +152,9 @@ class StartNewPeriod(ActionsView):
             configuration.date = datetime.now().date()
             configuration.save()
             # Непотраченный остаток присваиваем к общему счету
-            settings = configuration.settings_set.all()[0]
-            settings.free_money += balance
-            settings.save()
+            self.add_money(balance)
             # Получаем добавочный список
-            list_values_add = self.counting_additional_list((int(self.POST('income')) - last_income))
+            list_values_add, danger_info = self.counting_additional_list((input_income - last_income))
             # Создаем таблицу архива
             archive = Archive(date_one=last_date)
             archive.save()
@@ -135,7 +171,10 @@ class StartNewPeriod(ActionsView):
                 category.cost.clear()
                 cat = category
                 # Корректируем лимиты категорий
-                cat.max += list_values_add[n]
+                if not danger_info:
+                    cat.max += list_values_add[n]
+                else:
+                    cat.max = list_values_add[n]
                 cat.save()
 
             # Записываем сумму трат, сыкономленную и общую
@@ -147,50 +186,35 @@ class StartNewPeriod(ActionsView):
             # Прикрепляем полученный архив в нашей конфгурации
             configuration.archive.add(archive)
 
-            self.action_dispatch(description=self.description_for_action_record % balance,
+            comment = self.POST('comment') if self.POST('comment') else ''
+
+            self.action_dispatch(description=self.description_for_action_record % (balance, comment),
                                  settings=self.request.user.settings, configuration=configuration)
 
-            status = 1
+            status = 1 if not danger_info else 2
 
         response = {'status': status, 'balance': balance}
         return HttpResponse(json.dumps(response), content_type='application/json')
 
 
-# class EditDate(ActionsView):
-#
-#     description_for_action_record = 'Изменена дата на %s.'
-#
-#     def post(self, *args, **kwargs):
-#         date = datetime.strptime(self.POST('date'), '%Y-%m-%d').date()
-#         status = 0
-#         if datetime.now().date() >= date:
-#             configuration = self.configuration
-#             configuration.date = date
-#             configuration.save()
-#             status = 1
-#         response = {'status': status}
-#
-#         self.action_dispatch(description=self.description_for_action_record % str(date),
-#                              settings=self.request.user.settings, configuration=self.configuration)
-#
-#         return HttpResponse(json.dumps(response), content_type='application/json')
-
-
 class InputMiddleIncomePlan(StartNewPeriod):
 
-    description_for_action_record = 'Добавлен доход на сумму <b>%s</b> р.'
+    description_for_action_record = 'Добавлены деньги к плану сумму <b>%s</b> р. %s'
 
     def post(self, *args, **kwargs):
         status = 0
-        middle_income = int(self.POST('middle_income'))
+        middle_income = int(self.POST('number'))
         configuration = self.configuration
+
+        self.take_money(middle_income)
+
         categoryes = configuration.category.all()
         if middle_income >= len(categoryes):
 
             configuration.income += middle_income
             configuration.save()
 
-            list_values_add = self.counting_additional_list(middle_income)
+            list_values_add = self.counting_additional_list(middle_income)[0]
 
             for n, category in enumerate(categoryes):
                 _category = category
@@ -199,7 +223,9 @@ class InputMiddleIncomePlan(StartNewPeriod):
 
             status = 1
 
-            self.action_dispatch(description=self.description_for_action_record % str(middle_income),
+            comment = self.POST('comment') if self.POST('comment') else ''
+
+            self.action_dispatch(description=self.description_for_action_record % (str(middle_income), comment),
                                  settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse(json.dumps({'status': status}), content_type='application/json')
@@ -212,11 +238,11 @@ class DeletePlan(ActionsView):
     def post(self, *args, **kwargs):
         balance = self.configuration.income - sum(
             list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=self.configuration))))
-        settings = self.configuration.settings_set.all()[0]
-        settings.free_money += balance
-        settings.save()
+
         # Данные для записи в историю
         name = self.configuration.name
+
+        self.add_money(balance)
 
         self.action_dispatch(description=self.description_for_action_record % name,
                              settings=self.request.user.settings)
@@ -243,17 +269,31 @@ class SettingsPlan(ActionsView):
         configuration.color = self.POST('color')
         configuration.save()
 
+        print(self.request.POST)
+
         current_category = configuration.category.all()
         number_category = 0
         c = [item[1] for item in self.request.POST.items()][5:]
+
+        # Удаляем лишние категории, если есть
+        for extra_category in configuration.category.all()[len(c)//2:len(current_category)]:
+            extra_category.delete()
+
         for n, item in enumerate(c):
             if n % 2 == 1 and c[n - 1] and c[n]:
-                if not (current_category[number_category].name == c[n - 1] and
-                        current_category[number_category].max == c[n]):
-                    for_save = current_category[number_category]
-                    for_save.name = c[n - 1]
-                    for_save.max = c[n]
-                    for_save.save()
+
+                # Делаем изменения в категориях. Если есть новая, то по ошибке направляемся её создавать
+                try:
+                    if not (current_category[number_category].name == c[n - 1] and
+                            current_category[number_category].max == c[n]):
+                        for_save = current_category[number_category]
+                        for_save.name = c[n - 1]
+                        for_save.max = c[n]
+                        for_save.save()
+                except IndexError:
+                    new_category = CostCategory(name=c[n - 1], max=c[n])
+                    new_category.save()
+                    configuration.category.add(new_category)
                 number_category += 1
 
         self.action_dispatch(description=self.description_for_action_record,
