@@ -53,7 +53,6 @@ function stat_page() {
                 category_all.eq(q).css({'color': 'red'});
                 color_for_bar = '#ffe3d9'
             }
-
             $('.category-detail').eq(q).css({'background': 'linear-gradient(to right, ' + color_for_bar + ' ' + (100 - procent) + '%, #ffffff ' + (100 - procent) + '%)'});
         }
 

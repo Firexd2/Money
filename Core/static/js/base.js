@@ -8,9 +8,9 @@ jQuery(document).ready(function($) {
 
     $(function(){
         if (window.innerWidth <= 768) {
-            var navMain = $(".navbar-collapse");
+            var navMain = $(".navbar-offcanvas-touch");
             navMain.on("click", "a:not([data-toggle])", null, function () {
-                navMain.collapse('hide');
+                $('#button-toggle').click()
             });
         }
     });

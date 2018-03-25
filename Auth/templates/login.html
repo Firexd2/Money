@@ -7,6 +7,7 @@
     <div class="auth-block">
         <h2 style="text-align: center;padding: 25px 0 25px 0">Вход</h2>
         <form method="POST">{% csrf_token %}
+            <span style="color: red">{{ form.non_field_errors }}</span>
             <span style="color: red">{{ form.username.errors }}</span>
             <div style="margin-bottom: 10px; width: 100%" class="input-group">
                 <span style="width: 50px" class="input-group-addon"><i class="fa fa-user" style="font-size:20px;" aria-hidden="true"></i></span>

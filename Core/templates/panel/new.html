@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load poll_extras %}
     <h3>Создание нового плана распределения бюджета</h3>
     <hr>
     <form name="new" method="POST">
@@ -27,13 +28,12 @@
         </div>
         <div class="col-lg-6">
             <h4><i class=" icon fa fa-caret-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
-            <p class="info-text">Эту сумма выделяется из накопительного счета. Если вы создаете план, забыв ввести деньги, ваш счет уйдет в отрицательный баланс.</p>
+            <p class="info-text">Эту сумма выделяется из счета неиспользованных денег. На данный момент у вас на счете: <b>{{ user.settings.free_money|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i>. Если вы в первые пользуетесь <b>Control-Money.ru</b>, не забудьте внести деньги на этот счет на вкладке "Панель" -> "Ввод дохода"</p>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
-                <input style="width: 140%" name="income" type="number" class="form-control d-only" placeholder="Пример: 100000"/>
+                <input style="width: 140%" name="income" type="number" max="{{ user.settings.free_money }}" class="form-control d-only" placeholder="Пример: 100000"/>
             </div>
             <h4><i class="icon fa fa-caret-right" aria-hidden="true"></i> Планирование бюджета:</h4>
-            <p class="info-text" style="color: rgba(191,101,84,0.99);">ВНИМАНИЕ! После создания плана распределения бюджета добавлять/удалять категории будет невозможно, но изменять их название и значение максимума будет можно.</p>
             <table class="table table-hover">
                 <thead>
                 <tr>

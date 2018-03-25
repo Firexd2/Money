@@ -39,7 +39,7 @@
                         <tr>
                             <td>{{ category.name }}</td>
                             <td class="td-cost">
-                                <button class="button-input-cost btn btn-default" id="{{ category.id }}" name="{{ category.name }}" type="button">Внести</button>
+                                <button class="button-input-cost btn btn-default" id="{{ category.id }}" name="{{ category.name }}" type="button"><b>+</b></button>
                             </td>
                             <td style="text-align: center" class="td-amount">
                                 <div style="font-size: 20px">
@@ -73,8 +73,7 @@
                 <thead>
                 <tr style="font-weight: bold">
                     <td>Категория</td>
-                    <td>Сумма</td>
-                    <td width="150">Комментарий и теги</td>
+                    <td>Инфо</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,9 +87,9 @@
                             </td>
                             <td>
                                 {{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i>
-                            </td>
-                            <td>
-                                {{ cost.detailed_comment }}<br><br>
+                            <br><br>
+                                {{ cost.detailed_comment }}
+                                <br>
                                 {% for tag in cost.tags.all %}
                                     <span class="tags-in-action">{{ tag.name }}</span>
                                 {% endfor %}

@@ -447,36 +447,7 @@ input::-webkit-inner-spin-button {
 .navbar-toggle:hover {
     background: transparent !important;
 }
-.navbar-toggle .icon-bar {
-    width: 22px;
-    -webkit-transition: all 0.2s;
-    transition: all 0.2s;
-}
-.navbar-toggle.collapsed .icon-bar:nth-of-type(1) {
-    transform: translate3d(0,0,0) rotate(0deg);
-    width: 22px;
-}
-.navbar-toggle.collapsed .icon-bar:nth-of-type(2) {
-    transform: translate3d(0,0,0) rotate(0deg);
-}
-.navbar-toggle.collapsed .icon-bar:nth-of-type(3) {
-    transform: translate3d(0,0,0) rotate(0deg);
-    width: 22px;
-}
-.navbar-toggle .icon-bar:nth-of-type(1) {
-    transform: translate3d(1px,0,0) rotate(-45deg);
-    transform-origin: center center;
-    width: 11px;
-}
-.navbar-toggle .icon-bar:nth-of-type(2) {
-    transform: rotate(-90deg);
-    transform-origin: center center;
-}
-.navbar-toggle .icon-bar:nth-of-type(3) {
-    transform: translate3d(0px,-14px,0) rotate(-135deg);
-    transform-origin: right top;
-    width: 11px;
-}
+
 
 .conf {
     text-align: center;
@@ -903,4 +874,9 @@ input[name=price], input[name=new-price], input[name=count], input[name=new-coun
     margin-top: 80px;
     height: 25px;
     background: #313131;
+}
+
+.inline-input {
+    display: inline-block;
+    vertical-align: top
 }

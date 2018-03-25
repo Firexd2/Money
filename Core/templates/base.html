@@ -19,7 +19,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-
+    <script src="{% static 'js/lib/spincrement.min.js' %}"></script>
+    <script src="{% static 'js/lib/bootstrap.offcanvas.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/lib/bootstrap.offcanvas.min.css' %}">
     <style>
         ::-webkit-scrollbar-thumb {
             background-color: {% if configuration.color %}{{ configuration.color }}{% else %}#ff923a;{% endif %}
@@ -31,7 +33,7 @@
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+                <button type="button" id="button-toggle" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>

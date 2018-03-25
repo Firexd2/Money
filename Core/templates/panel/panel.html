@@ -7,11 +7,11 @@
             <div class="block-panel">
                 <div class="slider-block-panel">
                     <div>
-                        <b id="freemoney">{{ user.settings.free_money|points }}</b>
+                        <b class="spincrement" id="freemoney">{{ user.settings.free_money }}</b>
                         <p style="font-size: 20px">Неиспользуемые деньги</p>
                     </div>
                     <div>
-                        <p style="font-size: 15px">Сумма ваших "свободных денег". При начале нового рассчетного периода именно отсюда выделяются деньги, сумму которых вы указали.</p>
+                        <p style="font-size: 15px">Сумма ваших "свободных денег". В некотором роде эта сумма является вашим банком, которым вы можете распоряжаться так, как вы хотите.</p>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="block-panel">
                 <div class="slider-block-panel">
                     <div>
-                        <b id="circ" style="color: #ff5c00">{{ money_circulation|points }}</b>
+                        <b class="spincrement" id="circ" style="color: #ff5c00">{{ money_circulation }}</b>
                         <p style="font-size: 20px">Деньги в обороте</p>
                     </div>
                     <div>
@@ -33,7 +33,7 @@
             <div class="block-panel">
                 <div class="slider-block-panel">
                     <div>
-                        <b id="freecirc">{{ user.settings.free_money|add:money_circulation|points }}</b>
+                        <b class="spincrement" id="freecirc">{{ user.settings.free_money|add:money_circulation }}</b>
                         <p style="font-size: 20px">Общая сумма</p>
                     </div>
                     <div>
@@ -61,40 +61,49 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <h3>Управление деньгами</h3>
-        <hr>
-        <div class="col-lg-4">
-            <div class="manage-block">
-                <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Ввод дохода</h4>
-                <form name="income" method="POST">
-                    <input name="number" placeholder="Сумма" class="form-control input-home" type="number">
-                    <input name="comment" placeholder="Комментарий" class="form-control input-home" type="text">
-                    <button style="width: 100%; height: 45px; font-size: 25px" class="btn btn-default">
-                        <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
-                    </button>
-                </form>
+<div class="row">
+    <h3>Управление деньгами</h3>
+    <hr>
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Ввод дохода</h4>
+            <form style="margin-bottom: 8px" name="income" method="POST">
+                <div class="inline-input" style="width: 210px">
+                    <input required name="number" placeholder="Сумма*" class="form-control input-home" type="number">
+                    <input required name="comment" placeholder="Комментарий*" class="form-control input-home" type="text">
+                </div><div class="inline-input" style="width: 30px">
+                <button style="height: 100px; font-size: 25px" class="btn btn-default">
+                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                </button>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="manage-block">
-                <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изъятие денег</h4>
-                <form style="margin-bottom: 15px" name="take-money" method="POST">
-                    <input name="number" placeholder="Сумма" class="form-control input-home" type="number">
-                    <input name="comment" placeholder="Комментарий" class="form-control input-home" type="text">
-                    <button style="width: 100%; height: 45px; font-size: 25px" class="btn btn-default">
-                        <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
-                    </button>
-                </form>
-                <p class="info-text">
-                    Если вы хотите "вытащить" и не учитывать определенную сумму денег с вашего накопительного счета, используйте это поле.
-                </p>
-            </div>
+            </form>
+            <p class="info-text">
+                Введенный доход зачислится на счет неиспользованных денег. Вскоре вы сможете создать план распределения бюджета и внести эту сумму для распределения по категориям.
+            </p>
         </div>
     </div>
-    <div class="row">
-        <h3>История действий на вашем аккаунте:</h3>
-        <hr>
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изъятие денег</h4>
+            <form style="margin-bottom: 8px" name="take-money" method="POST">
+                <div class="inline-input" style="width: 210px">
+                    <input required name="number" placeholder="Сумма*" class="form-control input-home" type="number">
+                    <input required name="comment" placeholder="Комментарий*" class="form-control input-home" type="text">
+                </div><div class="inline-input" style="width: 30px">
+                <button style="height: 100px; font-size: 25px" class="btn btn-default">
+                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                </button>
+            </div>
+            </form>
+            <p class="info-text">
+                Если вы хотите "вытащить" и не учитывать определенную сумму денег, используйте эту форму.
+            </p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h3>История действий на вашем аккаунте:</h3>
+    <hr>
         {% include 'history_table.html' %}
     </div>
 <script src="{% static 'js/panel.js' %}"></script>

@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load poll_extras %}
 <div class="row">
     <h3>Навигация</h3>
     <hr>
@@ -46,19 +47,23 @@
         <div class="manage-block">
             <h4 id="manage-block-title-1"><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Новый рассчетный период</h4>
             <form style="margin-bottom: 15px" name="new-period" method="POST">
-                <input name="name" hidden value="{{ configuration.name_url }}">
-                <input required name="number" placeholder="Распределяемая сумма" class="form-control input-home" type="number">
-                <input name="comment" placeholder="Комментарий (необ.)" class="form-control input-home" type="text">
-                <button style="width: 100%; height: 45px; font-size: 25px" class="btn btn-default">
+                <div class="inline-input" style="width: 210px">
+                    <input name="name" hidden value="{{ configuration.name_url }}">
+                    <input required name="number" max="{{ user.settings.free_money }}" placeholder="Cумма*" class="form-control input-home" type="number">
+                    <input name="comment" placeholder="Комментарий" class="form-control input-home" type="text">
+                </div><div class="inline-input" style="width: 30px">
+                <button style="height: 100px; font-size: 25px" class="btn btn-default">
                     <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                 </button>
+            </div>
             </form>
+            <p style="color: green">Доступно для ввода: <b>{{ user.settings.free_money|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i></p>
             <p class="info-text">При начале нового рассчетного периода: <br>
                 - обнулятся текущие траты <br>
                 - неиспользованная сумма перейдет на ваш накопительный счет <br>
                 - отсчет месяца пойдет с сегодняшнего дня <br>
                 - <b>максимумы в категориях будут автоматически рассчитаны пропорционально. Вы всегда можете подкорректировать их в настройках.</b><br>
-                - вся история трат переместится в <a href="">архив</a>. <br>
+                - вся история трат переместится в <b>архив</b>. <br>
             </p>
             <p class="info-text" style="color: rgba(191,101,84,0.99);">
                 ВНИМАНИЕ! После начала нового рассчетного периода, возвратиться к прежнему состоянию плана будет невозможно.
@@ -83,13 +88,17 @@
         <div class="manage-block">
             <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Добавление денежных средств</h4>
             <form style="margin-bottom: 15px" name="middle-income" method="POST">
+                <div class="inline-input" style="width: 210px">
                 <input name="name" hidden value="{{ configuration.name_url }}">
-                <input required name="number" placeholder="Сумма" class="form-control input-home" type="number">
-                <input name="comment" placeholder="Комментарий (необ.)" class="form-control input-home" type="text">
-                <button style="width: 100%; height: 45px; font-size: 25px" class="btn btn-default">
+                <input required name="number" max="{{ user.settings.free_money }}" placeholder="Сумма*" class="form-control input-home" type="number">
+                <input name="comment" placeholder="Комментарий" class="form-control input-home" type="text">
+                </div><div class="inline-input" style="width: 30px">
+                <button style="height: 100px; font-size: 25px" class="btn btn-default">
                     <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                 </button>
+            </div>
             </form>
+            <p style="color: green">Доступно для ввода: <b>{{ user.settings.free_money|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i></p>
             <p class="info-text">
                 Введенная вами сумма пропорционально добавится ко всем категориям плана. Вы всегда можете откорректировать лимиты категорий в настройках.
             </p>

@@ -8,6 +8,41 @@ function archive() {
         });
     }
 
+    $('#archive-stat').on('click', '#edit-interval', function () {
+        $(document).ajaxStart(function() { Pace.restart(); });
+        $.confirm({
+            title: 'Выбрать период',
+            content: 'url:/alert/change_date/',
+            buttons:
+                {
+                    Ok: {
+                        text: 'Выбрать',
+                        btnClass: 'btn',
+                        action:
+                            function () {
+                                var date_one = $('#date-one').val();
+                                var date_two = $('#date-two').val();
+                                if ((date_one || date_two) && (date_one <= date_two)) {
+                                    load_report(date_one, date_two)
+                                } else {
+                                    $.alert({
+                                        title: 'Операция отменена',
+                                        type: 'orange',
+                                        icon: 'fa fa-exclamation-triangle',
+                                        content: 'Вы должны ввести две даты, причем вторая дата должна быть не раньше первой.'
+                                    });
+                                }
+                            }
+                    },
+                    Cancel: {
+                        text: 'Отмена',
+                        action: function () {
+                        }
+                    }
+                }
+        })
+    });
+
     function default_dates() {
         var plan = location.pathname;
         $.post(plan + 'archive/' + 'time-all' + '/', function (data) {

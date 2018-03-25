@@ -135,12 +135,11 @@
     <div class="row">
         <div class="col-lg-6">
             <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
-            <p class="info-text">Последние 15 покупок. Для более детального просмотра всей истории смотрите <a href="">все покупки</a>.</p>
             <div class="wrapper-history">
                 <table class="table">
                     <tbody style="font-size: 15px">
                     {% if costs %}
-                        {% for cost in costs|slice:":15" %}
+                        {% for cost in costs %}
                             <tr>
                                 <td>
                                     <b>{{ cost.datetime }}</b><br>

@@ -125,6 +125,11 @@ function panel_page() {
             }
         })
     });
+    $(".spincrement").spincrement({
+        from: 0,
+        duration: 2000,
+        thousandSeparator: "."
+    });
 }
 
 window.scriptsContent = panel_page();
