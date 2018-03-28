@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block title %}Панель управления{% endblock %}
 {% block brand %}
     <a class="navbar-brand" onclick="load('home/')"><i class="fa fa-money" aria-hidden="true"></i> <b>Control-Money.ru</b></a>
 {% endblock %}
@@ -8,17 +9,11 @@
         <ul class="nav navbar-nav">
             <li class="active"><a onclick="load('home/')"><i class="fa fa-columns" aria-hidden="true"></i> Панель</a></li>
             <li><a onclick="load('new/')"><i class="fa fa-plus-circle" aria-hidden="true"></i> Новый план бюджета</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-arrows" aria-hidden="true"></i> Планы бюджета <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <div class="arrow-up visible-lg"></div>
-                    {% for configuration in user.settings.configurations.all %}
-                        <li><a href="{{ configuration.get_absolute_url }}"><i class="{{ configuration.icon }}" aria-hidden="true"></i> {{ configuration.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
+            <li><a onclick="load('help/')"><i class="fa fa-info-circle" aria-hidden="true"></i> Помощь</a></li>
+            <li><a onclick="load('about/')"><i class="fa fa-wrench" aria-hidden="true"></i> О проекте</a></li>
         </ul>
-        <p class="navbar-text">Вы вошли как <b>{{ user }}</b>. <a href="/auth/logout/">Выйти</a></p>
+        <p class="navbar-text">Привет, <b>{{ user }}</b>. <a href="/auth/logout/">Выйти</a></p>
+        <p class="navbar-text version">{{ version }} <span class="caret"></span></p>
     </div>
 {% endblock %}
 {% block content %}

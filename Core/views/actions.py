@@ -2,11 +2,43 @@ import json
 from datetime import datetime
 from math import floor
 from django.http import HttpResponse
+from django.utils.encoding import uri_to_iri
 from django.views.generic.base import View
 from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem
 
 
 class ActionsView(View):
+
+    @staticmethod
+    def description_for_action_record(name):
+        descriptions = {
+            'AddIncome': 'Добавлен доход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>.'
+                         ' Комментарий: <b>%s</b>',
+
+            'TakeIncome': 'Со счета неиспользованных денег было изъято <b>%s</b> '
+                          '<i class="fa fa-rub" aria-hidden="true"></i>. Комментарий: <b>%s</b>',
+
+            'CreateNewPlan': 'Создан новый план распределения бюджета <b style="color:%s">'
+                             '<i class="%s" aria-hidden="true"></i> %s</b>.',
+
+            'StartNewPeriod': 'Начало нового рассчетного периода. На счет неиспользованных денег'
+                              ' было зачислено <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> остатка'
+                              ' с предыдущего периода. Все траты перемещены в архив. %s',
+
+            'InputMiddleIncomePlan': 'Добавлены дополнительный средства в план - '
+                                     '<b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>. %s',
+
+            'DeletePlan': 'План <b>%s</b> был удалён.',
+
+            'SettingsPlan': 'Отредактирован план',
+
+            'DeleteCost': 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: %s',
+
+            'InputCostShoppingList': 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
+
+        }
+
+        return descriptions[name]
 
     def take_money(self, value):
         settings = self.request.user.settings
@@ -23,16 +55,16 @@ class ActionsView(View):
 
     @property
     def configuration(self):
-        return self.request.user.settings.configurations.all().get(name_url=self.request.POST['name'])
+        return self.request.user.settings.configurations.all().get(name=uri_to_iri(self.request.POST['name']))
 
     @staticmethod
     def action_dispatch(**kwargs):
 
         if len(kwargs) == 3:
             history_for_settings = History(description='<b>' + kwargs['configuration'].name + '</b>: ' + kwargs['description'])
-            history_for_configuration = History(description=kwargs['description'])
-
             history_for_settings.save()
+
+            history_for_configuration = History(description=kwargs['description'])
             history_for_configuration.save()
 
             kwargs['settings'].history.add(history_for_settings)
@@ -45,29 +77,23 @@ class ActionsView(View):
 
 class AddIncome(ActionsView):
 
-    description_for_action_record = 'Добавлен доход на сумму <b>%s</b> р. Комментарий: <b>%s</b>'
-
     def post(self, *args, **kwargs):
         self.add_money(self.POST('number'))
-        self.action_dispatch(description=self.description_for_action_record % (self.POST('number'), self.POST('comment')),
-                             settings=self.request.user.settings)
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__)
+                                         % (self.POST('number'), self.POST('comment')), settings=self.request.user.settings)
         return HttpResponse('ok')
 
 
 class TakeIncome(ActionsView):
 
-    description_for_action_record = 'Со счета неиспользованных денег было изъято <b>%s</b> р. Комментарий: <b>%s</b>'
-
     def post(self, *args, **kwargs):
         self.take_money(self.POST('number'))
-        self.action_dispatch(description=self.description_for_action_record % (self.POST('number'), self.POST('comment')),
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (self.POST('number'), self.POST('comment')),
                              settings=self.request.user.settings)
         return HttpResponse('ok')
 
 
 class CreateNewPlan(ActionsView):
-
-    description_for_action_record = 'Создан новый план распределения бюджета <b style="color:%s"><i class="%s" aria-hidden="true"></i> %s</b>.'
 
     def post(self, *args, **kwargs):
 
@@ -83,7 +109,7 @@ class CreateNewPlan(ActionsView):
                 cost_category.save()
                 configuration.category.add(cost_category)
         self.request.user.settings.configurations.add(configuration)
-        self.action_dispatch(description=self.description_for_action_record %
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) %
                                          (configuration.color, configuration.icon, configuration.name),
                              settings=self.request.user.settings)
 
@@ -91,8 +117,6 @@ class CreateNewPlan(ActionsView):
 
 
 class StartNewPeriod(ActionsView):
-
-    description_for_action_record = 'Начало нового рассчетного периода. На счет неиспользованных денег было зачислено <b>%s</b> р. остатка с предыдущего месяца. Все траты перемещены в архив. %s'
 
     def counting_additional_list(self, diff):
 
@@ -188,7 +212,7 @@ class StartNewPeriod(ActionsView):
 
             comment = self.POST('comment') if self.POST('comment') else ''
 
-            self.action_dispatch(description=self.description_for_action_record % (balance, comment),
+            self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (balance, comment),
                                  settings=self.request.user.settings, configuration=configuration)
 
             status = 1 if not danger_info else 2
@@ -198,8 +222,6 @@ class StartNewPeriod(ActionsView):
 
 
 class InputMiddleIncomePlan(StartNewPeriod):
-
-    description_for_action_record = 'Добавлены деньги к плану сумму <b>%s</b> р. %s'
 
     def post(self, *args, **kwargs):
         status = 0
@@ -225,15 +247,13 @@ class InputMiddleIncomePlan(StartNewPeriod):
 
             comment = self.POST('comment') if self.POST('comment') else ''
 
-            self.action_dispatch(description=self.description_for_action_record % (str(middle_income), comment),
+            self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (str(middle_income), comment),
                                  settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse(json.dumps({'status': status}), content_type='application/json')
 
 
 class DeletePlan(ActionsView):
-
-    description_for_action_record = 'План <b>%s</b> был удалён.'
 
     def post(self, *args, **kwargs):
         balance = self.configuration.income - sum(
@@ -244,7 +264,7 @@ class DeletePlan(ActionsView):
 
         self.add_money(balance)
 
-        self.action_dispatch(description=self.description_for_action_record % name,
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % name,
                              settings=self.request.user.settings)
         try:
             self.configuration.delete()
@@ -258,8 +278,6 @@ class DeletePlan(ActionsView):
 
 class SettingsPlan(ActionsView):
 
-    description_for_action_record = 'План отредактирован'
-
     def post(self, *args, **kwargs):
 
         configuration = self.configuration
@@ -268,8 +286,6 @@ class SettingsPlan(ActionsView):
         configuration.icon = self.POST('icon')
         configuration.color = self.POST('color')
         configuration.save()
-
-        print(self.request.POST)
 
         current_category = configuration.category.all()
         number_category = 0
@@ -296,7 +312,7 @@ class SettingsPlan(ActionsView):
                     configuration.category.add(new_category)
                 number_category += 1
 
-        self.action_dispatch(description=self.description_for_action_record,
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__),
                              settings=self.request.user.settings, configuration=configuration)
 
         return HttpResponse('ok')
@@ -345,8 +361,6 @@ class InputCost(ActionsView):
 
 class DeleteCost(ActionsView):
 
-    description_for_action_record = 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: %s'
-
     def post(self, *args, **kwargs):
         cost = Cost.objects.filter(costcategory__configuration=self.configuration)\
             .get(id=self.POST('id'))
@@ -354,7 +368,7 @@ class DeleteCost(ActionsView):
         comment = cost.detailed_comment
         cost.delete()
 
-        self.action_dispatch(description=self.description_for_action_record % (value, comment),
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (value, comment),
                              settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse('ok')
@@ -405,8 +419,6 @@ class CreateShoppingList(ActionsView):
 
 class InputCostShoppingList(ActionsView):
 
-    description_for_action_record = 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
-
     def post(self, *args, **kwargs):
         # Счетчик суммы всех трат для записи в action_record
         n = 0
@@ -432,7 +444,7 @@ class InputCostShoppingList(ActionsView):
                     # Записываем трату в категорию
                     category.cost.add(cost)
 
-        self.action_dispatch(description=self.description_for_action_record % n,
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % n,
                              settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse('ok')
@@ -444,3 +456,10 @@ class DeleteItem(ActionsView):
     def post(self, *args, **kwargs):
         self.model.objects.get(id=kwargs['id']).delete()
         return HttpResponse('ok')
+
+
+def first_log_in_trigger(request):
+    user = request.user
+    user.first_log_in = False
+    user.save()
+    return HttpResponse('ok')

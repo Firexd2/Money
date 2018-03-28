@@ -1,20 +1,20 @@
 {% load staticfiles %}
 {% load poll_extras %}
-    <h3>Создание нового плана распределения бюджета</h3>
+    <h3>Создание нового плана распределения бюджета  <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     <form name="new" method="POST">
         <div class="col-lg-6">
-            <h4><i class="icon fa fa-caret-right" aria-hidden="true"></i> Название вашего плана:</h4>
+            <h4><i class="icon fa fa-caret-right" aria-hidden="true"></i> Название плана:</h4>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="name-plan" id="name-input" type="text" class="form-control" placeholder="Пример: Семья"/>
             </div>
             <h4><i class=" icon fa fa-caret-right" aria-hidden="true"></i> Иконка и цвет:</h4>
-            <p class="info-text">Выбери иконку в качестве "лого" конфигурации:</p>
+            <p class="info-text">Выберите иконку для вашего плана</p>
             <input name="icon" hidden type="text" value="fa fa-cogs">
             <div id="icons" style="margin-bottom: 10px; max-height: 350px; overflow: auto" class="container-fluid">
             </div>
-            <p class="info-text">Выбери цвет стилизации:</p>
+            <p class="info-text">Выберите цвет для стилизации вашего плана. После создания плана вы сможете поменять его в любой момент.</p>
             <input value="#ff923a" style="height: 30px; width: 60px" name="color" type="color">
             {#            <p style="margin-bottom: 40px"><select class="form-control" style="width: 150px" name="color">#}
             {#                <option selected value="black" style="background-color: black; color: black;">Черный</option>#}
@@ -27,18 +27,19 @@
             {#            </select></p>#}
         </div>
         <div class="col-lg-6">
-            <h4><i class=" icon fa fa-caret-right" aria-hidden="true"></i> Сумма, которую хотите распределить:</h4>
-            <p class="info-text">Эту сумма выделяется из счета неиспользованных денег. На данный момент у вас на счете: <b>{{ user.settings.free_money|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i>. Если вы в первые пользуетесь <b>Control-Money.ru</b>, не забудьте внести деньги на этот счет на вкладке "Панель" -> "Ввод дохода"</p>
+            <h4><i class=" icon fa fa-caret-right" aria-hidden="true"></i> Распределяемая сумма:</h4>
+            <p class="info-text">Распределяемая сумма должна быть меньше или равна сумме неиспользуемых денег. На вашем счете сейчас <b>{{ user.settings.free_money }}</b> р., пополнить его можно на вкладке "Панель".</p>
             <div class="input-group">
                 <span style="width: 40px" class="input-group-addon"><i class="fa fa-rub" aria-hidden="true"></i></span>
                 <input style="width: 140%" name="income" type="number" max="{{ user.settings.free_money }}" class="form-control d-only" placeholder="Пример: 100000"/>
             </div>
             <h4><i class="icon fa fa-caret-right" aria-hidden="true"></i> Планирование бюджета:</h4>
+        <p class="info-text">Создайте необходимые вам категории и распределите введенную выше сумму между ними. В колонке "Процент" будет автоматически рассчитана доля каждой категории от общей суммы. Вы всегда можете отредактировать список категорий и распределение средств по каждой из них.</p>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Название</th>
+                    <th>Категория</th>
                     <th width="200">Максимум</th>
                     <th style="min-width: 100px">Процент</th>
                 </tr>

@@ -1,17 +1,15 @@
 {% load poll_extras %}
-<div class="wrapper-history">
-    <table class="table">
-        <tbody style="font-size: 15px">
-        {% for cost in objects %}
-            <tr>
-                <td style="text-align: left">
-                    <b>{{ cost.datetime }}</b><br>
-                    Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
-                    <br>
-                    Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+<table class="table">
+    <tbody style="font-size: 15px">
+    {% for cost in objects %}
+        <tr>
+            <td style="text-align: left">
+                <b>{{ cost.datetime }}</b><br>
+                Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
+                <br>
+                Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

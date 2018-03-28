@@ -1,11 +1,14 @@
 {% load staticfiles %}
+{% load poll_extras %}
     <div class="row">
         <div class="col-lg-6">
-            <form name="shopping-list" method="POST"><input hidden name="name" value="{{ configuration.name_url }}" type="text">
+            <form name="shopping-list" method="POST"><input hidden name="name" value="{{ configuration.name }}" type="text">
                 <h3>Список запланированных покупок</h3>
                 <hr>
                 <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Название списка:</h4>
-                <p class="info-text">После ввода кликните вне поля, чтобы начать создавать список.</p>
+                <p class="info-text">
+                    По окончанию ввода названия списка, нажмите на облать вне поля, чтобы активировать список и начать вводить продукты.
+                </p>
                 <div class="input-group">
                     <span style="width: 40px" class="input-group-addon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span>
                     {% if list %} <input hidden type="text" id="name-list" name="id" value="{{ list.id }}"> {% endif %}
@@ -13,7 +16,9 @@
                 </div>
                 {% if list %}
                     <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Список:</h4>
-                    <p class="info-text">Чтобы удалить запись, нажми на крестик в раскрывающимся списке.</p>
+                    <p class="info-text">
+                        В любой момент и при любом состоянии списка в автоматическом режиме можно внести траты в систему, нажав на кнопку внизу страницы.
+                    </p>
                     {% for item in list.item.all %}
                         <div id="{{ item.id }}" class="item-list">
                             <input hidden name="id-item" value="{{ item.id }}" type="text">

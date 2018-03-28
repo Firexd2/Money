@@ -1,0 +1,7 @@
+{% load staticfiles %}
+{% load poll_extras %}
+{% for item in object_list %}
+    <h3>{{ item.position }}</h3>
+    <hr>
+    <p>{{ item.text|safe }}</p>
+{% endfor %}

@@ -100,7 +100,7 @@ function panel_page() {
             title: 'Подтвердите действие',
             icon: 'fa fa-question',
             type: 'orange',
-            content: 'Вы изъятие денег с накопительного счета?',
+            content: 'Вы подтверждаете изъятие денег с накопительного счета?',
             buttons: {
                 Ok: {
                     text: 'Да',
@@ -130,6 +130,16 @@ function panel_page() {
         duration: 2000,
         thousandSeparator: "."
     });
+
+    $('.version').on('click', function () {
+        $.alert({
+            theme: 'material',
+            title: 'История версий',
+            type: 'blue',
+            icon: 'fa fa-code-fork',
+            content: 'url: /panel/version/'
+        })
+    })
 }
 
 window.scriptsContent = panel_page();

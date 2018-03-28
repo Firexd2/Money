@@ -1,11 +1,13 @@
 {% load staticfiles %}
 {% load poll_extras %}
-    <h3>Общая статистика</h3>
+    <h3>Общая статистика <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     <div class="row">
         <div class="col-lg-6">
             <h4><i class="fa fa-table" aria-hidden="true"></i> Таблица лимитов и трат:</h4>
-            <p class="info-text">Здесь ваши суммы ваших трат разбиты по категориям. Чтобы получить детализацию трат определенной категории, нажмите на неё.</p>
+            <p class="info-text">
+                Данная таблица отображает состояние ваших категорий. Для детализации трат определенной категории нажмите на соответствующую строку таблицы.
+            </p>
             <table style="font-size: 15px" id="current-month-table" class="table">
                 <thead>
                 <tr style="font-size: 18px">
@@ -37,9 +39,9 @@
                     <td colspan="3">
                         <b><i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> Краткая статистика:</b> <br>
                         <p style="padding-left: 15px">
-                            - {% if max_cost %}Cамая крупная покупка в <b>{{ max_cost.value|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
-                            - Средние траты в день в <b>{{ middle_cost|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
-                            - Средние траты за неделю:<b> {{ middle_cost_of_week|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
+                            - {% if max_cost %}Cамая крупная покупка <b>{{ max_cost.value|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: <b>{{ max_cost.detailed_comment }}</b>{% else %}Покупок пока не было{% endif %} <br>
+                            - Средняя трата в день <b>{{ middle_cost|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
+                            - Средняя трата за неделю:<b> {{ middle_cost_of_week|points }}</b> <i class="fa fa-rub" aria-hidden="true"></i> <br>
                             - До конца месяца <b>~{{ days|add:'-30'|cut:'-' }}</b> дн.
                         </p>
                     </td>
@@ -49,7 +51,9 @@
         </div>
         <div class="col-lg-6">
             <h4><i class="fa fa-table" aria-hidden="true"></i> Таблица распределения на неделю:</h4>
-            <p class="info-text">Ты можешь выбрать, какие категории включить в недельный контроль. Для более равномерного распределения неделя считается как 8 дней.</p>
+            <p class="info-text">
+                Данная таблица отображает состояние категорий на текущей неделе.
+            </p>
             <table style="font-size: 15px" class="table">
                 <thead>
                 <tr style="font-size: 18px">
@@ -74,9 +78,7 @@
                     {% endfor %}
                 <td colspan="3">
                     <p class="info-text">
-                        Вы можете выбрать те категории, которые будут учитываться в недельной таблице.
-                        Например, у вас есть категория "Большие покупки". Эту категорию не стоит включать
-                        в недельный учет, так как большие покупки считать по неделям бессмысленно.
+                        Вы можете выбрать, какие категории учитывать в недельной таблице. Например, у вас есть категория "Большие покупки". Траты по ней распределяются не равномерно, поэтому в таблице её стоит не учитывать.
                     </p>
                     {% for category in configuration.category.all %}
                         <label>
@@ -90,7 +92,6 @@
                         }
                     </style>
                 </td>
-                </tr>
                 <tr style="background-color: #f5f5f5;">
                     <td colspan="3" style="color: #4f4f4f">
                         <i class="fa fa-info-circle" style="color: #261bb8;opacity: 0.8;" aria-hidden="true"></i> До новой недели: <b>{{ number_days_for_week }}</b> д.
@@ -103,30 +104,43 @@
     <div class="row">
         <div class="col-lg-6">
             <h4><b>#</b> Статистика и визуализация меток</h4>
-            <p class="info-text">Нажмите на метку, чтобы увидеть, какие покупки к ней относятся.</p>
-            <table class="table">
-                <thead>
-                <tr style="font-weight: bold">
-                    <td>Метка</td>
-                    <td style="text-align: center"><i class="fa fa-rub" aria-hidden="true"></i></td>
-                </tr>
-                </thead>
-                <tbody>
-                {% for name, sum, procent in tags %}
-                    <tr>
-                        <td class="tags-view" id="{{ name }}" style="background: linear-gradient(to right, #ececec {{ procent }}%, white {{ procent }}%); cursor: pointer">
-                            {{ name }}
-                        </td>
-                        <td style="width: 90px; border-left: 1px solid #d0d0d0; text-align: center">
-                            <span>{{ sum|points }}</span>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <p class="info-text">
+                Ниже приведены метки и суммы трат по ним. Вы можете получить детализацию трат по определенной метке, нажав на соответствующую строку с ней.
+            </p>
+            {% with tags|first as first_tag %}
+                {% if first_tag.1 %}
+                    <table class="table">
+                        <thead>
+                        <tr style="font-weight: bold">
+                            <td>Метка</td>
+                            <td style="text-align: center"><i class="fa fa-rub" aria-hidden="true"></i></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for name, sum, procent in tags %}
+                            {% if sum %}
+                                <tr>
+                                    <td class="tags-view" id="{{ name }}" style="background: linear-gradient(to right, #ececec {{ procent }}%, white {{ procent }}%); cursor: pointer">
+                                        {{ name }}
+                                    </td>
+                                    <td style="width: 90px; border-left: 1px solid #d0d0d0; text-align: center">
+                                        <span>{{ sum|points }}</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>Трат пока не было</p>
+                {% endif %}
+            {% endwith %}
         </div>
         <div class="col-lg-6">
             <h4><i class="fa fa-area-chart" aria-hidden="true"></i> Визуализация остатка по дням</h4>
+            <p class="info-text">
+                График демонстрирует состояние вашего остатка по прошедшим дням.
+            </p>
             <div style="height: 400px" id="chart-stat-days">
                 <date hidden>{{ days_info|first|first }}</date>
             </div>
@@ -134,7 +148,10 @@
     </div>
     <div class="row">
         <div class="col-lg-6">
-            <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты:</h4>
+            <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние траты</h4>
+            <p class="info-text">
+                В этом списке отображены все ваши траты за текущий расчетный период.
+            </p>
             <div class="wrapper-history">
                 <table class="table">
                     <tbody style="font-size: 15px">
@@ -150,7 +167,7 @@
                     {% else %}
                         <tr>
                             <td>
-                                Покупок пока не было
+                                Трат пока не было
                             </td>
                         </tr>
                     {% endif %}

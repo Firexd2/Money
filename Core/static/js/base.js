@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 
     jconfirm.defaults = {
-        theme: 'modern',
+        theme: 'material',
         closeIcon: true,
         closeIconClass: 'fa fa-close'
     };
@@ -36,6 +36,18 @@ jQuery(document).ready(function($) {
         onNavbar();
     });
     onNavbar();
+
+    $('body').on('click', '.help-button', function () {
+        var name = $(this).parent().text().slice(0, -1);
+        $.alert({
+            theme: 'material',
+            columnClass: 'col-lg-6 col-md-offset-3',
+            title: name,
+            type: 'blue',
+            icon: 'fa fa-question-circle-o',
+            content: 'url: /help/' + name + '/'
+        })
+    })
 
 });
 

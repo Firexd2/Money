@@ -204,7 +204,6 @@ body {
     display: none;
 }
 
-
 ::-webkit-scrollbar-button {
     background: url('') no-repeat;
     width:6px;
@@ -879,4 +878,21 @@ input[name=price], input[name=new-price], input[name=count], input[name=new-coun
 .inline-input {
     display: inline-block;
     vertical-align: top
+}
+
+.help-button {
+    cursor: pointer;
+    opacity: 0.4;
+}
+
+.help-button:hover {
+    opacity: 1;
+}
+
+.version {
+    cursor: pointer;
+}
+
+.version:hover {
+    color: #ffb57c;
 }

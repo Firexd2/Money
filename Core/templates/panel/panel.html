@@ -1,68 +1,50 @@
 {% load staticfiles %}
 {% load poll_extras %}
-    <div class="row">
-        <h3>Ваши счета:</h3>
-        <hr>
-        <div class="col-lg-4">
-            <div class="block-panel">
-                <div class="slider-block-panel">
-                    <div>
-                        <b class="spincrement" id="freemoney">{{ user.settings.free_money }}</b>
-                        <p style="font-size: 20px">Неиспользуемые деньги</p>
-                    </div>
-                    <div>
-                        <p style="font-size: 15px">Сумма ваших "свободных денег". В некотором роде эта сумма является вашим банком, которым вы можете распоряжаться так, как вы хотите.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="block-panel">
-                <div class="slider-block-panel">
-                    <div>
-                        <b class="spincrement" id="circ" style="color: #ff5c00">{{ money_circulation }}</b>
-                        <p style="font-size: 20px">Деньги в обороте</p>
-                    </div>
-                    <div>
-                        <p style="font-size: 15px">Сумма ваших средств задейственных в ваших планах распределения бюджета. Неизменяемая в ручную величина, так как напрямую зависит от ваших настроек в системе.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="block-panel">
-                <div class="slider-block-panel">
-                    <div>
-                        <b class="spincrement" id="freecirc">{{ user.settings.free_money|add:money_circulation }}</b>
-                        <p style="font-size: 20px">Общая сумма</p>
-                    </div>
-                    <div>
-                        <p style="font-size: 15px">Сумма накоплений и денег в планах распределения бюджета. По факту является суммой всех ваших денег на данный момент (если вы правильно пользуетесь системой).</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <h3>Планы распределения бюджета</h3>
-        <hr>
-        {% for configuration in user.settings.configurations.all %}
-            <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
-                <div class="list-plan">
-                    <i class="{{ configuration.icon }}" aria-hidden="true"></i>
-                    <p class="name-configuration-panel">{{ configuration.name }}</p>
-                </div>
-            </div>
-        {% endfor %}
-        <div onclick="load('new/')" class="col-lg-4 conf add">
-            <div class="list-plan" style="border: dashed 3px;">
-                <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
-                <p id="add-plan">План распределения бюджета</p>
-            </div>
-        </div>
-    </div>
 <div class="row">
-    <h3>Управление деньгами</h3>
+    <h3>Ваши счета <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
+    <hr>
+    <div class="col-lg-4">
+        <div class="block-panel">
+            <div class="slider-block-panel">
+                <div>
+                    <b class="spincrement" id="freemoney">{{ user.settings.free_money }}</b>
+                    <p style="font-size: 20px">Неиспользуемые деньги</p>
+                </div>
+                <div>
+                    <p style="font-size: 15px">Сумма, не участвующая в планах распределения бюджета. Это ваши <b>"свободные"</b> деньги, которые можно назвать накоплениями.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="block-panel">
+            <div class="slider-block-panel">
+                <div>
+                    <b class="spincrement" id="circ" style="color: #ff5c00">{{ money_circulation }}</b>
+                    <p style="font-size: 20px">Деньги в обороте</p>
+                </div>
+                <div>
+                    <p style="font-size: 15px">Остаток средств по всем действующим планам распределения бюджета. Это ваши <b>"рабочие"</b> деньги, которые вы выделили и распределили по категориям.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="block-panel">
+            <div class="slider-block-panel">
+                <div>
+                    <b class="spincrement" id="freecirc">{{ user.settings.free_money|add:money_circulation }}</b>
+                    <p style="font-size: 20px">Общая сумма</p>
+                </div>
+                <div>
+                    <p style="font-size: 15px">Эта сумма - ваш <b>общий бюджет</b>. Она включает в себя сумму "свободных" и "рабочих" денег.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h3>Управление деньгами <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     <div class="col-lg-4">
         <div class="manage-block">
@@ -78,13 +60,13 @@
             </div>
             </form>
             <p class="info-text">
-                Введенный доход зачислится на счет неиспользованных денег. Вскоре вы сможете создать план распределения бюджета и внести эту сумму для распределения по категориям.
+                Введенная сумма зачислится на счет <b>неиспользуемых денег</b>. Вы сможете создать новый план распределения бюджета, либо начать новый расчетный период в существующем.
             </p>
         </div>
     </div>
     <div class="col-lg-4">
         <div class="manage-block">
-            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изъятие денег</h4>
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изымание средств</h4>
             <form style="margin-bottom: 8px" name="take-money" method="POST">
                 <div class="inline-input" style="width: 210px">
                     <input required name="number" placeholder="Сумма*" class="form-control input-home" type="number">
@@ -96,14 +78,58 @@
             </div>
             </form>
             <p class="info-text">
-                Если вы хотите "вытащить" и не учитывать определенную сумму денег, используйте эту форму.
+                Если вы хотите изъять определенную сумму денег и <b>не учитывать её в системе</b>, используйте эту форму.
             </p>
         </div>
     </div>
 </div>
 <div class="row">
-    <h3>История действий на вашем аккаунте:</h3>
+    <h3>Планы распределения бюджета <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
-        {% include 'history_table.html' %}
+    {% for configuration in user.settings.configurations.all %}
+        <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
+            <div class="list-plan">
+                <i class="{{ configuration.icon }}" aria-hidden="true"></i>
+                <p class="name-configuration-panel">{{ configuration.name }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <div onclick="load('new/')" class="col-lg-4 conf add">
+        <div class="list-plan" style="border: dashed 3px;">
+            <img style="width: 80%; margin-top: -15px" src="{% static '/image/add.png' %}" alt="">
+            <p id="add-plan">План распределения бюджета</p>
+        </div>
     </div>
+</div>
+<div class="row">
+    <h3>История действий на вашем аккаунте <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
+    <hr>
+    {% include 'history_table.html' %}
+</div>
+<script>
+    {% if user.first_log_in %}
+        var name = 'Приветственное сообщение';
+        $.confirm({
+            columnClass: 'col-lg-6 col-md-offset-3',
+            theme: 'material',
+            title: name,
+            type: 'blue',
+            icon: 'fa fa-question-circle-o',
+            content: 'url: /help/' + name + '/',
+            buttons: {
+                Ok: {
+                    text: 'Окей',
+                    btnClass: 'btn',
+                    action: function () {
+                        $.post('/ajax/first_log_in/')
+                    }
+                },
+                Cancel: {
+                    text: 'Покажите это уведомление позже',
+                    action: function () {}
+                }
+            }
+        });
+    {% endif %}
+</script>
 <script src="{% static 'js/panel.js' %}"></script>

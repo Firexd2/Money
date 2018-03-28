@@ -1,5 +1,5 @@
 {% load poll_extras %}
-<div class="col-lg-6">
+<div style="margin-bottom: 50px" class="col-lg-6">
     <h4> Интервал: <b>{{ date_one }} / {{ date_two }}</b> (<b>{{ days }}</b>&nbsp;дн.)</h4>
     <button class="btn btn-default" id="edit-interval" style="font-size: 18px;margin-bottom: 40px;" type="button">Изменить интервал</button>
     <h4>
@@ -12,7 +12,7 @@
         <b>#</b> Статистика трат по меткам:
     </h4>
     {% if dict_tags %}
-        <table style="margin-bottom: 50px" class="table">
+        <table class="table">
             <thead>
             <tr style="font-weight: bold">
                 <td>Метка</td>
@@ -36,7 +36,7 @@
         <b>За этот период трат не нашлось</b>
     {% endif %}
 </div>
-<div class="col-lg-6">
+<div style="margin-bottom: 50px" class="col-lg-6">
     <h4>
         <b><i class="fa fa-list-ul" aria-hidden="true"></i></b> Траты, попавшие в выбранный интервал:
     </h4>

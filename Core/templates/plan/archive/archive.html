@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load poll_extras %}
     <div class="row">
-        <h3>Архивная статистика</h3>
+        <h3>Архивная статистика <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
         <hr>
         <div id="archive-stat">
             <div class="inner">
@@ -10,10 +10,13 @@
         </div>
     </div>
     <div class="row">
-        <h3>Завершенные периоды и их графическая визуализация</h3>
+        <h3>Завершенные периоды и их графическая визуализация <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
         <hr>
+        {% if archive %}
         <div id="chart-archive-period" style="min-height: 270px;"></div>
-
+        {% else %}
+        <b>Необходимые данные для построения графика отсутствуют.</b>
+        {% endif %}
         {% for item in archive %}
             <div id="{{ item.id }}" class="col-lg-4 navigation">
                 <div style="background: linear-gradient(45deg, #f4d0b2, {{ configuration.color }});" class="block-conf">

@@ -14,14 +14,6 @@ function cost() {
         index--;
     }
 
-    function removeTag(el) {
-        tag = $(el).prev().html();
-        $(el).parent().remove();
-        removeByValue(arrayTags, tag);
-        $("#inputTag").focus();
-    }
-
-
     function input_cost() {
 
         $('.caret-hide').on('click', function () {
@@ -65,9 +57,10 @@ function cost() {
             var table = $(this).parent().next().find('.table-cost');
 
             $.confirm({
-                title: 'Ввод траты в "' + category_name + '"',
+                title: 'Ввод траты',
                 icon: 'fa fa-plus-circle',
-                content: '<div style="margin: 0" class="input-cost">\n' +
+                content: '<p>Для категории <b>' + category_name + ' </b></p>' +
+                '<div style="margin: 0" class="input-cost">\n' +
                 '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
                 '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
                 '</div>',
@@ -144,7 +137,7 @@ function cost() {
             function insertTag(tag) {
                 var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
                     '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
-                    '<a href="" onclick="removeTag(this); return false;"'+
+                    '<a onclick="removeTag(this); return false;"'+
                     ' class="del" id="del_'+tag+'">&times;</strong></a>' +
                     '<input hidden name="tags" value="'+tag+'" type="text">'+
                     '</li>';
@@ -219,10 +212,10 @@ function cost() {
             var name = location.pathname.slice(1,-1);
 
             $.confirm({
-                title: 'Вы точно хотите удалить трату?',
+                title: 'Подтверждение',
                 type: 'red',
                 icon: 'fa fa-exclamation-triangle',
-                content: 'Восстановить ее будет невозможно',
+                content: 'Вы точно хотите удалить трату? Восстановить ее будет невозможно',
                 buttons: {
                     Ok: {
                         text: 'Да',

@@ -3,14 +3,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    {#    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
-    {#    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script data-pace-options='{"ajax":"trackMethods":["GET","POST"]}' src="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="{% static 'js/bootstrap/bootstrap.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Alegreya+SC|Encode+Sans+Expanded|Exo+2" rel="stylesheet">
@@ -22,6 +20,7 @@
     <script src="{% static 'js/lib/spincrement.min.js' %}"></script>
     <script src="{% static 'js/lib/bootstrap.offcanvas.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/lib/bootstrap.offcanvas.min.css' %}">
+    <title>{% block title %}{% endblock %}</title>
     <style>
         ::-webkit-scrollbar-thumb {
             background-color: {% if configuration.color %}{{ configuration.color }}{% else %}#ff923a;{% endif %}

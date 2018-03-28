@@ -1,14 +1,16 @@
 {% load staticfiles %}
 {% load poll_extras %}
-    <h3>Ввод траты</h3>
+    <h3>Ввод трат <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     <div class="row">
         <div class="col-lg-6">
             <form name="cost" method="POST">
-                <input hidden name="name" value="{{ configuration.name_url }}" type="text">
+                <input hidden name="name" value="{{ configuration.name }}" type="text">
                 <div style="margin-bottom: 10px">
-                    <h4><i class="fa fa-tags" aria-hidden="true"></i> Метки траты:</h4>
-                    <p class="info-text">Для статистики используются "метки траты". Введите слово, нажмите пробел, метка зафиксируется. </p>
+                    <h4><i class="fa fa-tags" aria-hidden="true"></i> Метки трат:</h4>
+                    <p class="info-text">
+                        Введите название метки, нажмите пробел и метка зафиксируется.
+                    </p>
                     <div id="boxTags">
                         <input type="hidden" id="hiddenTags"/>
                         <ul class="ulTags" style="clear:both;">
@@ -25,7 +27,9 @@
                     </div>
                 </div>
                 <h4><i class="fa fa-shopping-cart" aria-hidden="true"></i> Промежуточная таблица:</h4>
-                <p class="info-text">Выберете категорию и введите свою трату. Вы можете написать к ней комментарий. Не забудьте сохранить ваш ввод, нажав на кнопку "Записать расходы"</p>
+                <p class="info-text">
+                    Эта таблица позволяет ввести траты, добавляя к ним комментарии. Чтобы зафиксировать их в базе данных, необходимо нажать на кнопку "Записать расходы".
+                </p>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
@@ -68,7 +72,9 @@
         </div>
         <div class="col-lg-6">
             <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Последние действия:</h4>
-            <p class="info-text">Последние действия при вводе трат. При необходимости, вы можете отменить определенную трату, нажав на нужную вам строку таблицы.</p>
+            <p class="info-text">
+                В данном списке отображены ваши последние траты. При необходимости можно удалить трату, нажав на соответствующую строку с ней.
+            </p>
             <table style="font-size: 16px" class="table table-hover">
                 <thead>
                 <tr style="font-weight: bold">
@@ -81,7 +87,7 @@
                     {% for cost in costs %}
                         <tr id="{{ cost.id }}" class="action-cost" style="cursor: pointer">
                             <td>
-                                {% with cost.costcategory_set.all|first as category %}
+                                {% with cost.category.all|first as category %}
                                     <b>{{ category.name }}</b>
                                 {% endwith %}
                             </td>
@@ -99,7 +105,7 @@
                 {% else %}
                     <tr>
                         <td colspan="3">
-                            Покупок пока не было
+                            Трат пока не было
                         </td>
                     </tr>
                 {% endif %}
@@ -107,4 +113,12 @@
             </table>
         </div>
     </div>
+<script>
+    function removeTag(el) {
+        tag = $(el).prev().html();
+        $(el).parent().remove();
+        removeByValue(arrayTags, tag);
+        $("#inputTag").focus();
+    }
+</script>
 <script src="{% static 'js/cost.js' %}"></script>

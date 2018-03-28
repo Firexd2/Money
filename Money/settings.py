@@ -30,6 +30,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,13 +62,17 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'loaders': [
+                'admin_tools.template_loaders.Loader',
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
             ],
         },
     },
@@ -102,6 +110,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Admin settings
+
+ADMIN_TOOLS_THEMING_CSS = '/css/admin-theme.css'
+
+ADMIN_TOOLS_INDEX_DASHBOARD = {
+    'django.contrib.admin.site': 'Core.custom_admin.dashboard.CustomIndexDashboard',
+}
+
+ADMIN_TOOLS_MENU = {
+    'django.contrib.admin.site': 'Core.custom_admin.menu.CustomMenu',
+}
+
 # Auth settings
 
 AUTH_USER_MODEL = 'Auth.User'
@@ -129,4 +149,5 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'

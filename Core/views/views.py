@@ -3,20 +3,40 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, DetailView
-from Core.models import CostCategory, Cost, Tags, Archive, ShoppingList
+from django.views.generic import TemplateView, DetailView, FormView
+from django.views.generic.base import View
+from Auth.models import VisitationIp
+from Core.models import CostCategory, Cost, Tags, Archive, ShoppingList, HelpText, VersionControl
 
 
-@method_decorator(login_required, name='dispatch')
+def visit_check(func):
+    def wrapper(request, *args, **kwargs):
+
+        # Определяем ip
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        # Записываем ip, если новый, или обновляем дату существующей записи
+        VisitationIp.objects.update_or_create(ip=ip)
+
+        return func(request, *args, **kwargs)
+
+    return wrapper
+
+
+@method_decorator((login_required, visit_check), name='dispatch')
 class BaseTemplatePlanView(TemplateView):
 
     @property
     def configuration(self):
-        return self.request.user.settings.configurations.all().get(name_url=self.kwargs['name_url'])
+        return self.request.user.settings.configurations.all().get(name=self.kwargs['name'])
 
     @property
     def list_costs(self):
-        return Cost.objects.filter(costcategory__configuration=self.configuration).order_by('-datetime')
+        return Cost.objects.filter(category__configuration=self.configuration).order_by('-datetime')
 
     def get_context_data(self, **kwargs):
         context = super(BaseTemplatePlanView, self).get_context_data(**kwargs)
@@ -76,7 +96,7 @@ class StatTemplatePlanView(BaseTemplatePlanView):
 class CostTemplatePlanView(BaseTemplatePlanView):
     def get_context_data(self, **kwargs):
         context = super(CostTemplatePlanView, self).get_context_data(**kwargs)
-        context['costs'] = Cost.objects.filter(costcategory__configuration=self.configuration)\
+        context['costs'] = Cost.objects.filter(category__configuration=self.configuration)\
             .order_by('-datetime')
         context['tags'] = Tags.objects.filter(user=str(self.request.user)).order_by('-datetime')[:10]
         return context
@@ -176,17 +196,17 @@ class GetDatesInArchive(BaseTemplatePlanView):
 class TagDetailView(BaseTemplatePlanView):
     def get_context_data(self, **kwargs):
         context = super(TagDetailView, self).get_context_data(**kwargs)
-        tag = Tags.objects.get(name=kwargs['name'])
+        tag = Tags.objects.get(name=kwargs['tag'])
         context['cost'] = self.list_costs.filter(tags=tag)
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator((login_required, visit_check), name='dispatch')
 class BaseTemplateView(TemplateView):
 
     @property
     def get_money_circulation(self):
-        # Идет подсчет всех непотраченных денег во всех планах
+        # Подсчет всех непотраченных денег во всех планах
         return sum([conf.income - sum([sum([cost.value for cost in cat.cost.all()]) for cat in conf.category.all()])
                     for conf in self.request.user.settings.configurations.all()])
 
@@ -195,6 +215,7 @@ class BaseTemplateView(TemplateView):
 
         context['money_circulation'] = self.get_money_circulation
         context['history'] = self.request.user.settings.history.all()[::-1]
+        context['version'] = VersionControl.objects.all().last()
         return context
 
 
@@ -209,4 +230,11 @@ class TableInputCostShoppingList(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TableInputCostShoppingList, self).get_context_data(**kwargs)
         context['shop_list'] = ShoppingList.objects.get(id=kwargs['id'])
+        return context
+
+
+class GetHelpText(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super(GetHelpText, self).get_context_data(**kwargs)
+        context['text'] = HelpText.objects.get(position=kwargs['name'])
         return context
