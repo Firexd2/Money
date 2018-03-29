@@ -1,3 +1,16 @@
-{% for item in object_list %}
-    {{ item.version }}
-{% endfor %}
+<table class="table">
+    <tbody style="font-size: 15px;word-break: break-all;">
+    {% for version in object_list reversed %}
+        <tr>
+            <td style="text-align: left">
+                <b style="font-size: 17px">{{ version.version }}</b> <span style="font-size: 13px; color: darkgray">({{ version.date }})</span>
+                <br>
+                <br>
+                <span style="font-size: 14px;color:gray">
+                    {{ version.description|safe }}
+                 </span>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

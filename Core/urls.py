@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from Core.models import Archive, ShoppingListItem, ShoppingList, HelpText, VersionControl
+from Core.models import Archive, ShoppingListItem, ShoppingList, HelpText, VersionControl, CostCategory
 from Core.views import actions, views
-from django.views.generic import RedirectView, ListView
+from django.views.generic import RedirectView, ListView, DetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +31,7 @@ urlpatterns = [
     path('panel/about/', views.TemplateView.as_view(template_name='panel/about.html')),
     path('panel/help/', ListView.as_view(template_name='panel/help.html', model=HelpText)),
     path('panel/version/', ListView.as_view(template_name='panel/version.html', model=VersionControl)),
+    path('panel/new_version/', ListView.as_view(template_name='panel/version.html', model=VersionControl)),
     path('<name>/', views.BaseTemplatePlanView.as_view(template_name='plan/base.html'), name='base'),
     path('<name>/home/', views.BaseTemplatePlanView.as_view(template_name='plan/home.html')),
     path('<name>/cost/', views.CostTemplatePlanView.as_view(template_name='plan/cost.html')),
@@ -41,10 +42,10 @@ urlpatterns = [
     path('<name>/archive/', views.ArchiveTemplatePlanView.as_view(template_name='plan/archive/archive.html')),
     path('<name>/archive/<date_one>/<date_two>/', views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
     path('<name>/archive/<type_date>/', views.GetDatesInArchive.as_view()),
-    path('archive/detail/<int:pk>/', views.DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
+    path('archive/detail/<int:pk>/', DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
     path('alert/change_date/', views.TemplateView.as_view(template_name='plan/archive/change_date_alert.html')),
-    path('category/<id>/', views.CategoryDetailView.as_view(template_name='plan/stat/category_detail.html')),
-    path('table_input/<id>/', views.TableInputCostShoppingList.as_view(template_name='plan/shopping_list/table_input.html')),
+    path('category/<pk>/', DetailView.as_view(template_name='plan/stat/category_detail.html', model=CostCategory)),
+    path('table_input/<pk>/', DetailView.as_view(template_name='plan/shopping_list/table_input.html', model=ShoppingList)),
     path('tag/<name>/<tag>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),
     path('auth/', include('Auth.urls')),
     path('help/<name>/', views.GetHelpText.as_view(template_name='help.html')),
@@ -63,5 +64,6 @@ urlpatterns = [
     path('ajax/input_cost_shopping_list/<id>/', actions.InputCostShoppingList.as_view()),
     path('ajax/add_money/', actions.AddIncome.as_view()),
     path('ajax/take_money/', actions.TakeIncome.as_view()),
-    path('ajax/first_log_in/', actions.first_log_in_trigger)
+    path('ajax/first_log_in/', actions.first_log_in_trigger),
+    path('ajax/look_last_version/', actions.look_last_version)
 ]

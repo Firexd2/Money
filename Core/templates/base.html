@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script data-pace-options='{"ajax":"trackMethods":["GET","POST"]}' src="//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="{% static 'js/base.js' %}"></script>
@@ -57,6 +57,9 @@
 <footer style="flex: 0 0 auto;">
     {% include 'footer.html' %}
 </footer>
+<version name="{{ version.version }}" style="display: none">
+    {{ version.description }}
+</version>
 <script>
     function load(url) {
         $(document).ajaxStart(function() { Pace.restart(); });
@@ -71,6 +74,27 @@
             }
         }
     }
+
+    {% if user.look_version.id != version.id %}
+        $.confirm({
+            theme: 'material',
+            title: '<span style="font-weight: 100">Новая версия:</span> ' + $('version').attr('name'),
+            type: 'blue',
+            icon: 'fa fa-question-circle-o',
+            content: $('version').text(),
+            buttons: {
+                Ok: {
+                    text: 'Окей',
+                    btnClass: 'btn',
+                    action: function () {$.post('/ajax/look_last_version/')}
+                },
+                Cancel: {
+                    text: 'Отмена',
+                    action: function () {$.post('/ajax/look_last_version/')}
+                }
+            }
+        });
+    {% endif %}
 </script>
 </body>
 <style>

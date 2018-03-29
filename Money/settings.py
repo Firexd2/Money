@@ -25,7 +25,7 @@ SECRET_KEY = '8oz&(rk^79_-pmn0t2$pj6bs$coh8wuh&b0^*j_k=z-z$9(8te'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['control-money.ru', '127.0.0.1']
 
 # Application definition
 
@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Core.context_proccesor.get_last_version'
             ],
             'loaders': [
                 'admin_tools.template_loaders.Loader',

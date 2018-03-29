@@ -130,16 +130,6 @@ function panel_page() {
         duration: 2000,
         thousandSeparator: "."
     });
-
-    $('.version').on('click', function () {
-        $.alert({
-            theme: 'material',
-            title: 'История версий',
-            type: 'blue',
-            icon: 'fa fa-code-fork',
-            content: 'url: /panel/version/'
-        })
-    })
 }
 
 window.scriptsContent = panel_page();

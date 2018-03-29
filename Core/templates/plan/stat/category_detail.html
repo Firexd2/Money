@@ -1,6 +1,6 @@
 {% load poll_extras %}
-{% if category.cost.all %}
-    {% with category.cost.all as objects %}
+{% if object.cost.all %}
+    {% with object.cost.all as objects %}
         {% include 'table_detail_cost.html' %}
     {% endwith %}
 {% else %}

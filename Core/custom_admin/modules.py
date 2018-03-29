@@ -1,17 +1,24 @@
-# class StatOrderModule(modules.DashboardModule):
-#     order = Order.objects
-#     title = u'Заказы'
-#
-#     def is_empty(self):
-#         return False
-#
-#     def filter_status(self, status):
-#         return self.order.filter(status=status).count()
-#
-#     def __init__(self, **kwargs):
-#         super(StatOrderModule, self).__init__(**kwargs)
-#         self.template = 'modules_for_admin/stat/order.html'
-#         self.all = self.order.all().count()
-#         self.new = self.filter_status('processed')
-#         self.road = self.filter_status('road')
-#         self.success = self.filter_status('delivered')
+from datetime import datetime, timedelta
+from admin_tools.dashboard import modules
+from Auth.models import VisitationIp
+
+
+class StatModule(modules.DashboardModule):
+    order = VisitationIp
+    title = u'Посещения'
+
+    def is_empty(self):
+        return False
+
+    @staticmethod
+    def filter_visitation_ip(day):
+        now = datetime.now().date()
+        return VisitationIp.objects.filter(date__lte=now, date__gte=now - timedelta(days=day)).count()
+
+    def __init__(self, **kwargs):
+        super(StatModule, self).__init__(**kwargs)
+        self.template = 'custom_admin/stat.html'
+        self.today = self.filter_visitation_ip(0)
+        self.toweek = self.filter_visitation_ip(7)
+        self.tomonth = self.filter_visitation_ip(30)
+        self.toall = VisitationIp.objects.all().count()

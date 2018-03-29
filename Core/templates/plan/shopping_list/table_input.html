@@ -1,6 +1,6 @@
 <table style="text-align: left" class="table">
     <tbody>
-    {% for item in shop_list.item.all %}
+    {% for item in object.item.all %}
         {% if item.flag %}
             <tr>
                 <td><b>{{ item.name }}</b> {{ item.count }} шт.<br>

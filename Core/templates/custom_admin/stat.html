@@ -1,0 +1,9 @@
+{% extends "admin_tools/dashboard/module.html" %}
+{% block module_content %}
+    <div style="font-size: 13px; color: #616161">
+        <p>Сегодня: <b>{{ module.today }}</b></p>
+        <p>За неделю: <b>{{ module.toweek }}</b></p>
+        <p>За месяц: <b>{{ module.tomonth }}</b></p>
+        <p>За все время: <b>{{ module.toall }}</b></p>
+    </div>
+{% endblock %}

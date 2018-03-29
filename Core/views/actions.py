@@ -4,7 +4,8 @@ from math import floor
 from django.http import HttpResponse
 from django.utils.encoding import uri_to_iri
 from django.views.generic.base import View
-from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem
+from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem, \
+    VersionControl
 
 
 class ActionsView(View):
@@ -461,5 +462,12 @@ class DeleteItem(ActionsView):
 def first_log_in_trigger(request):
     user = request.user
     user.first_log_in = False
+    user.save()
+    return HttpResponse('ok')
+
+
+def look_last_version(request):
+    user = request.user
+    user.look_version_id = VersionControl.objects.all().last().id
     user.save()
     return HttpResponse('ok')

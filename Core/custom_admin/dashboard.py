@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from admin_tools.dashboard import modules, Dashboard, AppIndexDashboard
+from Core.custom_admin.modules import StatModule
 
 
 class CustomIndexDashboard(Dashboard):
@@ -12,6 +13,14 @@ class CustomIndexDashboard(Dashboard):
         self.children.append(modules.AppList(
             _('Applications'),
             exclude=('django.contrib.*',),
+        ))
+
+        self.children.append(modules.Group(
+            title=u'Статистика',
+            display='tabs',
+            children=[
+                StatModule()
+            ]
         ))
 
         # append a recent actions module
@@ -35,14 +44,6 @@ class CustomAppIndexDashboard(AppIndexDashboard):
                 limit=5
             )
         ]
-
-        self.children.append(modules.Group(
-            title=u'Статистика',
-            display='tabs',
-            children=[
-                
-            ]
-        ))
 
     def init_with_context(self, context):
         """

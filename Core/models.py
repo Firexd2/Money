@@ -146,16 +146,6 @@ class Configuration(models.Model):
     shopping_list = models.ManyToManyField(ShoppingList, related_name='configuration', verbose_name='Списки покупок', blank=True)
     date = models.DateField('Дата ввода', default=datetime.now)
 
-    # def save(self, *args, **kwargs):
-    #     self.name_url = ''
-    #     for letter in self.name.lower():
-    #         try:
-    #             self.name_url += DICT_LETTERS[letter]
-    #         except KeyError:
-    #             self.name_url += letter
-    #
-    #     super(Configuration, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         return reverse('base', args=[str(self.name)])
 
@@ -197,6 +187,7 @@ class HelpText(models.Model):
 class VersionControl(models.Model):
     version = models.CharField('Наименование версии', max_length=20)
     description = models.TextField('Описание изменений')
+    date = models.DateField('Дата', auto_now_add=True)
 
     def __str__(self):
         return self.version

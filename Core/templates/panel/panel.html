@@ -120,14 +120,11 @@
                 Ok: {
                     text: 'Окей',
                     btnClass: 'btn',
-                    action: function () {
-                        $.post('/ajax/first_log_in/')
-                    }
+                    action: function () {$.post('/ajax/first_log_in/')}
                 },
                 Cancel: {
-                    text: 'Покажите это уведомление позже',
-                    action: function () {}
-                }
+                    text: 'Отмена',
+                    action: function () {$.post('/ajax/first_log_in/')}}
             }
         });
     {% endif %}

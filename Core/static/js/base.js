@@ -47,6 +47,16 @@ jQuery(document).ready(function($) {
             icon: 'fa fa-question-circle-o',
             content: 'url: /help/' + name + '/'
         })
+    });
+
+    $('.version').on('click', function () {
+        $.alert({
+            theme: 'material',
+            title: 'История версий',
+            type: 'blue',
+            icon: 'fa fa-code-fork',
+            content: 'url: /panel/version/'
+        })
     })
 
 });

@@ -3,10 +3,9 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, DetailView, FormView
-from django.views.generic.base import View
+from django.views.generic import TemplateView
 from Auth.models import VisitationIp
-from Core.models import CostCategory, Cost, Tags, Archive, ShoppingList, HelpText, VersionControl
+from Core.models import Cost, Tags, Archive, ShoppingList, HelpText, VersionControl
 
 
 def visit_check(func):
@@ -216,20 +215,6 @@ class BaseTemplateView(TemplateView):
         context['money_circulation'] = self.get_money_circulation
         context['history'] = self.request.user.settings.history.all()[::-1]
         context['version'] = VersionControl.objects.all().last()
-        return context
-
-
-class CategoryDetailView(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super(CategoryDetailView, self).get_context_data(**kwargs)
-        context['category'] = CostCategory.objects.get(id=kwargs['id'])
-        return context
-
-
-class TableInputCostShoppingList(TemplateView):
-    def get_context_data(self, **kwargs):
-        context = super(TableInputCostShoppingList, self).get_context_data(**kwargs)
-        context['shop_list'] = ShoppingList.objects.get(id=kwargs['id'])
         return context
 
 

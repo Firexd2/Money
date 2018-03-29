@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from Core.models import Settings
+from Core.models import Settings, VersionControl
 
 
 class User(AbstractUser):
     settings = models.OneToOneField(Settings, on_delete=models.CASCADE, blank=True, null=True)
     first_log_in = models.BooleanField(default=True)
+    look_version = models.ForeignKey(VersionControl, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_now=True)
 
     def __str__(self):
