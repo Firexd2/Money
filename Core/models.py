@@ -136,7 +136,6 @@ class CostCategory(models.Model):
 class Configuration(models.Model):
 
     name = models.CharField('Название конфигурации', max_length=100)
-    # name_url = models.CharField('URL', max_length=120, blank=True, null=True)
     category = models.ManyToManyField(CostCategory, related_name='configuration', verbose_name='Категории')
     income = models.IntegerField('Деньги в обороте')
     icon = models.CharField('Иконка на главной', max_length=100)

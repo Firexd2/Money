@@ -48,7 +48,7 @@
             <h4 id="manage-block-title-1"><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Новый расчетный период</h4>
             <form style="margin-bottom: 15px" name="new-period" method="POST">
                 <div class="inline-input" style="width: 210px">
-                    <input name="name" hidden value="{{ configuration.name_url }}">
+                    <input name="name" hidden value="{{ configuration.name }}">
                     <input required name="number" max="{{ user.settings.free_money }}" placeholder="Cумма*" class="form-control input-home" type="number">
                     <input name="comment" placeholder="Комментарий" class="form-control input-home" type="text">
                 </div><div class="inline-input" style="width: 30px">
