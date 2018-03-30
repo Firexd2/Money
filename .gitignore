@@ -7,5 +7,4 @@ db.sqlite3
 .DS_Store
 *.log
 migrations
-static
 dev_settings.py
