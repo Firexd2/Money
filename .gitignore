@@ -8,3 +8,4 @@ db.sqlite3
 *.log
 migrations
 dev_settings.py
+log.django
