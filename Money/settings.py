@@ -152,3 +152,9 @@ USE_TZ = False
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+
+try:
+    from .dev_settings import *
+except:
+    pass

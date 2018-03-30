@@ -8,3 +8,4 @@ db.sqlite3
 *.log
 migrations
 static
+dev_settings.py
