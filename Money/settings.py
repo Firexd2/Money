@@ -25,7 +25,7 @@ SECRET_KEY = '8oz&(rk^79_-pmn0t2$pj6bs$coh8wuh&b0^*j_k=z-z$9(8te'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['control-money.ru', '127.0.0.1']
+ALLOWED_HOSTS = ['control-money.com', '127.0.0.1']
 
 # Application definition
 
