@@ -133,62 +133,40 @@ function cost() {
             $("#inputTag").focus().val("");
             $("#hiddenTags").val("");
 
-            $("#inputTag").keydown(function(event) {
+            $("#inputTag").on('input', function() {
+
                 var textVal = jQuery.trim($(this).val()).toLowerCase();
-                var keyCode = event.which;
+                var inputWidth = textVal.length * 8;
 
-                if (keyCode === 37 && textVal === '') {
-                    $("#newTagInput").insertBefore($("#newTagInput").prev());
-                    $("#inputTag").focus();
-                }
+                $(this).attr("style", "width:"+inputWidth+"px");
+                $("#newTagInput").attr("style", "width:"+inputWidth+"px");
 
-                if (keyCode === 39 && textVal === '') {
-                    $("#newTagInput").insertAfter($("#newTagInput").next());
-                    $("#inputTag").focus();
-                }
-
-                if (keyCode === 8 && textVal === '') {
-                    deletedTag = $("#newTagInput").prev().find(".a_tag").html();
-                    removeByValue(arrayTags, deletedTag);
-                    $("#newTagInput").prev().remove();
-                    $("#inputTag").focus();
-                }
-
-                if (keyCode === 46 && textVal === '') {
-                    deletedTag = $("#newTagInput").next().find(".a_tag").html();
-                    removeByValue(arrayTags, deletedTag);
-                    $("#newTagInput").next().remove();
-                    $("#inputTag").focus();
-                }
-
-                if ((47 < keyCode && keyCode < 106) || (keyCode === 32)) {
-
-                    if (keyCode !== 32) {
-                        inputWidth = inputWidth + 7;
-                        $(this).attr("style", "width:"+inputWidth+"px");
-                        $("#newTagInput").attr("style", "width:"+inputWidth+"px");
-                    } else if (keyCode === 32 && (textVal !== '')) {
-                        var isExist = jQuery.inArray(textVal, arrayTags);
-
-                        if (isExist === -1) {
-                            $(insertTag(textVal)).insertBefore("#newTagInput");
-
-                            arrayTags[index] = textVal;
-                            index++;
-                        }
-                        inputWidth = 16;
-                        $(this).attr("style", "width:"+inputWidth+"px");
-                        $("#newTagInput").attr("style", "width:23px");
-                        $(this).val("");
-                    } else {
-                        $(this).val("");
-                    }
-                }
             });
 
             $('#boxTags').on('click', function () {
                 $('.input-tags').focus()
-            })
+            });
+
+            var touchtime = 0;
+            $('#boxTags').on("click", function() {
+                if (((new Date().getTime()) - touchtime) < 500) {
+
+                    var textVal = jQuery.trim($("#inputTag").val()).toLowerCase();
+                    var isExist = jQuery.inArray(textVal, arrayTags);
+                    if (isExist === -1) {
+                        $(insertTag(textVal)).insertBefore("#newTagInput");
+                        arrayTags[index] = textVal;
+                        index++;
+                    }
+                    inputWidth = 16;
+                    $("#inputTag").attr("style", "width:"+inputWidth+"px");
+                    $("#newTagInput").attr("style", "width:23px");
+                    $("#inputTag").val("");
+                }
+                touchtime = new Date().getTime();
+            });
+
+
         }
         tags();
 
