@@ -35,7 +35,7 @@
             </div>
             <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Редактирование категорий:</h4>
             <p class="info-text">
-                Вы можете делать любые манипуляции с категориями. Помните о том, что при удалении категории удаляются и все траты по ней, а восстановить их будет не возможно. Изменения сохранятся только после нажатия кнопки "Сохранить"
+                Вы можете делать любые манипуляции с категориями. Помните о том, что при удалении категории удаляются и все траты по ней, а восстановить их будет не возможно. Изменения вступят в силу только после нажатия кнопки "Сохранить"
             </p>
             <table class="table table-hover">
                 <thead>
@@ -50,8 +50,8 @@
                 {% for category in configuration.category.all %}
                     <tr>
                         <td><b>{{ forloop.counter }}</b></td>
-                        <td><input name="name-cat{{ forloop.counter }}" type="text" class="form-control ca" value="{{ category.name }}" placeholder="Пример: На еду"/></td>
-                        <td><input name="income1{{ forloop.counter }}" type="number" class="form-control cat" value="{{ category.max }}"/></td>
+                        <td><input name="name{{ category.id }}" type="text" class="form-control ca" value="{{ category.name }}" placeholder="Пример: На еду"/></td>
+                        <td><input name="limit{{ category.id }}" type="number" class="form-control cat" value="{{ category.max }}"/></td>
                         <td style="text-align: center"><span>-- </span>%</td>
                     </tr>
                 {% endfor %}

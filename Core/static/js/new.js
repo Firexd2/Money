@@ -888,8 +888,8 @@ function new_page() {
             }
             tr.eq(tr.length-4).after('<tr>\n' +
                 '<td><b>' + (tr.length-3) + '</b></td>\n' +
-                '<td><input required ' + disabled +  ' name="name-cat' + (tr.length-3) + '" type="text" class="form-control ca" placeholder="Пример: На еду"/></td>\n' +
-                '<td><input required ' + disabled +  ' name="income' + (tr.length-3) + '" type="number" class="form-control cat"/></td>\n' +
+                '<td><input required ' + disabled +  ' name="name-cat" type="text" class="form-control ca"/></td>\n' +
+                '<td><input required ' + disabled +  ' name="limit" type="number" class="form-control cat"/></td>\n' +
                 '<td style="text-align: center"><span>' + proc + '</span>%</td>\n' +
                 '</tr>');
         });

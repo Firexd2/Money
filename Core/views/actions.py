@@ -103,12 +103,16 @@ class CreateNewPlan(ActionsView):
         configuration = Configuration(name=self.POST('name-plan'), income=self.POST('income'),
                                       icon=self.POST('icon'), color=self.POST('color'))
         configuration.save()
-        c = [item[1] for item in self.request.POST.items()][4:]
-        for n, item in enumerate(c):
-            if n % 2 == 1 and c[n - 1] and c[n]:
-                cost_category = CostCategory(name=c[n - 1], max=c[n])
-                cost_category.save()
-                configuration.category.add(cost_category)
+        print(self.request.POST)
+
+        names_cat = self.request.POST.getlist('name-cat')
+        limits_cat = self.request.POST.getlist('limit')
+
+        for n, name in enumerate(names_cat):
+            cost_category = CostCategory(name=name, max=limits_cat[n])
+            cost_category.save()
+            configuration.category.add(cost_category)
+
         self.request.user.settings.configurations.add(configuration)
         self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) %
                                          (configuration.color, configuration.icon, configuration.name),
@@ -288,30 +292,23 @@ class SettingsPlan(ActionsView):
         configuration.color = self.POST('color')
         configuration.save()
 
-        current_category = configuration.category.all()
-        number_category = 0
-        c = [item[1] for item in self.request.POST.items()][5:]
+        for item_category in configuration.category.all():
+            category = item_category
+            try:
+                category.name = self.POST('name' + str(category.id))
+                category.max = self.POST('limit' + str(category.id))
+                category.save()
+            except KeyError:
+                category.delete()
 
-        # Удаляем лишние категории, если есть
-        for extra_category in configuration.category.all()[len(c)//2:len(current_category)]:
-            extra_category.delete()
+        new_category_names = self.request.POST.getlist('name-cat')
+        new_category_limits = self.request.POST.getlist('limit')
 
-        for n, item in enumerate(c):
-            if n % 2 == 1 and c[n - 1] and c[n]:
-
-                # Делаем изменения в категориях. Если есть новая, то по ошибке направляемся её создавать
-                try:
-                    if not (current_category[number_category].name == c[n - 1] and
-                            current_category[number_category].max == c[n]):
-                        for_save = current_category[number_category]
-                        for_save.name = c[n - 1]
-                        for_save.max = c[n]
-                        for_save.save()
-                except IndexError:
-                    new_category = CostCategory(name=c[n - 1], max=c[n])
-                    new_category.save()
-                    configuration.category.add(new_category)
-                number_category += 1
+        if new_category_limits:
+            for n, name in enumerate(new_category_names):
+                cost_category = CostCategory(name=name, max=new_category_limits[n])
+                cost_category.save()
+                configuration.category.add(cost_category)
 
         self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__),
                              settings=self.request.user.settings, configuration=configuration)
