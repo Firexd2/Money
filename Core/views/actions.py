@@ -105,7 +105,6 @@ class CreateNewPlan(ActionsView):
         configuration = Configuration(name=self.POST('name-plan'), income=self.POST('income'),
                                       icon=self.POST('icon'), color=self.POST('color'))
         configuration.save()
-        print(self.request.POST)
 
         names_cat = self.request.POST.getlist('name-cat')
         limits_cat = self.request.POST.getlist('limit')
@@ -360,8 +359,7 @@ class InputCost(ActionsView):
 class DeleteCost(ActionsView):
 
     def post(self, *args, **kwargs):
-        cost = Cost.objects.filter(costcategory__configuration=self.configuration)\
-            .get(id=self.POST('id'))
+        cost = Cost.objects.filter(category__configuration=self.configuration).get(id=self.POST('id'))
         value = cost.value
         comment = cost.detailed_comment
         cost.delete()

@@ -14,6 +14,13 @@
         </ul>
         <p class="navbar-text">Привет, <b>{{ user }}</b>. <a href="/auth/logout/">Выйти</a></p>
         <p class="navbar-text version">{{ version }} <span class="caret"></span></p>
+        <div class="visible-xs">
+            {% for plan in user.settings.configurations.all %}
+                <p class="navbar-text">
+                    <span style="color:{{ plan.color }}"><i class="{{ plan.icon }}" aria-hidden="true"></i> {{ plan.name }}</span>
+                </p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 {% block content %}
