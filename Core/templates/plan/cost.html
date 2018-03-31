@@ -113,12 +113,26 @@
             </table>
         </div>
     </div>
+<script src="{% static 'js/cost.js' %}"></script>
 <script>
+
+    var arrayTags = [""];
+    var index = 0;
+
     function removeTag(el) {
         tag = $(el).prev().html();
         $(el).parent().remove();
         removeByValue(arrayTags, tag);
         $("#inputTag").focus();
     }
+
+    function removeByValue(arr, val) {
+        for(var i=0; i<arr.length; i++) {
+            if(arr[i] === val) {
+                arr.splice(i, 1);
+                break;
+            }
+        }
+        index--;
+    }
 </script>
-<script src="{% static 'js/cost.js' %}"></script>

@@ -1,19 +1,5 @@
 function cost() {
 
-    var arrayTags = [""];
-    var index = 0;
-
-
-    function removeByValue(arr, val) {
-        for(var i=0; i<arr.length; i++) {
-            if(arr[i] === val) {
-                arr.splice(i, 1);
-                break;
-            }
-        }
-        index--;
-    }
-
     function input_cost() {
 
         $('.caret-hide').on('click', function () {
