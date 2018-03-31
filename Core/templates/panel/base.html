@@ -17,7 +17,7 @@
         <div class="visible-xs">
             {% for plan in user.settings.configurations.all %}
                 <p class="navbar-text">
-                    <span style="color:{{ plan.color }}"><i class="{{ plan.icon }}" aria-hidden="true"></i> {{ plan.name }}</span>
+                    <span onclick="location.href='{{ plan.get_absolute_url }}'" style="color:{{ plan.color }};cursor: pointer"><i class="{{ plan.icon }}" aria-hidden="true"></i> {{ plan.name }}</span>
                 </p>
             {% endfor %}
         </div>
