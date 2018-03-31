@@ -963,7 +963,6 @@ function new_page() {
         $('#readonly-income').on('click', function () {
             $.alert({
                 type: 'orange',
-                icon: 'fa fa-exclamation-triangle',
                 title: 'Операция отменена',
                 content: 'Напрямую изменить общую сумму в плане нельзя. Если вы хотите добавить и распределить дополнительный доход, используйте соответствующую форму во вкладке <b>"Главная"</b>'
             })

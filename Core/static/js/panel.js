@@ -11,45 +11,6 @@ function panel_page() {
                 }
             }
         });
-
-        // $('#btn-freemoney').on('click', function () {
-        //     $(document).ajaxStart(function () {
-        //         Pace.restart();
-        //     });
-        //     var val = $(this).prev().val();
-        //     if (val) {
-        //
-        //         $.confirm({
-        //             title: 'Подтвердите действие',
-        //             icon: 'fa fa-question',
-        //             type: 'orange',
-        //             content: 'Вы подтверждаете изменение суммы ваших накоплений? Советуем поменять её один раз в начале пользования системой.',
-        //             buttons: {
-        //                 Ok: {
-        //                     text: 'Да',
-        //                     action: function () {
-        //                         $.post('/ajax/correct_free_money/', {value: val}, function (data) {
-        //                             if (data.status) {
-        //                                 location.reload()
-        //                             } else {
-        //                                 $.alert({
-        //                                     type: 'red',
-        //                                     icon: 'fa fa-exclamation-triangle',
-        //                                     title: 'Операция отменена!',
-        //                                     content: 'Для успешного изменения суммы ваших накоплений вам нужно ввести число больше 0 или 0.'
-        //                                 })
-        //                             }
-        //                         });
-        //                     }
-        //                 },
-        //                 Cancel: {
-        //                     text: 'Отмена',
-        //                     action: function () {}
-        //                 }
-        //             }
-        //         })
-        //     }
-        // })
     }
 
     panel();
@@ -62,7 +23,6 @@ function panel_page() {
         });
         $.confirm({
             title: 'Подтвердите действие',
-            icon: 'fa fa-question',
             type: 'orange',
             content: 'Вы подтверждаете ввод дохода?',
             buttons: {
@@ -98,7 +58,6 @@ function panel_page() {
         });
         $.confirm({
             title: 'Подтвердите действие',
-            icon: 'fa fa-question',
             type: 'orange',
             content: 'Вы подтверждаете изъятие денег с накопительного счета?',
             buttons: {

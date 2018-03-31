@@ -28,7 +28,6 @@ function archive() {
                                     $.alert({
                                         title: 'Операция отменена',
                                         type: 'orange',
-                                        icon: 'fa fa-exclamation-triangle',
                                         content: 'Вы должны ввести две даты, причем вторая дата должна быть не раньше первой.'
                                     });
                                 }

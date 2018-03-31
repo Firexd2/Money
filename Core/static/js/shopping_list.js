@@ -150,7 +150,6 @@ function shopping_list() {
                                 $.alert({
                                     title: 'Операция прошла успешно',
                                     type: 'green',
-                                    icon: 'fa fa-check',
                                     content: 'Траты успешно внесены!'
                                 })
                             })
@@ -168,7 +167,6 @@ function shopping_list() {
             $.alert({
                 type: 'red',
                 title: 'Операция отменена',
-                icon: 'fa fa-exclamation-triangle',
                 content: 'Чтобы внести список в траты, необходимо у всех отмеченных записей вписать цену и выбрать категорию.'
             })
         }

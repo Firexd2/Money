@@ -44,7 +44,6 @@ jQuery(document).ready(function($) {
             columnClass: 'col-lg-6 col-md-offset-3',
             title: name,
             type: 'blue',
-            icon: 'fa fa-question-circle-o',
             content: 'url: /help/' + name + '/'
         })
     });

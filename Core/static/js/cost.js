@@ -44,7 +44,6 @@ function cost() {
 
             $.confirm({
                 title: 'Ввод траты',
-                icon: 'fa fa-plus-circle',
                 content: '<p>Для категории <b>' + category_name + ' </b></p>' +
                 '<div style="margin: 0" class="input-cost">\n' +
                 '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
@@ -178,7 +177,6 @@ function cost() {
             $.confirm({
                 title: 'Подтверждение',
                 type: 'red',
-                icon: 'fa fa-exclamation-triangle',
                 content: 'Вы точно хотите удалить трату? Восстановить ее будет невозможно',
                 buttons: {
                     Ok: {
@@ -247,7 +245,6 @@ function cost() {
                                     success: function () {
                                         $('#input-cost-button-menu').click();
                                         $.alert({
-                                            icon: 'fa fa-check',
                                             type: 'green',
                                             title: '<b>Операция выполнена!</b>',
                                             content: 'Траты успешно внесены'
@@ -273,7 +270,6 @@ function cost() {
                 $.alert({
                     title: 'Операция отменена',
                     type: 'orange',
-                    icon: 'fa fa-exclamation-triangle',
                     content: content
                 });
             }
