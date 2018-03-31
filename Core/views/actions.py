@@ -26,12 +26,14 @@ class ActionsView(View):
                               ' было зачислено <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> остатка'
                               ' с предыдущего периода. Все траты перемещены в архив. %s',
 
-            'InputMiddleIncomePlan': 'Добавлены дополнительный средства в план - '
+            'InputMiddleIncomePlan': 'Добавлены дополнительные средства в план - '
                                      '<b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>. %s',
 
             'DeletePlan': 'План <b>%s</b> был удалён.',
 
             'SettingsPlan': 'Отредактирован план',
+
+            'InputCost': 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>',
 
             'DeleteCost': 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: %s',
 
@@ -326,8 +328,6 @@ class ToggleCategoryWeekTable(ActionsView):
 
 class InputCost(ActionsView):
 
-    description_for_action_record = 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
-
     def post(self, *args, **kwargs):
         # Счетчик суммы для записи в историю
         number = 0
@@ -351,7 +351,7 @@ class InputCost(ActionsView):
                 cat.cost.add(cost)
                 n += 1
 
-        self.action_dispatch(description=self.description_for_action_record % number,
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % number,
                              settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse('ok')
