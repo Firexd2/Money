@@ -70,9 +70,6 @@ function shopping_list() {
         });
     });
 
-    // $('form').on('blur', 'input[name=new-price], input[name=new-count], input[name=new-name-item]', function() {
-    //     $('form').submit();
-    // });
 
     $('body').unbind().on('click', '.show-item-shop', function () {
         var elem = $(this).next();
@@ -104,17 +101,6 @@ function shopping_list() {
     $('select').on('change', function () {
         $(this).prev().val($(this).val());
         $('form').submit()
-
-        // или как передать название категории
-        //         var data = $('form[name=shopping-list]').serializeArray();
-        // $.ajax({
-        //     type: "POST",
-        //     url: '/ajax/new_shopping_list/',
-        //     data: data,
-        //     success: function(data) {
-        //         load('shopping_list/' + data.id + '/')
-        //     }
-        // });
     });
 
     $('#input-cost').on('click', function () {

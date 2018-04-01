@@ -35,9 +35,11 @@ class ActionsView(View):
 
             'InputCost': 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>',
 
-            'DeleteCost': 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i> с комментарием: %s',
+            'DeleteCost': 'Удалена трата на сумму <b>%s</b> <i class="fa fa-rub"'
+                          ' aria-hidden="true"></i> с комментарием: %s',
 
-            'InputCostShoppingList': 'Зафиксирован расход на сумму <b>%s</b> <i class="fa fa-rub" aria-hidden="true"></i>'
+            'InputCostShoppingList': 'Зафиксирован расход на сумму <b>%s</b>'
+                                     ' <i class="fa fa-rub" aria-hidden="true"></i>'
 
         }
 
@@ -64,7 +66,8 @@ class ActionsView(View):
     def action_dispatch(**kwargs):
 
         if len(kwargs) == 3:
-            history_for_settings = History(description='<b>' + kwargs['configuration'].name + '</b>: ' + kwargs['description'])
+            history_for_settings = History(description='<b>' + kwargs['configuration'].name
+                                                       + '</b>: ' + kwargs['description'])
             history_for_settings.save()
 
             history_for_configuration = History(description=kwargs['description'])
@@ -82,8 +85,11 @@ class AddIncome(ActionsView):
 
     def post(self, *args, **kwargs):
         self.add_money(self.POST('number'))
-        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__)
-                                         % (self.POST('number'), self.POST('comment')), settings=self.request.user.settings)
+
+        description = self.description_for_action_record(self.__class__.__name__) %\
+                      (self.POST('number'), self.POST('comment'))
+
+        self.action_dispatch(description=description, settings=self.request.user.settings)
         return HttpResponse('ok')
 
 
@@ -91,8 +97,11 @@ class TakeIncome(ActionsView):
 
     def post(self, *args, **kwargs):
         self.take_money(self.POST('number'))
-        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (self.POST('number'), self.POST('comment')),
-                             settings=self.request.user.settings)
+
+        description = self.description_for_action_record(self.__class__.__name__) %\
+                      (self.POST('number'), self.POST('comment'))
+
+        self.action_dispatch(description=description, settings=self.request.user.settings)
         return HttpResponse('ok')
 
 
@@ -115,9 +124,11 @@ class CreateNewPlan(ActionsView):
             configuration.category.add(cost_category)
 
         self.request.user.settings.configurations.add(configuration)
-        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) %
-                                         (configuration.color, configuration.icon, configuration.name),
-                             settings=self.request.user.settings)
+
+        description = self.description_for_action_record(self.__class__.__name__) %\
+                      (configuration.color, configuration.icon, configuration.name)
+
+        self.action_dispatch(description=description, settings=self.request.user.settings)
 
         return HttpResponse('ok')
 
@@ -176,7 +187,7 @@ class StartNewPeriod(ActionsView):
             last_date = configuration.date
             # Рассчитываем непотраченный остаток с предыдущего месяца
             balance = last_income - sum(
-                list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=configuration))))
+                list(map(lambda x: x.value, Cost.objects.filter(category__configuration=configuration))))
             # Вносим новые правки в план
             configuration.income = input_income
             configuration.date = datetime.now().date()
@@ -218,7 +229,9 @@ class StartNewPeriod(ActionsView):
 
             comment = self.POST('comment') if self.POST('comment') else ''
 
-            self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (balance, comment),
+            description = self.description_for_action_record(self.__class__.__name__) % (balance, comment)
+
+            self.action_dispatch(description=description,
                                  settings=self.request.user.settings, configuration=configuration)
 
             status = 1 if not danger_info else 2
@@ -253,7 +266,9 @@ class InputMiddleIncomePlan(StartNewPeriod):
 
             comment = self.POST('comment') if self.POST('comment') else ''
 
-            self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__) % (str(middle_income), comment),
+            description = self.description_for_action_record(self.__class__.__name__) % (str(middle_income), comment)
+
+            self.action_dispatch(description=description,
                                  settings=self.request.user.settings, configuration=self.configuration)
 
         return HttpResponse(json.dumps({'status': status}), content_type='application/json')
@@ -263,7 +278,7 @@ class DeletePlan(ActionsView):
 
     def post(self, *args, **kwargs):
         balance = self.configuration.income - sum(
-            list(map(lambda x: x.value, Cost.objects.filter(costcategory__configuration=self.configuration))))
+            list(map(lambda x: x.value, Cost.objects.filter(category__configuration=self.configuration))))
 
         # Данные для записи в историю
         name = self.configuration.name

@@ -2,12 +2,6 @@ from datetime import datetime
 from django.db import models
 from django.urls import reverse
 
-# DICT_LETTERS = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z',
-#                 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r',
-#                 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
-#                 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya', ' ': '_', '-': '_', ',': '_',
-#                 '"': '_', '(': '_', ')': '_', '№': '_'}
-
 
 class ShoppingListItem(models.Model):
     flag = models.BooleanField('Куплено, или нет', default=False)

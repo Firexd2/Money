@@ -20,13 +20,3 @@ def points(value):
                 result.append('.')
     result.reverse()
     return ''.join(result)
-
-
-@register.filter
-@stringfilter
-def pos(value):
-    try:
-        text = HelpText.objects.get(position=value).text
-    except:
-        text = 'Здесь должен быть пояснсяющий текст. Позиция - <b>' + value + '</b>'
-    return mark_safe(text)
