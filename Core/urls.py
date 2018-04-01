@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_tools/', include('admin_tools.urls')),
     path('', RedirectView.as_view(url='/panel/')),
-    path('favicon.ico/', RedirectView.as_view(url='/static/images/favicon.ico'), name='favicon'),
+    path('favicon.ico/', RedirectView.as_view(url='/static/image/favicon.ico'), name='favicon'),
     path('panel/', views.BaseTemplateView.as_view(template_name='panel/base.html'), name='panel'),
     path('panel/home/', views.BaseTemplateView.as_view(template_name='panel/panel.html')),
     path('panel/new/', views.BaseTemplateView.as_view(template_name='panel/new.html')),

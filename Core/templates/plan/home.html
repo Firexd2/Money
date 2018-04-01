@@ -69,24 +69,10 @@
                 <br>
             </p>
             <p class="info-text" style="color: rgba(191,101,84,0.99);">
-                ВНИМАНИЕ! После начала нового рассчетного периода, возвратиться к прежнему состоянию плана будет невозможно.
+                ВНИМАНИЕ! После начала нового рассчетного периода, вернуться к прежнему состоянию плана будет невозможно.
             </p>
         </div>
     </div>
-    {#    <div class="col-lg-4">#}
-    {#        <div class="manage-block">#}
-    {#            <h4><i class=" icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Изменение даты</h4>#}
-    {#            <div style="margin-bottom: 10px;" class="input-group">#}
-    {#                <input class="form-control input-home" value="{{ configuration.date|date:"Y-m-d" }}" type="date">#}
-    {#                <button id="date" style="height: 50px;font-size: 25px" class="btn btn-default">#}
-    {#                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>#}
-    {#                </button>#}
-    {#            </div>#}
-    {#            <p class="info-text">#}
-    {#                Если после ввода дохода вы ошиблись днем, вы можете поменять текущую дату не создавая новый план. По умолчанию стоит текущая дата вашего плана распределения бюджета.#}
-    {#            </p>#}
-    {#        </div>#}
-    {#    </div>#}
     <div class="col-lg-4">
         <div class="manage-block">
             <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Добавление денежных средств</h4>
@@ -118,7 +104,7 @@
     </div>
 </div>
 <div class="row">
-    <h3>История действий в плане {{ configuration.name }} <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
+    <h3>История действий в плане <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     {% include 'history_table.html' %}
 </div>
