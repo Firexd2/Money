@@ -169,7 +169,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
        'file': {
-           'level': 'DEBUG',
+           'level': 'ERROR',
            'class': 'logging.FileHandler',
            'filename': 'log.django',
        },
@@ -177,7 +177,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console','file'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
         },
     },
 }
