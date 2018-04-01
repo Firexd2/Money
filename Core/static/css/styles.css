@@ -328,7 +328,7 @@ input::-webkit-inner-spin-button {
     color: #ff923a;
     font-size: 25px;
     cursor: pointer;
-    padding: 12px 15px 18px 15px;
+    padding: 13px 15px 17px 15px;
 }
 /* цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или при его нахождении в фокусе */
 .navbar-default .navbar-brand:hover,

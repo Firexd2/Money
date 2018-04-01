@@ -56,8 +56,7 @@ jQuery(document).ready(function($) {
             icon: 'fa fa-code-fork',
             content: 'url: /panel/version/'
         })
-    })
-
+    });
 });
 
 var scriptsContent;
