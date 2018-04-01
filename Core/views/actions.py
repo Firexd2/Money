@@ -466,19 +466,3 @@ def look_last_version(request):
     user.look_version_id = VersionControl.objects.all().last().id
     user.save()
     return HttpResponse('ok')
-
-
-def alice(request):
-
-    # Внеси трату чипсы цена 300 рублей
-    request_text = request.POST['request']['command'].split('')
-
-    session_id = request.POST['session']['session_id']
-    message_id = request.POST['session']['message_id']
-    user_id = request.POST['session']['user_id']
-    version = request.POST['version']
-
-    response = {'response': {'text': 'Я внесла твою трату ' + request_text[2] + ' c ценой ' + request_text[4], 'end_session': False},
-                'session': {'session_id': session_id, 'message_id': message_id, 'user_id': user_id}, 'version': version}
-
-    return HttpResponse(json.dumps(response), content_type='application/json')

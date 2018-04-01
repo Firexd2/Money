@@ -66,6 +66,4 @@ urlpatterns = [
     path('ajax/take_money/', actions.TakeIncome.as_view()),
     path('ajax/first_log_in/', actions.first_log_in_trigger),
     path('ajax/look_last_version/', actions.look_last_version),
-
-    path('webhook/alice/', actions.alice)
 ]
