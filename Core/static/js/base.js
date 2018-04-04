@@ -1,9 +1,14 @@
 jQuery(document).ready(function($) {
 
+    var flag = window.innerWidth >= 768;
     jconfirm.defaults = {
         theme: 'material',
         closeIcon: true,
-        closeIconClass: 'fa fa-close'
+        closeIconClass: 'fa fa-close',
+        typeAnimated: flag,
+        animateFromElement: flag,
+        animationSpeed: flag ? 400 : false,
+        scrollToPreviousElementAnimate: flag
     };
 
     $(function(){

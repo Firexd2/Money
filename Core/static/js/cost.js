@@ -43,9 +43,8 @@ function cost() {
             var table = $(this).parent().next().find('.table-cost');
 
             $.confirm({
-                title: 'Ввод траты',
-                content: '<p>Для категории <b>' + category_name + ' </b></p>' +
-                '<div style="margin: 0" class="input-cost">\n' +
+                title: category_name,
+                content: '<div style="margin: 0" class="input-cost">\n' +
                 '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
                 '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
                 '</div>',
