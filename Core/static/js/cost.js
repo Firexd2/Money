@@ -242,7 +242,7 @@ function cost() {
                                     url: url,
                                     data: data,
                                     success: function () {
-                                        $('#input-cost-button-menu').click();
+                                        load('stat/');
                                         $.alert({
                                             type: 'green',
                                             title: '<b>Операция выполнена!</b>',

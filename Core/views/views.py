@@ -97,7 +97,7 @@ class CostTemplatePlanView(BaseTemplatePlanView):
         context = super(CostTemplatePlanView, self).get_context_data(**kwargs)
         context['costs'] = Cost.objects.filter(category__configuration=self.configuration)\
             .order_by('-datetime')
-        context['tags'] = Tags.objects.filter(user=str(self.request.user)).order_by('-datetime')[:10]
+        context['tags'] = Tags.objects.filter(user=str(self.request.user)).order_by('-datetime')
         return context
 
 
