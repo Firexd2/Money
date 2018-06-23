@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from Core.models import Archive, ShoppingListItem, ShoppingList, HelpText, VersionControl, CostCategory
+from django.urls import include, path
+from django.views.generic import DetailView, ListView, RedirectView
+
+from Core.models import Archive, CostCategory, HelpText, ShoppingList, ShoppingListItem, VersionControl
 from Core.views import actions, views
-from django.views.generic import RedirectView, ListView, DetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,16 +37,21 @@ urlpatterns = [
     path('<name>/home/', views.BaseTemplatePlanView.as_view(template_name='plan/home.html')),
     path('<name>/cost/', views.CostTemplatePlanView.as_view(template_name='plan/cost.html')),
     path('<name>/stat/', views.StatTemplatePlanView.as_view(template_name='plan/stat/stat.html')),
-    path('<name>/shopping_list/', views.ShoppingListTemplateView.as_view(template_name='plan/shopping_list/shopping_list.html')),
-    path('<name>/shopping_list/<id>/', views.DetailShoppingListTemplateView.as_view(template_name='plan/shopping_list/create_shopping_list.html')),
+    path('<name>/shopping_list/',
+         views.ShoppingListTemplateView.as_view(template_name='plan/shopping_list/shopping_list.html')),
+    path('<name>/shopping_list/<id>/',
+         views.DetailShoppingListTemplateView.as_view(template_name='plan/shopping_list/create_shopping_list.html')),
     path('<name>/settings/', views.BaseTemplatePlanView.as_view(template_name='plan/settings.html')),
     path('<name>/archive/', views.ArchiveTemplatePlanView.as_view(template_name='plan/archive/archive.html')),
-    path('<name>/archive/<date_one>/<date_two>/', views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
+    path('<name>/archive/<date_one>/<date_two>/',
+         views.ArchiveReportLastPeriodView.as_view(template_name='plan/archive/report_last_period.html')),
     path('<name>/archive/<type_date>/', views.GetDatesInArchive.as_view()),
-    path('archive/detail/<int:pk>/', DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
+    path('archive/detail/<int:pk>/',
+         DetailView.as_view(template_name='plan/archive/detail_archive.html', model=Archive), name='detail_archive'),
     path('alert/change_date/', views.TemplateView.as_view(template_name='plan/archive/change_date_alert.html')),
     path('category/<pk>/', DetailView.as_view(template_name='plan/stat/category_detail.html', model=CostCategory)),
-    path('table_input/<pk>/', DetailView.as_view(template_name='plan/shopping_list/table_input.html', model=ShoppingList)),
+    path('table_input/<pk>/',
+         DetailView.as_view(template_name='plan/shopping_list/table_input.html', model=ShoppingList)),
     path('tag/<name>/<tag>/', views.TagDetailView.as_view(template_name='plan/stat/tag_detail.html')),
     path('auth/', include('Auth.urls')),
     path('help/<name>/', views.GetHelpText.as_view(template_name='help.html')),

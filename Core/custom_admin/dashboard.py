@@ -1,5 +1,6 @@
+from admin_tools.dashboard import AppIndexDashboard, Dashboard, modules
 from django.utils.translation import ugettext_lazy as _
-from admin_tools.dashboard import modules, Dashboard, AppIndexDashboard
+
 from Core.custom_admin.modules import StatModule
 
 

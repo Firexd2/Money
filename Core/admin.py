@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from Core.models import *
 
 admin.site.register(Settings)

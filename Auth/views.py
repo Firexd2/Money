@@ -1,4 +1,5 @@
 from django.views.generic.edit import FormView
+
 from Auth.forms import RegisterForm
 from Core.models import Settings, VersionControl
 

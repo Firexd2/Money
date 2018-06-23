@@ -1,7 +1,7 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
-from Auth import views
+from django.urls import path
 
+from Auth import views
 
 urlpatterns = [
     path('register/', views.RegisterFormView.as_view()),

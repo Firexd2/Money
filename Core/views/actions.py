@@ -1,10 +1,12 @@
 import json
 from datetime import datetime
 from math import floor
+
 from django.http import HttpResponse
 from django.utils.encoding import uri_to_iri
 from django.views.generic.base import View
-from Core.models import Configuration, CostCategory, Cost, Tags, History, Archive, ShoppingList, ShoppingListItem, \
+
+from Core.models import Archive, Configuration, Cost, CostCategory, History, ShoppingList, ShoppingListItem, Tags, \
     VersionControl
 
 
