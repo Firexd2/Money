@@ -183,7 +183,7 @@ class GetDatesInArchive(BaseTemplatePlanView):
             if request[1].isdigit():
                 date_one = (date_now - timedelta(days=int(request[1])*30)).date()
             else:
-                date_one = self.request.user.date
+                date_one = self.request.user.date_joined.date()
             date_two = date_now.date()
         else:
             archives = Archive.objects.filter(configuration=self.configuration)[::-1][:int(request[1])]
