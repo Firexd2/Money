@@ -136,6 +136,55 @@ function home() {
             }
         })
     })
+
+    $('form[name=change-tags]').on('submit', function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        $(document).ajaxStart(function () {Pace.restart()});
+        $.confirm({
+            title: 'Подтвердите действие',
+            type: 'orange',
+            content: 'Вы подтверждаете перевод трат на другую метку?',
+            buttons: {
+                Ok: {
+                    text: 'Да',
+                    btnClass: 'btn',
+                    action: function () {
+                        var data = $form.serializeArray();
+                        var url = '/ajax/change_tags/';
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: function (data) {
+                                if (data.status === 1) {
+                                    $.alert({
+                                        title: 'Операция выполнена!',
+                                        type: 'green',
+                                        content: 'Траты успешно переведены на другую метку! <br> Были изменены: <br> - <b>'
+                                        + data.current_plan + '</b> шт. трат из текушего плана <br>  - <b>'
+                                        + data.archives + '</b> шт. трат из архива.'
+                                    });
+                                    $('#home-button-menu').click();
+                                } else {
+                                    $.alert({
+                                        type: 'red',
+                                        title: 'Операция отменена!',
+                                        content: data.info
+                                    })
+                                }
+                            }
+                        })
+                    }
+                },
+                Cancel: {
+                    text: 'Отмена',
+                    action: function () {
+                    }
+                }
+            }
+        })
+    });
 }
 
 window.scriptsContent = home();

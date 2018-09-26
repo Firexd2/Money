@@ -104,6 +104,47 @@
     </div>
 </div>
 <div class="row">
+    <div class="col-lg-4">
+        <div class="manage-block">
+            <h4><i class="icon fa fa-caret-right" style="color: {{ configuration.color }}" aria-hidden="true"></i> Работа с метками</h4>
+            <p class="info-text">
+                Если вы хотите навести порядок со своими метками путем перевода всех трат с одной метки на другую,
+                воспользуйтесь полями ниже. <br>
+                В <b>первое поле</b> введите метку, с которой нужно мигрировать вашим тратам, а во <b>второе</b> - на которую должны мигрировать траты.
+            </p>
+            <p class="info-text" style="color: rgba(191,101,84,0.99);">
+                ВНИМАНИЕ! Данные действия не обратимы.
+            </p>
+            <form style="margin-bottom: 15px" name="change-tags" method="POST">
+                <label>
+                    <input class="check-cat" name="current-costs" type="checkbox" checked>
+                    <span style="font-weight: 100" class="pseudocheckbox">Текущие траты</span>
+                </label>
+                <br>
+                <label>
+                    <input class="check-cat" name="archive-costs" type="checkbox">
+                    <span style="font-weight: 100" class="pseudocheckbox">Архивные траты</span>
+                </label>
+                <br>
+                <hr style="margin: 5px 0 5px 0">
+                <label style="padding-bottom: 5px">
+                    <input class="check-cat" name="delete-src-tag" type="checkbox" checked>
+                    <span style="font-weight: 100" class="pseudocheckbox">Удалить первую метку</span>
+                </label>
+                <div class="inline-input" style="width: 210px">
+                    <input name="name" hidden value="{{ configuration.name }}">
+                    <input required name="src-tag" placeholder="Первая метка*" class="form-control input-home" type="text">
+                    <input required name="dst-tag" placeholder="Вторая метка*" class="form-control input-home" type="text">
+                </div><div class="inline-input" style="width: 30px">
+                <button style="height: 100px; font-size: 25px" class="btn btn-default">
+                    <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
     <h3>История действий в плане <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     {% include 'history_table.html' %}

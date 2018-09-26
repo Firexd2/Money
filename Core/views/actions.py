@@ -41,7 +41,10 @@ class ActionsView(View):
                           ' aria-hidden="true"></i> с комментарием: %s',
 
             'InputCostShoppingList': 'Зафиксирован расход на сумму <b>%s</b>'
-                                     ' <i class="fa fa-rub" aria-hidden="true"></i>'
+                                     ' <i class="fa fa-rub" aria-hidden="true"></i>',
+
+            'ChangeTags': 'Была успешно произведена миграция трат с метки "<b>%s</b>" на метку "<b>%s</b>".'
+                          ' Изменено <b>%s</b> шт. трат.'
 
         }
 
@@ -469,6 +472,80 @@ class DeleteItem(ActionsView):
     def post(self, *args, **kwargs):
         self.model.objects.get(id=kwargs['id']).delete()
         return HttpResponse('ok')
+
+
+class ChangeTags(ActionsView):
+
+    def change_tags_in_costs(self, src_tag,  dst_tag, update_current_plan, update_archive):
+
+        # счетчики измененых трат
+        count_cost_in_current_plan = 0
+        count_cost_in_archive = 0
+
+        if update_current_plan:
+            # получаем все текущие траты с нужной меткой
+            all_cost = Cost.objects.filter(category__configuration=self.configuration, tags=src_tag)
+            for cost in all_cost:
+                cost.tags.remove(src_tag)
+                cost.tags.add(dst_tag)
+                count_cost_in_current_plan += 1
+
+        if update_archive:
+            # получаем все архивы нашего плана
+            all_acrchives = self.configuration.archive.all()
+            for archive in all_acrchives:
+                all_cost = archive.archive_costs.filter(category__configuration=self.configuration, tags=src_tag)
+                for cost in all_cost:
+                    cost.tags.remove(src_tag)
+                    cost.tags.add(dst_tag)
+                    count_cost_in_archive += 1
+
+        return {'current_plan': count_cost_in_current_plan,
+                'archives': count_cost_in_archive}
+
+    def post(self, *args, **kwargs):
+
+        src_tag_name = self.request.POST.get('src-tag')
+        dst_tag_name = self.request.POST.get('dst-tag')
+        current_costs = self.request.POST.get('current-costs')
+        archive_costs = self.request.POST.get('archive-costs')
+        delete_src_tag = self.request.POST.get('delete-src-tag')
+
+        if src_tag_name == dst_tag_name or (not current_costs and not archive_costs):
+
+            if src_tag_name == dst_tag_name:
+                info = 'Тэги должны быть разными.'
+            else:
+                info = 'Вы не выбрали, где нужно произвести замену трат.'
+
+            return HttpResponse(json.dumps({'status': 0, 'info': info}), content_type='application/json')
+
+        try:
+            src_tag = Tags.objects.get(name=src_tag_name, user=self.request.user.username)
+        except Tags.DoesNotExist:
+            info = 'Первой метки не существует.'
+            return HttpResponse(json.dumps({'status': 0, 'info': info}), content_type='application/json')
+
+        try:
+            dst_tag = Tags.objects.get(name=dst_tag_name, user=self.request.user.username)
+        except Tags.DoesNotExist:
+            dst_tag = Tags.objects.create(name=dst_tag_name, user=self.request.user.username)
+
+        result = self.change_tags_in_costs(src_tag, dst_tag, current_costs, archive_costs)
+
+        if delete_src_tag and not Cost.objects.filter(category__configuration=self.configuration,
+                                                      tags=src_tag).exists():
+            src_tag.delete()
+
+        response = {'status': 1}
+        response.update(result)
+
+        self.action_dispatch(description=self.description_for_action_record(self.__class__.__name__)
+                                         % (src_tag_name, dst_tag_name, sum(result.values())),
+                             settings=self.request.user.settings,
+                             configuration=self.configuration)
+
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 def first_log_in_trigger(request):
