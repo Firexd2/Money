@@ -51,12 +51,6 @@ class TestAjaxApi(TestCase):
         cost = Cost.objects.create(value=123)
         cost.tags.add(tags[0], tags[2])
 
-        # записываем все траты
-        categoryes = CostCategory.objects.all()
-        for cost in Cost.objects.all():
-            category = categoryes[randint(0, 2)]
-            category.cost.add(cost)
-
         response = self.client.login(username=self.user.username, password='123')
         self.assertTrue(response)
 
@@ -64,6 +58,12 @@ class TestAjaxApi(TestCase):
         """
         Проверка на то, что скрипт перевода с одной метки на другую работает в текущем плане
         """
+
+        # записываем все траты
+        categoryes = CostCategory.objects.all()
+        for cost in Cost.objects.all():
+            category = categoryes[randint(0, 2)]
+            category.cost.add(cost)
 
         before_data_cost_tags = [
             {'id': 1, 'tags': ['первая метка']},

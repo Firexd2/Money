@@ -494,7 +494,7 @@ class ChangeTags(ActionsView):
             # получаем все архивы нашего плана
             all_acrchives = self.configuration.archive.all()
             for archive in all_acrchives:
-                all_cost = archive.archive_costs.filter(category__configuration=self.configuration, tags=src_tag)
+                all_cost = archive.archive_costs.filter(tags=src_tag)
                 for cost in all_cost:
                     cost.tags.remove(src_tag)
                     cost.tags.add(dst_tag)
@@ -533,8 +533,7 @@ class ChangeTags(ActionsView):
 
         result = self.change_tags_in_costs(src_tag, dst_tag, current_costs, archive_costs)
 
-        if delete_src_tag and not Cost.objects.filter(category__configuration=self.configuration,
-                                                      tags=src_tag).exists():
+        if delete_src_tag and not Cost.objects.filter(tags=src_tag).exists():
             src_tag.delete()
 
         response = {'status': 1}
