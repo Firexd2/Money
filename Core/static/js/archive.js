@@ -51,8 +51,6 @@ function archive() {
 
     default_dates();
 
-
-
     function count_procent_table_tags() {
         var values =  $('.tags-value');
         var procent;

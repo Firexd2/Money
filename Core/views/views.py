@@ -2,6 +2,7 @@ import json
 from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -118,15 +119,85 @@ class DetailShoppingListTemplateView(BaseTemplatePlanView):
         return context
 
 
-class ArchiveTemplatePlanView(BaseTemplatePlanView):
-
+class TagDetailView(BaseTemplatePlanView):
     def get_context_data(self, **kwargs):
-        context = super(ArchiveTemplatePlanView, self).get_context_data(**kwargs)
-        context['archive'] = Archive.objects.filter(configuration=self.configuration)[::-1]
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        tag = Tags.objects.get(name=kwargs['tag'])
+        context['cost'] = self.list_costs.filter(tags=tag)
         return context
 
 
-class ArchiveReportLastPeriodView(BaseTemplatePlanView):
+@method_decorator((login_required, visit_check), name='dispatch')
+class BaseTemplateView(TemplateView):
+
+    @property
+    def get_money_circulation(self):
+        # Подсчет всех непотраченных денег во всех планах
+        return sum([conf.income - sum([sum([cost.value for cost in cat.cost.all()]) for cat in conf.category.all()])
+                    for conf in self.request.user.settings.configurations.all()])
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseTemplateView, self).get_context_data(**kwargs)
+
+        context['money_circulation'] = self.get_money_circulation
+        context['history'] = self.request.user.settings.history.all()[::-1]
+        context['version'] = VersionControl.objects.all().last()
+        return context
+
+
+class BaseArchiveTemplateView(TemplateView):
+    """Класс описывающий вьюхи общих и плановых архивов
+    """
+    @property
+    def get_configurations(self):
+        # определяем, где требуется архив
+        if self.kwargs.get('name') and self.kwargs.get('name') != 'panel':
+            configurations = [self.request.user.settings.configurations.all().get(name=self.kwargs['name'])]
+        else:
+            configurations = self.request.user.settings.configurations.all()
+        return configurations
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseArchiveTemplateView, self).get_context_data(**kwargs)
+        if self.kwargs.get('name') and self.kwargs.get('name') != 'panel':
+            context['configuration'] = self.get_configurations[0]
+        return context
+
+
+class GetDatesInArchive(BaseArchiveTemplateView):
+
+    def post(self, *args, **kwargs):
+
+        request = kwargs['type_date'].split('-')
+        if request[0] == 'time':
+            date_now = datetime.now()
+            if request[1].isdigit():
+                date_one = (date_now - timedelta(days=int(request[1])*30)).date()
+            else:
+                date_one = self.request.user.date_joined.date()
+            date_two = date_now.date()
+
+        return HttpResponse(json.dumps({'date_one': date_one.strftime('%Y-%m-%d'),
+                                        'date_two': date_two.strftime('%Y-%m-%d')}), content_type='application/json')
+
+
+class ArchiveTemplatePlanView(BaseArchiveTemplateView):
+
+    def get_context_data(self, **kwargs):
+        context = super(ArchiveTemplatePlanView, self).get_context_data(**kwargs)
+        context['archive'] = Archive.objects.filter(configuration__in=self.get_configurations)[::-1]
+        return context
+
+
+class ArchiveTemplateView(BaseArchiveTemplateView):
+
+    def get_context_data(self, **kwargs):
+        context = super(ArchiveTemplateView, self).get_context_data(**kwargs)
+        context['archive'] = Archive.objects.filter(configuration__in=self.get_configurations)[::-1]
+        return context
+
+
+class ArchiveReportLastPeriodView(BaseArchiveTemplateView):
 
     def report_last_period(self, **kwargs):
 
@@ -137,10 +208,13 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         biggest_cost = [0, '']
         dict_tags = dict()
 
-        archives = Archive.objects.filter(configuration=self.configuration)
-        archive_costs = Cost.objects.filter(archive__in=
-                                            [archive.id for archive in archives]).filter(datetime__lte=
-                                                      date_two + timedelta(days=1), datetime__gte=date_one).order_by('-datetime')
+        archives = Archive.objects.filter(configuration__in=self.get_configurations)
+
+        # получаем все архивные и текущие траты
+        archive_costs = Cost.objects.\
+            filter(Q(archive__in=archives) | Q(category__configuration__in=self.get_configurations)).\
+            filter(datetime__lte=date_two + timedelta(days=1), datetime__gte=date_one).\
+            order_by('-datetime')
 
         # Считаем количество дней между первым и последним днем выбранного периода
         days = (date_two - date_one).days + 1
@@ -170,53 +244,6 @@ class ArchiveReportLastPeriodView(BaseTemplatePlanView):
         for key in result_report:
             if key not in ('date_one', 'date_two', 'self', 'kwargs'):
                 context[key] = result_report[key]
-        return context
-
-
-class GetDatesInArchive(BaseTemplatePlanView):
-
-    def post(self, *args, **kwargs):
-
-        request = kwargs['type_date'].split('-')
-        if request[0] == 'time':
-            date_now = datetime.now()
-            if request[1].isdigit():
-                date_one = (date_now - timedelta(days=int(request[1])*30)).date()
-            else:
-                date_one = self.request.user.date_joined.date()
-            date_two = date_now.date()
-        else:
-            archives = Archive.objects.filter(configuration=self.configuration)[::-1][:int(request[1])]
-            date_one = archives[-1].date_one
-            date_two = archives[0].date_two
-
-        return HttpResponse(json.dumps({'date_one': date_one.strftime('%Y-%m-%d'),
-                                        'date_two': date_two.strftime('%Y-%m-%d')}), content_type='application/json')
-
-
-class TagDetailView(BaseTemplatePlanView):
-    def get_context_data(self, **kwargs):
-        context = super(TagDetailView, self).get_context_data(**kwargs)
-        tag = Tags.objects.get(name=kwargs['tag'])
-        context['cost'] = self.list_costs.filter(tags=tag)
-        return context
-
-
-@method_decorator((login_required, visit_check), name='dispatch')
-class BaseTemplateView(TemplateView):
-
-    @property
-    def get_money_circulation(self):
-        # Подсчет всех непотраченных денег во всех планах
-        return sum([conf.income - sum([sum([cost.value for cost in cat.cost.all()]) for cat in conf.category.all()])
-                    for conf in self.request.user.settings.configurations.all()])
-
-    def get_context_data(self, **kwargs):
-        context = super(BaseTemplateView, self).get_context_data(**kwargs)
-
-        context['money_circulation'] = self.get_money_circulation
-        context['history'] = self.request.user.settings.history.all()[::-1]
-        context['version'] = VersionControl.objects.all().last()
         return context
 
 

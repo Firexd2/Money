@@ -141,7 +141,9 @@ class Configuration(models.Model):
     date = models.DateField('Дата ввода', default=datetime.now)
 
     def get_absolute_url(self):
-        return reverse('base', args=[str(self.name)])
+        # для обработки null конфигурации (с пустым названием)
+        name = self.name if self.name else 'none'
+        return reverse('base', args=[name])
 
     def __str__(self):
         name = self.settings.first().user.username if self.settings.count() else '--'

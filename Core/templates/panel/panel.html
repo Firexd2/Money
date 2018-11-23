@@ -71,14 +71,17 @@
                 <div class="inline-input" style="width: 210px">
                     <input required name="number" placeholder="Сумма*" class="form-control input-home" type="number">
                     <input required name="comment" placeholder="Комментарий*" class="form-control input-home" type="text">
+                    <input required name="tag" placeholder="Метка*" class="form-control input-home" type="text">
                 </div><div class="inline-input" style="width: 30px">
-                <button style="height: 100px; font-size: 25px" class="btn btn-default">
+                <button style="height: 150px; font-size: 25px" class="btn btn-default">
                     <i class="fa fa-check" style="color: #5cb85c" aria-hidden="true"></i>
                 </button>
             </div>
             </form>
             <p class="info-text">
-                Если вы хотите изъять определенную сумму денег и <b>не учитывать её в системе</b>, используйте эту форму.
+                Если вы хотите внести трату <b>вне плана</b>, используйте эту форму.
+                <br>
+                <span class="info-text" style="color: rgba(191,101,84,0.99);">Удалить внесённую трату будет нельзя!</span>
             </p>
         </div>
     </div>
@@ -87,12 +90,14 @@
     <h3>Планы распределения бюджета <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
     <hr>
     {% for configuration in user.settings.configurations.all %}
-        <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
-            <div class="list-plan">
-                <i class="{{ configuration.icon }}" aria-hidden="true"></i>
-                <p class="name-configuration-panel">{{ configuration.name }}</p>
+        {% if not configuration.name == '' %}
+            <div style="color: {{ configuration.color }};" onclick="location.href='{{ configuration.get_absolute_url }}'" class="col-lg-4 conf">
+                <div class="list-plan">
+                    <i class="{{ configuration.icon }}" aria-hidden="true"></i>
+                    <p class="name-configuration-panel">{{ configuration.name }}</p>
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endfor %}
     <div onclick="load('new/')" class="col-lg-4 conf add">
         <div class="list-plan" style="border: dashed 3px;">

@@ -101,10 +101,35 @@ class AddIncome(ActionsView):
 class TakeIncome(ActionsView):
 
     def post(self, *args, **kwargs):
+        """Процесс изымания денег вне плана. Для отображения статистики в архиве, деньги изымаются как трата в
+        null конфигурации (спец. созданная конфигурация без имени)
+        """
+        null_configuration = self.request.user.settings.configurations.filter(name='').first()
+
+        if not null_configuration:
+            null_configuration = Configuration.objects.create(name='', income=0, icon='', color='#808080')
+            self.request.user.settings.configurations.add(null_configuration)
+
+            null_archive = Archive.objects.create(date_one=datetime.now())
+            null_configuration.archive.add(null_archive)
+
+        tag = self.POST('tag')
+        tag_obj, created = Tags.objects.get_or_create(user=str(self.request.user), name=tag)
+
+        # создаем трату
+        cost = Cost.objects.create(value=int(self.POST('number')), detailed_comment=self.POST('comment'))
+        cost.tags.add(tag_obj)
+
+        # архив всегда будет одним в null конфигурации
+        null_archive = null_configuration.archive.all().first()
+        null_archive.archive_costs.add(cost)
+
+        # так как трата архивная, не забываем вычесть деньги со счета
         self.take_money(self.POST('number'))
 
         description = self.description_for_action_record(self.__class__.__name__) %\
                       (self.POST('number'), self.POST('comment'))
+
 
         self.action_dispatch(description=description, settings=self.request.user.settings)
         return HttpResponse('ok')

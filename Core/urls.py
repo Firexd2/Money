@@ -33,6 +33,7 @@ urlpatterns = [
     path('panel/help/', ListView.as_view(template_name='panel/help.html', model=HelpText)),
     path('panel/version/', ListView.as_view(template_name='panel/version.html', model=VersionControl)),
     path('panel/new_version/', ListView.as_view(template_name='panel/version.html', model=VersionControl)),
+    path('panel/archive/', views.ArchiveTemplateView.as_view(template_name='panel/archive/archive.html')),
     path('<name>/', views.BaseTemplatePlanView.as_view(template_name='plan/base.html'), name='base'),
     path('<name>/home/', views.BaseTemplatePlanView.as_view(template_name='plan/home.html')),
     path('<name>/cost/', views.CostTemplatePlanView.as_view(template_name='plan/cost.html')),

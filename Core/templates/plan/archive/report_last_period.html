@@ -50,7 +50,25 @@
                             <b>{{ cost.datetime }}</b><br>
                             Покупка на сумму: <b>{{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i></b>.
                             <br>
-                            Комментарий: <b>{{ cost.detailed_comment }}</b><br> {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+                            Комментарий: <b>{{ cost.detailed_comment }}</b><br>
+                            {% for tag in cost.tags.all %}<span class="tags-in-action">{{ tag.name }}</span>{% endfor %}
+                            <br>
+                            {% if cost.category.all %}
+                                {% with cost.category.all.first.configuration.all.first as conf %}
+                                    <span style="opacity: 0.7;  font-size: 14px;"><b style="color: {{ conf.color }}">{{ conf.name }}</b> (текущая)</span>
+                                {% endwith %}
+                            {% endif %}
+                            {% if cost.archive_set.all %}
+                                {% with cost.archive_set.all.first.configuration.all.first as conf %}
+                                    <span style="opacity: 0.7; font-size: 14px;">
+                                        {% if conf.name %}
+                                            <b style="color: {{ conf.color }}">{{ conf.name }}</b> (архивная)
+                                        {% else %}
+                                            Изымание средств
+                                        {% endif %}
+                                    </span>
+                                {% endwith %}
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
