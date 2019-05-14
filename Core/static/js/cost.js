@@ -11,6 +11,30 @@ function cost() {
             }
         });
 
+        function add_cost(this_, category_id, comment, cost, number, table) {
+            if (!(comment)) {
+                comment = 'Без комментария';
+            }
+            if ((cost) && cost !== '0') {
+                table.append('<tr>\n' +
+                    '<td>\n' +
+                    '<input readonly class="comment-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
+                    '</td>\n' +
+                    '<td>\n' +
+                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs value-cost" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                    '</td>\n' +
+                    '<td class="remove-middle-cost">\n' +
+                    '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
+                    '</td>\n' +
+                    '</tr>');
+
+                this_.siblings('.middle-comment').val('');
+                this_.siblings('.middle-cost').val('');
+                this_.parent().hide();
+                count_amount();
+            }
+        }
+
         function count_amount() {
             var amounts = $('.cost-amount');
             var all_amount = $('#cost-amount');
@@ -49,46 +73,32 @@ function cost() {
                 '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
                 '</div>',
                 buttons: {
-                    Ok: {
+                    ok_and_go_on: {
+                        text: 'Внести и продолжить',
+                        btnClass: 'btn',
+                        action: function () {
+                            var comment = this.$content.find('.middle-comment').val();
+                            var cost = this.$content.find('.middle-cost').val();
+                            var number = table.children().length;
+                            add_cost($(this), category_id, comment, cost, number, table);
+                            $('.input-cost').find('input').val('');
+                            return false
+                        }
+                    },
+                    ok: {
                         text: 'Внести',
                         btnClass: 'btn',
                         action: function () {
                             var comment = this.$content.find('.middle-comment').val();
                             var cost = this.$content.find('.middle-cost').val();
                             var number = table.children().length;
-
-                            if (!(comment)) {
-                                comment = 'Без комментария';
-                            }
-                            if ((cost) && cost !== '0') {
-                                table.append('<tr>\n' +
-                                    '<td>\n' +
-                                    '<input readonly class="comment-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
-                                    '</td>\n' +
-                                    '<td>\n' +
-                                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs value-cost" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
-                                    '</td>\n' +
-                                    '<td class="remove-middle-cost">\n' +
-                                    '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
-                                    '</td>\n' +
-                                    '</tr>');
-
-                                $(this).siblings('.middle-comment').val('');
-                                $(this).siblings('.middle-cost').val('');
-                                $(this).parent().hide();
-                                count_amount();
-                            }
-                        }
-                    },
-                    cancel: {
-                        text: 'Отмена',
-                        action: function () {
+                            add_cost($(this), category_id, comment, cost, number, table)
                         }
                     }
                 }
-            });
-
+            })
         });
+
 
         $('.table-cost').on('click', '.remove-middle-cost', function () {
             $(this).parent().remove();

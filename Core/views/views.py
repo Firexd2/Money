@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-
 from Auth.models import VisitationIp
 from Core.models import Archive, Cost, HelpText, ShoppingList, Tags, VersionControl
 
@@ -20,6 +19,21 @@ def visit_check(func):
             ip = x_forwarded_for.split(',')[0]
         else:
             ip = request.META.get('REMOTE_ADDR')
+
+        def _validate_ip(ip):
+            split_ip = ip.split('.')
+            if len(split_ip) != 4:
+                return False
+            for x in split_ip:
+                if not x.isdigit():
+                    return False
+                i = int(x)
+                if i < 0 or i > 255:
+                    return False
+            return True
+
+        if not _validate_ip(ip):
+            ip = '0.0.0.0'
 
         # Записываем ip, если новый, или обновляем дату существующей записи
         VisitationIp.objects.update_or_create(ip=ip)
