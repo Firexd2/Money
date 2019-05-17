@@ -1,5 +1,9 @@
 function cost() {
 
+    // глобальные переменные, нужные для манипуляций ввода трат в функциях, которые не относятся к таблице
+    var category_id;
+    var table;
+
     function input_cost() {
 
         $('.caret-hide').on('click', function () {
@@ -11,27 +15,36 @@ function cost() {
             }
         });
 
-        function add_cost(this_, category_id, comment, cost, number, table) {
+        function add_cost(comment, cost) {
+            var number = table.children().length;
+
+            if (cost === undefined) {
+                comment = $('.middle-comment').val();
+                cost = $('.middle-cost').val();
+            }
             if (!(comment)) {
                 comment = 'Без комментария';
             }
-            if ((cost) && cost !== '0') {
-                table.append('<tr>\n' +
-                    '<td>\n' +
-                    '<input readonly class="comment-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
-                    '</td>\n' +
-                    '<td>\n' +
-                    '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs value-cost" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
-                    '</td>\n' +
-                    '<td class="remove-middle-cost">\n' +
-                    '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
-                    '</td>\n' +
-                    '</tr>');
 
-                this_.siblings('.middle-comment').val('');
-                this_.siblings('.middle-cost').val('');
-                this_.parent().hide();
-                count_amount();
+            if (comment && cost) {
+                if ((cost) && cost !== '0') {
+                    table.append('<tr>\n' +
+                        '<td>\n' +
+                        '<input readonly class="comment-cost" value="' + comment + '" name="detail-comment-' + category_id + '-' + number + '" style="background: inherit;border: none;width: 150px; height: 18px; cursor: inherit;">' + '\n' +
+                        '</td>\n' +
+                        '<td>\n' +
+                        '<input readonly name="value-' + category_id + '-' + number + '" class="middle-costs value-cost" style="background: inherit;border: none;width: 60px; cursor: inherit;" value="' + cost + '" type="number">\n' +
+                        '</td>\n' +
+                        '<td class="remove-middle-cost">\n' +
+                        '<i class="fa fa-times remove-cost" style="color: red" aria-hidden="true"></i>\n' +
+                        '</td>\n' +
+                        '</tr>');
+
+                    $('.middle-comment').val('');
+                    $('.middle-cost').val('');
+                    // this_.parent().hide();
+                    count_amount();
+                }
             }
         }
 
@@ -42,10 +55,10 @@ function cost() {
             var counts;
             var all_counts = 0;
 
-            for (var i=0; i<amounts.length; i++) {
+            for (var i = 0; i < amounts.length; i++) {
                 counts = 0;
                 current_amount = amounts.eq(i).parent().next().children().children().find('.middle-costs');
-                for (var j=0;j<current_amount.length;j++) {
+                for (var j = 0; j < current_amount.length; j++) {
                     if (current_amount.eq(j).val()) {
                         counts += parseInt(current_amount.eq(j).val());
                     }
@@ -61,44 +74,107 @@ function cost() {
             all_amount.text(all_counts)
         }
 
+        $(document).on('click', '.preloaded-cost', function () {
+            add_cost($(this).children().eq(0).text(), $(this).children().eq(1).text());
+            // удаляем из текущего списка элемент и из общего, который скрытен
+            $('#list-preloaded-cost').children().eq($(this).index()).remove();
+            if ($('#list-preloaded-cost').children().length === 0) {
+                $('#preloaded-info').remove()
+            }
+            $(this).remove()
+        });
+
+        function templateTablePreloadedCosts(content) {
+            return '<div id="preloaded-info"><div class="input-cost-title">Не распределенные предзагруженные траты:</div>' +
+                '<table class="preloaded-table">' +
+                '  <tbody>' + content + '  </tbody>' +
+                '</table></div>'
+        }
+
         $('.button-input-cost').on('click', function () {
-            var category_id = $(this).attr('id');
+            category_id = $(this).attr('id');
             var category_name = $(this).attr('name');
-            var table = $(this).parent().next().find('.table-cost');
+            table = $(this).parent().next().find('.table-cost');
+            var preloaded_costs = $('#list-preloaded-cost').children();
+
+            content = '<div class="input-cost-title">Ручной ввод:</div>' +
+                '<div style="margin: 0" class="input-cost">\n' +
+                '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
+                '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
+                '</div>';
+
+            if (preloaded_costs.length > 0) {
+                var preloaded_content = '';
+                var data;
+                for (var i = 0; i < preloaded_costs.length; i++) {
+                    data = preloaded_costs.eq(i).text().split('.');
+                    preloaded_content += '<tr class="preloaded-cost"><td>' + data[0] + '</td><td>' + data[1] + '</td></tr>'
+                }
+                content = templateTablePreloadedCosts(preloaded_content) + content
+            }
 
             $.confirm({
                 title: category_name,
-                content: '<div style="margin: 0" class="input-cost">\n' +
-                '<input placeholder="Сумма" class="form-control middle-cost" type="number">\n' +
-                '<input placeholder="Доп. комментарий" class="form-control middle-comment" type="text">\n' +
-                '</div>',
+                content: content,
                 buttons: {
                     ok_and_go_on: {
-                        text: 'Внести и продолжить',
+                        text: 'Ок и продолжить',
                         btnClass: 'btn',
                         action: function () {
-                            var comment = this.$content.find('.middle-comment').val();
-                            var cost = this.$content.find('.middle-cost').val();
-                            var number = table.children().length;
-                            add_cost($(this), category_id, comment, cost, number, table);
-                            $('.input-cost').find('input').val('');
+                            add_cost();
                             return false
                         }
                     },
                     ok: {
-                        text: 'Внести',
+                        text: 'Ок',
                         btnClass: 'btn',
                         action: function () {
-                            var comment = this.$content.find('.middle-comment').val();
-                            var cost = this.$content.find('.middle-cost').val();
-                            var number = table.children().length;
-                            add_cost($(this), category_id, comment, cost, number, table)
+                            add_cost()
                         }
                     }
                 }
             })
         });
 
+        $('#button-preloaded-costs').on('click', function () {
+            $.confirm({
+                title: 'Предзагрузка трат',
+                content:
+                    '<div id="preloaded-info"><div class="input-cost-title">Строка с QR-кода чека:</div>\n' +
+                    '<div style="margin: 0" class="input-cost">\n' +
+                    '<input class="form-control str-qr-code" type="text">\n' +
+                    '</div>',
+                buttons: {
+                    ok: {
+                        text: 'Загрузить',
+                        btnClass: 'btn',
+                        action: function () {
+                            var data = {'qr': $('.str-qr-code').val()};
+                            var url = '/ajax/get-preloaded-costs/';
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: data,
+                                success: function (response) {
+
+                                    $.alert({
+                                        type: 'green',
+                                        title: '<b>Операция выполнена!</b>',
+                                        content: 'Траты предзагружены.'
+                                    })
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: 'Отмена',
+                        action: function () {
+
+                        }
+                    }
+                }
+            })
+        });
 
         $('.table-cost').on('click', '.remove-middle-cost', function () {
             $(this).parent().remove();
@@ -129,11 +205,11 @@ function cost() {
             });
 
             function insertTag(tag) {
-                var liEl = '<li id="tag-'+tag+'" class="li_tags">'+
-                    '<span href="javascript://" class="a_tag">'+tag+'</span>&nbsp;'+
-                    '<a onclick="removeTag(this); return false;"'+
-                    ' class="del" id="del_'+tag+'">&times;</strong></a>' +
-                    '<input hidden name="tags" value="'+tag+'" type="text">'+
+                var liEl = '<li id="tag-' + tag + '" class="li_tags">' +
+                    '<span href="javascript://" class="a_tag">' + tag + '</span>&nbsp;' +
+                    '<a onclick="removeTag(this); return false;"' +
+                    ' class="del" id="del_' + tag + '">&times;</strong></a>' +
+                    '<input hidden name="tags" value="' + tag + '" type="text">' +
                     '</li>';
                 return liEl;
             }
@@ -141,13 +217,13 @@ function cost() {
             $("#inputTag").focus().val("");
             $("#hiddenTags").val("");
 
-            $("#inputTag").on('input', function() {
+            $("#inputTag").on('input', function () {
 
                 var textVal = jQuery.trim($(this).val()).toLowerCase();
                 var inputWidth = textVal.length * 8;
 
-                $(this).attr("style", "width:"+inputWidth+"px");
-                $("#newTagInput").attr("style", "width:"+inputWidth+"px");
+                $(this).attr("style", "width:" + inputWidth + "px");
+                $("#newTagInput").attr("style", "width:" + inputWidth + "px");
 
             });
 
@@ -156,7 +232,7 @@ function cost() {
             });
 
             var touchtime = 0;
-            $('#boxTags').on("click", function() {
+            $('#boxTags').on("click", function () {
                 if (((new Date().getTime()) - touchtime) < 500) {
 
                     var textVal = jQuery.trim($("#inputTag").val()).toLowerCase();
@@ -167,7 +243,7 @@ function cost() {
                         index++;
                     }
                     inputWidth = 16;
-                    $("#inputTag").attr("style", "width:"+inputWidth+"px");
+                    $("#inputTag").attr("style", "width:" + inputWidth + "px");
                     $("#newTagInput").attr("style", "width:23px");
                     $("#inputTag").val("");
                 }
@@ -176,12 +252,13 @@ function cost() {
 
 
         }
+
         tags();
 
         $('.action-cost').on('click', function () {
             var _this = $(this);
             var id = _this.attr('id');
-            var name = location.pathname.slice(1,-1);
+            var name = location.pathname.slice(1, -1);
 
             $.confirm({
                 title: 'Подтверждение',
@@ -192,7 +269,7 @@ function cost() {
                         text: 'Да',
                         btnClass: 'btn',
                         action: function () {
-                            $.post('/ajax/delete_cost/', {id:id, name:name});
+                            $.post('/ajax/delete_cost/', {id: id, name: name});
                             _this.remove()
                         }
                     },
@@ -206,7 +283,9 @@ function cost() {
         });
 
         $('#submit-cost').on('click', function () {
-            $(document).ajaxStart(function() { Pace.restart(); });
+            $(document).ajaxStart(function () {
+                Pace.restart();
+            });
             if ($('.value-cost').length && $('input[name=tags]').length) {
 
                 $.confirm({
@@ -284,6 +363,7 @@ function cost() {
             }
         })
     }
+
     input_cost()
 }
 

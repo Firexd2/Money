@@ -530,7 +530,7 @@ input[type=radio]:checked + .pseudocheckbox::before { content: "\2713";}
 
 .input-cost {
     margin-left: 50px;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 10px 0 10px;
     background: white;
 }
 
@@ -860,3 +860,26 @@ input[name=price], input[name=new-price], input[name=count], input[name=new-coun
 .version {cursor: pointer;}
 
 .version:hover {color: #ffb57c;}
+
+
+.preloaded-table {
+    width: 100%;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.preloaded-table td {
+    border-top: 1px solid lightgrey;
+    padding: 5px;
+}
+
+.preloaded-table tr:hover {
+    background: #f6f6f6;
+    cursor: pointer;
+}
+
+.input-cost-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 10px
+}

@@ -572,6 +572,13 @@ class ChangeTags(ActionsView):
         return HttpResponse(json.dumps(response), content_type='application/json')
 
 
+class GetPreloadedCosts(ActionsView):
+
+    def post(self, *args, **kwargs):
+        print(self.request.POST)
+        return HttpResponse('ok')
+
+
 def first_log_in_trigger(request):
     user = request.user
     user.first_log_in = False

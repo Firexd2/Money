@@ -73,5 +73,6 @@ urlpatterns = [
     path('ajax/take_money/', actions.TakeIncome.as_view()),
     path('ajax/first_log_in/', actions.first_log_in_trigger),
     path('ajax/look_last_version/', actions.look_last_version),
-    path('ajax/change_tags/', actions.ChangeTags.as_view())
+    path('ajax/change_tags/', actions.ChangeTags.as_view()),
+    path('ajax/get-preloaded-costs/', actions.GetPreloadedCosts.as_view())
 ]

@@ -1,118 +1,133 @@
 {% load staticfiles %}
 {% load poll_extras %}
-    <h3>Ввод трат <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
-    <hr>
-    <div class="row">
-        <div class="col-lg-6">
-            <form name="cost" method="POST">
-                <input hidden name="name" value="{{ configuration.name }}" type="text">
-                <div style="margin-bottom: 10px">
-                    <h4><i class="fa fa-tags" aria-hidden="true"></i> Метки трат:</h4>
-                    <p class="info-text">
-                        Введите название будущей метки, два раза нажмите на нее, и она зафиксируется.
-                    </p>
-                    <div id="boxTags">
-                        <input type="hidden" id="hiddenTags"/>
-                        <ul class="ulTags" style="clear:both;">
-                            <li id="newTagInput"><input class="input-tags" type="text" id="inputTag"/></li>
-                        </ul>
-                        <div style="clear:both;"></div>
-                    </div>
-                    <div class="ulTags" style="min-width: calc(100% - 88px);display: inline-block; margin-top: 10px">
-                        <div style="white-space: nowrap;">
-                            {% for tag in tags %}
-                                <span class="a_tag li_tags last_tag">{{ tag.name }}</span>
-                            {% endfor %}
-                        </div>
+<h3>Ввод трат <i class="fa fa-question-circle-o help-button" aria-hidden="true"></i></h3>
+<hr>
+<div class="row">
+    <div class="col-lg-6">
+        <form name="cost" method="POST">
+            <input hidden name="name" value="{{ configuration.name }}" type="text">
+            <div style="margin-bottom: 10px">
+                <h4><i class="fa fa-tags" aria-hidden="true"></i> Метки трат:</h4>
+                <p class="info-text">
+                    Введите название будущей метки, два раза нажмите на нее, и она зафиксируется.
+                </p>
+                <div id="boxTags">
+                    <input type="hidden" id="hiddenTags"/>
+                    <ul class="ulTags" style="clear:both;">
+                        <li id="newTagInput"><input class="input-tags" type="text" id="inputTag"/></li>
+                    </ul>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="ulTags" style="min-width: calc(100% - 88px);display: inline-block; margin-top: 10px">
+                    <div style="white-space: nowrap;">
+                        {% for tag in tags %}
+                        <span class="a_tag li_tags last_tag">{{ tag.name }}</span>
+                        {% endfor %}
                     </div>
                 </div>
-                <h4><i class="fa fa-shopping-cart" aria-hidden="true"></i> Промежуточная таблица:</h4>
-                <p class="info-text">
-                    Эта таблица позволяет ввести траты, добавляя к ним комментарии. Чтобы зафиксировать их в базе данных, необходимо нажать на кнопку "Записать расходы".
-                </p>
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th>Категория</th>
-                        <th style="text-align: center">Ввод</th>
-                        <th style="text-align: center">Итог</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for category in configuration.category.all %}
-                        <tr>
-                            <td>{{ category.name }}</td>
-                            <td class="td-cost">
-                                <button class="button-input-cost btn btn-default" id="{{ category.id }}" name="{{ category.name }}" type="button"><b>+</b></button>
-                            </td>
-                            <td style="text-align: center" class="td-amount">
-                                <div style="font-size: 20px">
-                                    <span class="cost-amount">0</span>
-                                    <i style="display: none; cursor: pointer" class="fa fa-caret-down caret-hide" aria-hidden="true"></i>
-                                </div>
-                                <div class="hide-detail">
-                                    <table style="margin: 0" class="table table-bordered">
-                                        <tbody class="table-cost">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    <tr style="font-weight: bold">
-                        <td colspan="2">Общая сумма:</td>
-                        <td style="font-size: 20px;text-align: center">
-                            <span id="cost-amount">0</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button class="btn btn-default" id="submit-cost" style="font-size: 18px;margin-bottom: 50px;" type="button">Записать расходы</button>
-            </form>
-        </div>
-        <div class="col-lg-6">
-            <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Все траты:</h4>
+            </div>
+            <h4><i class="fa fa-shopping-cart" aria-hidden="true"></i> Промежуточная таблица:</h4>
             <p class="info-text">
-                В данном списке отображены ваши последние траты. При необходимости можно удалить трату, нажав на соответствующую строку с ней.
+                Эта таблица позволяет ввести траты, добавляя к ним комментарии. Чтобы зафиксировать их в базе данных,
+                необходимо нажать на кнопку "Записать расходы". Вы можете предзагрузить траты с чека, нажав на кнопку
+                "Предзагрузить траты".
             </p>
-            <table style="font-size: 16px" class="table table-hover">
+            <button class="btn btn-default" id="button-preloaded-costs" style="font-size: 15px;margin-bottom: 15px;" type="button">
+                Предзагрузить траты
+            </button>
+            <table class="table table-striped table-bordered table-hover">
                 <thead>
-                <tr style="font-weight: bold">
-                    <td>Категория</td>
-                    <td>Инфо</td>
+                <tr>
+                    <th>Категория</th>
+                    <th style="text-align: center">Ввод</th>
+                    <th style="text-align: center">Итог</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% if costs %}
-                    {% for cost in costs %}
-                        <tr id="{{ cost.id }}" class="action-cost" style="cursor: pointer">
-                            <td>
-                                {% with cost.category.all|first as category %}
-                                    <b>{{ category.name }}</b>
-                                {% endwith %}
-                            </td>
-                            <td>
-                                {{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i>
-                            <br><br>
-                                {{ cost.detailed_comment }}
-                                <br>
-                                {% for tag in cost.tags.all %}
-                                    <span class="tags-in-action">{{ tag.name }}</span>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="3">
-                            Трат пока не было
-                        </td>
-                    </tr>
-                {% endif %}
+                {% for category in configuration.category.all %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td class="td-cost">
+                        <button class="button-input-cost btn btn-default" id="{{ category.id }}"
+                                name="{{ category.name }}" type="button"><b>+</b></button>
+                    </td>
+                    <td style="text-align: center" class="td-amount">
+                        <div style="font-size: 20px">
+                            <span class="cost-amount">0</span>
+                            <i style="display: none; cursor: pointer" class="fa fa-caret-down caret-hide"
+                               aria-hidden="true"></i>
+                        </div>
+                        <div class="hide-detail">
+                            <table style="margin: 0" class="table table-bordered">
+                                <tbody class="table-cost">
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight: bold">
+                    <td colspan="2">Общая сумма:</td>
+                    <td style="font-size: 20px;text-align: center">
+                        <span id="cost-amount">0</span>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-        </div>
+            <button class="btn btn-default" id="submit-cost" style="font-size: 18px;margin-bottom: 50px;" type="button">
+                Записать расходы
+            </button>
+        </form>
     </div>
+    <div class="col-lg-6">
+        <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Все траты:</h4>
+        <p class="info-text">
+            В данном списке отображены ваши последние траты. При необходимости можно удалить трату, нажав на
+            соответствующую строку с ней.
+        </p>
+        <table style="font-size: 16px" class="table table-hover">
+            <thead>
+            <tr style="font-weight: bold">
+                <td>Категория</td>
+                <td>Инфо</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% if costs %}
+            {% for cost in costs %}
+            <tr id="{{ cost.id }}" class="action-cost" style="cursor: pointer">
+                <td>
+                    {% with cost.category.all|first as category %}
+                    <b>{{ category.name }}</b>
+                    {% endwith %}
+                </td>
+                <td>
+                    {{ cost.value|points }} <i class="fa fa-rub" aria-hidden="true"></i>
+                    <br><br>
+                    {{ cost.detailed_comment }}
+                    <br>
+                    {% for tag in cost.tags.all %}
+                    <span class="tags-in-action">{{ tag.name }}</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="3">
+                    Трат пока не было
+                </td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div hidden id="list-preloaded-cost">
+    <span>Молоко.435</span>
+    <span>хлебушк.11</span>
+    <span>Игрушка заводная классна суиыф.5531</span>
+</div>
 <script src="{% static 'js/cost.js' %}"></script>
 <script>
 
@@ -127,8 +142,8 @@
     }
 
     function removeByValue(arr, val) {
-        for(var i=0; i<arr.length; i++) {
-            if(arr[i] === val) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === val) {
                 arr.splice(i, 1);
                 break;
             }
