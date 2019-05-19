@@ -107,7 +107,7 @@ function cost() {
                 var preloaded_content = '';
                 var data;
                 for (var i = 0; i < preloaded_costs.length; i++) {
-                    data = preloaded_costs.eq(i).text().split('.');
+                    data = preloaded_costs.eq(i).text().split('|');
                     preloaded_content += '<tr class="preloaded-cost"><td>' + data[0] + '</td><td>' + data[1] + '</td></tr>'
                 }
                 content = templateTablePreloadedCosts(preloaded_content) + content
@@ -140,28 +140,59 @@ function cost() {
             $.confirm({
                 title: 'Предзагрузка трат',
                 content:
-                    '<div id="preloaded-info"><div class="input-cost-title">Строка с QR-кода чека:</div>\n' +
-                    '<div style="margin: 0" class="input-cost">\n' +
-                    '<input class="form-control str-qr-code" type="text">\n' +
-                    '</div>',
+                '<div id="preloaded-info">' +
+                '<div style="margin: 0" class="input-cost">\n' +
+                '<div class="input-cost-title">Расшифруйте QR код чека:</div>\n' +
+                '<input class="form-control str-qr-code" name="str-qr-code" placeholder="Данные QR кода" type="text">\n' +
+                '<div class="input-cost-title">Или введите данные чека в ручную:</div>\n' +
+                '<input class="form-control" name="date" placeholder="Дата" type="datetime-local">\n' +
+                '<input class="form-control" name="summa" placeholder="Сумма (с копейками через точку)" type="text">\n' +
+                '<input class="form-control" name="fn" placeholder="ФН" type="text">\n' +
+                '<input class="form-control" name="fd" placeholder="ФД" type="text">\n' +
+                '<input class="form-control" name="fp" placeholder="ФП" type="text">\n' +
+                '</div></div>',
                 buttons: {
                     ok: {
                         text: 'Загрузить',
                         btnClass: 'btn',
                         action: function () {
-                            var data = {'qr': $('.str-qr-code').val()};
+                            const str_qr_code = $('input[name=str-qr-code]').val();
+                            var data;
+                            if (str_qr_code) {
+                                data = {'qr': str_qr_code}
+                            } else {
+                                data = {
+                                    'date': $('input[name=date]').val(),
+                                    'summa': $('input[name=summa]').val(),
+                                    'fn': $('input[name=fn]').val(),
+                                    'fd': $('input[name=fd]').val(),
+                                    'fp': $('input[name=fp]').val()
+                                }
+                            }
                             var url = '/ajax/get-preloaded-costs/';
                             $.ajax({
                                 type: "POST",
                                 url: url,
                                 data: data,
-                                success: function (response) {
-
-                                    $.alert({
-                                        type: 'green',
-                                        title: '<b>Операция выполнена!</b>',
-                                        content: 'Траты предзагружены.'
-                                    })
+                                success: function (data) {
+                                    if (!('traceback' in data)) {
+                                        const container_costs = $('#list-preloaded-cost');
+                                        container_costs.children().remove();
+                                        for (var i = 0; i < data.length; i++) {
+                                            container_costs.append('<span>' + data[i]['comment'] + '|' + data[i]['sum'] + '</span>')
+                                        }
+                                        $.alert({
+                                            type: 'green',
+                                            title: '<b>Операция выполнена!</b>',
+                                            content: 'Траты предзагружены.'
+                                        })
+                                    } else {
+                                        $.alert({
+                                            type: 'red',
+                                            title: '<b>Ошибка</b>',
+                                            content: data['traceback']
+                                        })
+                                    }
                                 }
                             })
                         }
@@ -169,7 +200,6 @@ function cost() {
                     cancel: {
                         text: 'Отмена',
                         action: function () {
-
                         }
                     }
                 }

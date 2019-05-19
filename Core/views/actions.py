@@ -1,7 +1,10 @@
 import json
+import re
 from datetime import datetime
 from math import floor
+import re
 
+import requests
 from django.http import HttpResponse
 from django.utils.encoding import uri_to_iri
 from django.views.generic.base import View
@@ -574,9 +577,50 @@ class ChangeTags(ActionsView):
 
 class GetPreloadedCosts(ActionsView):
 
+    def _get_json_from_data(self, date, summa, fn, fd, fp):
+
+        headers = {'Device-Id': 'LINUX', 'Device-OS': 'linux'}
+        payload = {'fiscalSign': fp, 'date': date, 'sum': summa}
+        phone = '+79652139790'
+        pwd = '165125'
+
+        check_request = requests.get(
+            'https://proverkacheka.nalog.ru:9999/v1/ofds/*/inns/*/fss/{fn}/operations/1/tickets/{fd}'.format(fn=fn, fd=fd),
+            params=payload, headers=headers, auth=(phone, pwd)
+        )
+
+        request_info = requests.get(
+            'https://proverkacheka.nalog.ru:9999/v1/inns/*/kkts/*/fss/{fn}/tickets/'
+            '{fd}?fiscalSign={fp}&sendToEmail=no'.format(fn=fn, fd=fd, fp=fp), headers=headers, auth=(phone, pwd)
+        )
+        products = request_info.json()
+
+        return [{'comment': item['name'], 'sum': round(int(item['sum']) / 100)}
+                for item in products['document']['receipt']['items']]
+
     def post(self, *args, **kwargs):
-        print(self.request.POST)
-        return HttpResponse('ok')
+        # TODO: нормальную обработку ошибок
+        try:
+            if 'qr' in self.request.POST:
+                qr_string = self.POST('qr')
+                date = re.findall(r't=(\w+)', qr_string)[0]
+                summa = re.findall(r's=(\w+)', qr_string)[0]
+                fn = re.findall(r'fn=(\w+)', qr_string)[0]
+                fd = re.findall(r'i=(\w+)', qr_string)[0]
+                fp = re.findall(r'fp=(\w+)', qr_string)[0]
+            else:
+                date = self.POST('date').replace('-', '').replace(':', '') + '00'
+                summa = self.POST('summa')
+                fn = self.POST('fn')
+                fd = self.POST('fd')
+                fp = self.POST('fp')
+
+            result = self._get_json_from_data(date, summa, fn, fd, fp)
+        except Exception as e:
+            import traceback
+            result = {'traceback': str(traceback.format_exc())}
+
+        return HttpResponse(json.dumps(result), content_type='application/json')
 
 
 def first_log_in_trigger(request):

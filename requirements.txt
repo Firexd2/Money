@@ -2,3 +2,4 @@ django
 django-admin-tools
 django-widget-tweaks
 psycopg2
+requests
