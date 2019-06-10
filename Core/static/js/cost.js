@@ -244,7 +244,6 @@ function cost() {
                 return liEl;
             }
 
-            $("#inputTag").focus().val("");
             $("#hiddenTags").val("");
 
             $("#inputTag").on('input', function () {
